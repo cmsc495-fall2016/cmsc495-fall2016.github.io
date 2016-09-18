@@ -43,3 +43,4 @@ Temporary Items
 .apdisk
 documents/week1/~$todo.docx
 *.tmp
+/target/
