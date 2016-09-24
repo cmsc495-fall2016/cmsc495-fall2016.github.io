@@ -4,4 +4,11 @@
   <artifactId>sharkbread-app</artifactId>
   <version>0.0.1</version>
   <name>SharkBread App</name>
+    <dependencies>
+        <dependency>
+            <groupId>sqlite-jdbc</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.8.11</version>
+        </dependency>
+    </dependencies>
 </project>
