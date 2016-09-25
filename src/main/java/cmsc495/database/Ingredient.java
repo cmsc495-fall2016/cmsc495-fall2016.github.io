@@ -22,6 +22,16 @@ public class Ingredient {
     private String name = null;
     private String description = null;
 
+    /**
+     *
+     * @return  Ingredient id
+     */
+    public int getId() {
+        return id;
+    }
+
+
+
     /** Creates an Ingredient with a name.
      * @param name      A string containing the Ingredient's name
      * @throws SQLException
@@ -32,6 +42,7 @@ public class Ingredient {
         statement.setString(1, name);
         statement.executeUpdate();
         connection.close();
+        getIngredientByName(name); // Set the id #
     }
 
     /**
@@ -47,9 +58,12 @@ public class Ingredient {
         PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO ingredient (name,description) VALUES (?,?)");
         statement.setString(1,name);
+        this.name = name;
         statement.setString(2,description);
+        this.description = description;
         statement.executeUpdate();
         connection.close();
+        getIngredientByName(name); // Set the id #
     }
 
     /**
@@ -59,7 +73,7 @@ public class Ingredient {
      * @return      Ingredient id number
      * @throws SQLException
      */
-    public int getIngredientByName(String name) throws SQLException {
+    public void getIngredientByName(String name) throws SQLException {
         this.name = name;
         connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement(
@@ -69,7 +83,6 @@ public class Ingredient {
         this.id = results.getInt(1);
         this.description = results.getString(2);
         connection.close();
-        return results.getInt(1);
     }
 
     /**
@@ -79,7 +92,7 @@ public class Ingredient {
      * @return      Ingredient name
      * @throws SQLException
      */
-    public String getIngredientByNumber(int id) throws SQLException {
+    public void getIngredientByNumber(int id) throws SQLException {
         connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement("SELECT name,description FROM ingredient " +
                 "WHERE id = ?;");
@@ -88,7 +101,6 @@ public class Ingredient {
         this.name = results.getString(1);
         this.description = results.getString(2);
         connection.close();
-        return results.getString(1);
     }
 
     /**
@@ -125,7 +137,8 @@ public class Ingredient {
     }
 
     /**
-     * Deletes an ingredient from the Ingredient table after ensuring the Ingredient isn't in use by a Recipe.
+     * Deletes an ingredient from the Ingredient table after ensuring the Ingredient isn't in use by a Recipe. DOES NOT
+     * prompt for confirmation - that's a UI function.
      * Displays an alert if the Ingredient is used by a Recipe.
      * @param id                Ingredient id number
      * @throws SQLException
@@ -171,7 +184,7 @@ public class Ingredient {
         System.out.println("[!] Begin Ingredient Test.");
         Ingredient test = new Ingredient();
         test.createIngredient("Paprika");
-        int test_id = test.getIngredientByName("Paprika");
+        test.getIngredientByName("Paprika");
         System.out.println("[#] Number is: " + test.id);
         System.out.println("[*] Name is: " + test.name);
         System.out.println("[*] Testing updateIngredient");
