@@ -8,6 +8,8 @@
  */
 package cmsc495.ui;
 
+import cmsc495.database.Recipe;
+
 /**
  * @author Adam Howell, Obinna Ojialor
  * @date   2016-09-19
