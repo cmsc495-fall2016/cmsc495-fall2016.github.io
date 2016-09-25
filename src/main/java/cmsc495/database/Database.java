@@ -31,7 +31,22 @@ public class Database {
         }
         
     }
-    
+
+    /**
+     * Returns a connection string. Used by entity wrappers.
+     *
+     * @return  A database connection
+     */
+    public Connection getDatabaseConn(){
+        try{
+            Connection connection = DriverManager.getConnection(path);
+            return connection;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     /**
      * This method creates the tables as specified in the 
      * project ERD
@@ -83,6 +98,6 @@ public class Database {
     {
         Database test = new Database();
         test.createTables();
-  }
+    }
 }
 
