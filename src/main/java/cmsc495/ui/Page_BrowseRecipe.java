@@ -1,10 +1,6 @@
 /**
  * Class to create a page to browse recipes in the database
-<<<<<<< HEAD
- *    Initila display will be truncated information 
-=======
- *    Initilaze display will be truncated information 
->>>>>>> origin/phase1
+ *    Initialize display will be truncated information 
  *    Once the user selects a recipe, the Display Recipe page will be loaded
  *     with the selected recipe
  */
