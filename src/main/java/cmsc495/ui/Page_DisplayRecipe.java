@@ -54,7 +54,7 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
               "When this thickens to a medium consistency add the cheese slowly mixing well to incorporate it into the milk.\n" +
               "Add the blanched vegetables and pasta.\n" +
               "Season with black pepper to taste.\n" +
-              "Transfer to four 2-inch deep serving pans and top with 1½ cups cheddar cheese each. (25 servings per pan)\n" +
+              "Transfer to four 2-inch deep serving pans and top with 1ï¿½ cups cheddar cheese each. (25 servings per pan)\n" +
               "Bake in oven at 350 degrees for 10 minutes.\n" +
               "Cover and hold according to HACCP Hot Food Holding Guidelines.'\n";
       this.recipe = new Recipe_Hold(

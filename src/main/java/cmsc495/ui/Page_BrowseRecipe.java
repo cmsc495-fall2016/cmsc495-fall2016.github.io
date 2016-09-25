@@ -1,6 +1,6 @@
 /**
  * Class to create a page to browse recipes in the database
- *    Initilaze display will be truncated information 
+ *    Initialize display will be truncated information 
  *    Once the user selects a recipe, the Display Recipe page will be loaded
  *     with the selected recipe
  */
@@ -25,6 +25,7 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
    * Generated serial ID
    */
   private static final long serialVersionUID = -1007375598685985229L;
+
   private Map<JButton,Recipe_Hold> buttonMap = new HashMap<JButton, Recipe_Hold>();
   
   public Page_BrowseRecipe(String title) {
@@ -114,7 +115,7 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
         
         // set the panel to the main page
         SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
-        gui.setCurrentPage(new Page_DisplayRecipe(recipe));
+        //gui.setCurrentPage(new Page_DisplayRecipe(recipe));
       }else{
         // show a PopUp.error() if there is no action associated
         PopUp.Error(this,

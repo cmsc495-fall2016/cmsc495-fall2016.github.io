@@ -14,12 +14,14 @@ import javax.swing.border.LineBorder;
  * @author Adam Howell, Obinna Ojialor
  * @date   2016-09-20
  */
+
 public class Page extends JPanel{
 
   /**
    * Generated serial ID
    */
   private static final long serialVersionUID = 8490689814447716962L;
+
   private String title;
   
   /**

@@ -4,6 +4,7 @@
 package cmsc495.ui;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -29,13 +30,8 @@ import javax.swing.border.TitledBorder;
  * @author Adam Howell, Obinna Ojialor
  * @date   2016-09-20
  */
+
 public class SimpleGui extends JFrame implements ActionListener {
-
-  /**
-   * Default generated UID.
-   */
-  private static final long serialVersionUID = -2392353801787181754L;
-
   /**
    * Private variables
    */
@@ -205,6 +201,7 @@ public class SimpleGui extends JFrame implements ActionListener {
     
     // revalidate the JFrame
     revalidate();
+
   }// end setCurrentPage
 
   /**
@@ -222,7 +219,6 @@ public class SimpleGui extends JFrame implements ActionListener {
     frame.setVisible(true);
     
   }//end setCommonActions_JFrame
-
 
   /* *******************************************************
    * Methods to set borders to JPanels
