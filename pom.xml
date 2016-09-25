@@ -3,6 +3,7 @@
   <groupId>cmsc495</groupId>
   <artifactId>sharkbread-app</artifactId>
   <version>0.0.1</version>
+  <packaging>jar</packaging>
   <name>SharkBread App</name>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
