@@ -87,6 +87,14 @@ public class Database {
             stmt.executeUpdate(createUses);
             //System.out.println("Created Uses table");
             
+            String createUserTable = "CREATE TABLE IF NOT EXISTS user "+
+                                "(id INTEGER PRIMARY KEY NOT NULL, "+
+                                "user_name TEXT,"+
+                                "first_name TEXT,"+
+                                "last_name TEXT, "+
+                                "email_address TEXT)";
+            stmt.executeUpdate(createUserTable);
+            
             stmt.close();
             this.databaseConn.close();
             
