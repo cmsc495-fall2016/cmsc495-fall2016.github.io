@@ -7,15 +7,16 @@ package cmsc495.database;
 import java.sql.*;
 
 /**
- *
- * @author Claire 
+ * Creates and provides connectivity to the project's database, implementing the schema.
+ * @author Claire, Justin
+ * @version 1.0
  */
 public class Database {
     private String path = "jdbc:sqlite:recipe.db";
     private Connection databaseConn = null;
     private Statement stmt = null;
     /**
-     * Constructor that creates the recipe database
+     * Constructor that creates the recipe database & executes the schema.
      */
     public Database(){
 
@@ -24,6 +25,7 @@ public class Database {
          */
         try{
             this.databaseConn = DriverManager.getConnection(path);
+            createTables(); // Create if not exists
             //System.out.println("Successfully connected");
         }
         catch (Exception e){
@@ -66,12 +68,12 @@ public class Database {
             String createRecipe = "CREATE TABLE IF NOT EXISTS recipe " + 
                                   "(id INTEGER PRIMARY KEY NOT NULL," +
                                   "name text NOT NULL,"+
-                                  "serves INTEGER"+
-                                  "author text" +
-                                  "prep_time INTEGER"+
-                                  "cook_time INTEGER"+
-                                  "difficulty INTEGER"+
-                                  "procedures text"+
+                                  "serves INTEGER,"+
+                                  "author text," +
+                                  "prep_time INTEGER,"+
+                                  "cook_time INTEGER,"+
+                                  "difficulty INTEGER,"+
+                                  "procedures text,"+
                                   "description text)";
             stmt.executeUpdate(createRecipe);
             //System.out.println("Created recipe table");
@@ -93,7 +95,11 @@ public class Database {
             System.out.println(e.getClass().getName()+e.getMessage()+":"+e.getSQLState());
         }
     }
-   
+
+    /**
+     * Test method for development & debugging. TODO: Comment out before moving to production.
+     * @param args
+     */
     public static void main( String args[] )
     {
         Database test = new Database();
