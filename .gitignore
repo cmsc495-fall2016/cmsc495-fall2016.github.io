@@ -43,3 +43,12 @@ Temporary Items
 .apdisk
 documents/week1/~$todo.docx
 *.tmp
+/target/
+/cmsc495-fall2016.github.io.iml
+/sharkbread-app.iml
+/.idea/vcs.xml
+/.idea/compiler.xml
+/.idea/copyright/profiles_settings.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/
