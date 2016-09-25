@@ -12,7 +12,7 @@ import java.sql.*;
  * @version 0.1 - 9/24/2016
  */
 public class Recipe {
-    Database myDatabase = new Database();
+    private Database myDatabase = new Database();
 
     /** A database connection */
     private Connection connection = null;
@@ -46,6 +46,7 @@ public class Recipe {
     public void createRecipe(String name, int serves, String author, int prep_time, int cook_time,
                               int difficulty, String procedures, String description) throws SQLException {
         connection = myDatabase.getDatabaseConn();
+        testConnection(connection);
         PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO recipe (name,serves,author,prep_time,cook_time,difficulty,procedures,description)" +
                         "VALUES(?,?,?,?,?,?,?,?);");
@@ -68,6 +69,7 @@ public class Recipe {
      */
     public void getRecipeByNumber(int id) throws SQLException {
         connection = myDatabase.getDatabaseConn();
+        testConnection(connection);
         PreparedStatement statement = connection.prepareStatement(
                 "SELECT name,serves,author,prep_time,cook_time,difficulty,procedures,description FROM recipe " +
                 "WHERE id = ?;");
@@ -91,6 +93,7 @@ public class Recipe {
      */
     public void getRecipeByName(String name) throws SQLException {
         connection = myDatabase.getDatabaseConn();
+        testConnection(connection);
         PreparedStatement statement = connection.prepareStatement(
                 "SELECT id,serves,author,prep_time,cook_time,difficulty,procedures,description FROM recipe " +
                         "WHERE name = ? COLLATE NOCASE;");
@@ -128,14 +131,23 @@ public class Recipe {
                 "UPDATE recipe SET name = ?,serves = ?,author = ?,prep_time = ?,cook_time = ?,difficulty = ?," +
                         "procedures = ?,description =? WHERE id = ?;");
         statement.setString(1,name);
+        this.name = name;
         statement.setInt(2,serves);
+        this.serves = serves;
         statement.setString(3,author);
+        this.author = author;
         statement.setInt(4,prep_time);
+        this.prep_time = prep_time;
         statement.setInt(5,cook_time);
+        this.cook_time = cook_time;
         statement.setInt(6,difficulty);
+        this.difficulty = difficulty;
         statement.setString(7,procedures);
+        this.procedures = procedures;
         statement.setString(8,description);
+        this.description = description;
         statement.setInt(9,id);
+        this.id = id;
         statement.executeUpdate();
         connection.close();
     }
@@ -147,6 +159,7 @@ public class Recipe {
      */
     public void deleteRecipe(int id) throws SQLException {
         connection = myDatabase.getDatabaseConn();
+        testConnection(connection);
         // First, ensure this ingredient isn't in use by any recipes; must maintain data integrity
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM uses WHERE recipe_id = ?;");
         statement.setInt(1,id);
@@ -159,5 +172,36 @@ public class Recipe {
         connection.close();
     }
 
-    //TODO: Write a test main method...
+    /**
+     * Utility method to verify db exists & create it if it doesn't.
+     * @param connection    Database connection to test.
+     */
+    public void testConnection(Connection connection){
+        if(connection == null){
+            JOptionPane.showMessageDialog(null,"Database not found!");
+            Database db = new Database();
+            db.createTables();
+            return;
+        }
+    }
+
+    /**
+     * Main method for development testing & debugging. TODO: Comment this out before moving into production.
+     * @param args          Standard command-line arguments
+     * @throws SQLException Standard SQL Exception
+     */
+    public static void main( String args[] ) throws SQLException{
+        Recipe test = new Recipe();
+        System.out.println("[!] Begin test with Recipe creation.");
+        test.createRecipe("Cookies", 4, "Justin", 15, 30, 2, "Read directions off of cookie pack", "De-lish chocolate cookies");
+        System.out.println("[*] Testing getRecipeByName");
+        test.getRecipeByName("cookies");
+        System.out.println("[*] Serves: " + test.serves);
+        System.out.println("[#] Testing updateRecipe to serve 5 instead of 4");
+        test.updateRecipe(test.id, "Cookies", 5, "Justin", 15, 30, 2, "Read directions off of cookie pack", "De-lish chocolate cookies");
+        System.out.println("[*] Serves: " + test.serves);
+        System.out.println("[!] Deleting recipe");
+        test.deleteRecipe(test.id);
+        System.out.println("[!] Tests complete; check sqlite explorer to verify deletion.");
+    }
 }
