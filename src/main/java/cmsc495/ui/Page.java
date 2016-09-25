@@ -3,7 +3,12 @@
  */
 package cmsc495.ui;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.border.LineBorder;
 
 /**
  * @author Adam Howell, Obinna Ojialor
@@ -30,5 +35,19 @@ public class Page extends JPanel{
   public String getTitleName(){
     return this.title;
   }
-  
+
+  /**
+   * Method to create JTextAreas.  boolean flag determines if JTextArea is editable
+   * @param editable      boolean
+   * @return JTextArea
+   */
+  public static JTextArea createJTextArea(boolean editable){
+    JTextArea jtextarea = new JTextArea(10,10);
+    jtextarea.setEditable(editable);
+    jtextarea.setFont(new Font("Courier", Font.BOLD, 14));
+    jtextarea.setBorder(new LineBorder(Color.BLACK, 1));
+    jtextarea.setWrapStyleWord(true);
+    
+    return jtextarea;
+  }
 }//end class Page
