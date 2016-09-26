@@ -18,7 +18,6 @@ public class Main {
     
     //Create database and tables
     Database recipe = new Database();
-    recipe.createTables();
   }
   
 }//end class Main
