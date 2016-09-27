@@ -20,8 +20,8 @@ public class Database {
      */
     public Database(){
 
-        /**
-         * Try to connect to the database, or create it if it doesn't exist
+        /*
+          Try to connect to the database, or create it if it doesn't exist
          */
         try{
             this.databaseConn = DriverManager.getConnection(path);
@@ -74,7 +74,8 @@ public class Database {
                                   "cook_time INTEGER,"+
                                   "difficulty INTEGER,"+
                                   "procedures text,"+
-                                  "description text)";
+                                  "description text,"+
+                    "source text)";
             stmt.executeUpdate(createRecipe);
             //System.out.println("Created recipe table");
             
