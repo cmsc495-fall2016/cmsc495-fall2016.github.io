@@ -1,3 +1,7 @@
+package cmsc495.database;
+
+import java.sql.*;
+
 /**
  * Specifies a User. A user is an index number (used as the primary key for the Ingredient database
  * table), a user_name, first_name, last_name, and an email address. The user class exposes Create, Read, Update & Delete for the
@@ -6,10 +10,6 @@
  * @author  Claire Breer
  * @version 0.1 - 9/24/2016
  */
-
-package cmsc495.database;
-
-import java.sql.*;
 
 public class User {
     
@@ -26,10 +26,10 @@ public class User {
     private String email_address = null;
 
     /** Creates a user with a user_name, first_name, last_name.
-     * @param user_name      A string containing the user name
-     * @param first_name     A string containing the first name
-     * @param last_name      A string containing the last name
-     * @throws SQLException
+     * @param user_name         A string containing the user name
+     * @param first_name        A string containing the first name
+     * @param last_name         A string containing the last name
+     * @throws SQLException     Standard SQL Exception
      */
     public void createUser(String user_name, String first_name, String last_name) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -43,11 +43,11 @@ public class User {
     }
     
     /** Creates a user with a user_name, first_name, last_name, email_address.
-     * @param user_name      A string containing the user name
-     * @param first_name     A string containing the first name
-     * @param last_name      A string containing the last name
-     * @param email_address  A string containing the email address
-     * @throws SQLException
+     * @param user_name         A string containing the user name
+     * @param first_name        A string containing the first name
+     * @param last_name         A string containing the last name
+     * @param email_address     A string containing the email address
+     * @throws SQLException     Standard SQL Exception
      */
     public void createUser(String user_name, String first_name, String last_name, String email_address) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -66,7 +66,7 @@ public class User {
      * populates the user's id & first_name, last_name, and email_address fields.
      * @param user_name     User's user name
      * @return      User's id number
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public int getUserByName(String user_name) throws SQLException {
         this.user_name = user_name;
@@ -90,7 +90,7 @@ public class User {
      * populates the user's id & first_name, last_name, and email_address fields.
      * @param id    User id number
      * @return      User name
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public String getUserByNumber(int id) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -111,7 +111,7 @@ public class User {
      * Update a user's  user_name
      * @param id        Ingredient id number
      * @param newUserName   Ingredient new name
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public void updateUser(int id, String newUserName) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -127,9 +127,9 @@ public class User {
     /**
      * Update an user's first name
      * @param id                User id number
-     * @param first_name              User name, provided for constructor discrimination
+     * @param first_name        User name, provided for constructor discrimination
      * @param newFirstName      User new first name
-     * @throws SQLException
+     * @throws SQLException     Standard SQL Exception
      */
     public void updateUser(int id, String first_name, String newFirstName) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -148,10 +148,12 @@ public class User {
      * @param user_name         Username
      * @param first_name        User first name, provided for constructor discrimination
      * @param last_name         User last name, provided for constructor discrimination
-     * @param newLastName      User new last name
-     * @throws SQLException
+     * @param email_address     User email address
+     * @param newLastName       User new last name
+     * @throws SQLException     Standard SQL Exception
      */
-    public void updateUser(int id, String user_name, String first_name, String last_name,String newLastName) throws SQLException {
+    public void updateUser(int id, String user_name, String first_name, String last_name,String newLastName,
+                           String email_address) throws SQLException {
         connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement("UPDATE "
                 + "user SET last_name = ? WHERE id = ?;");
@@ -169,7 +171,7 @@ public class User {
      * @param first_name        User first name, provided for constructor discrimination
      * @param last_name         User last name, provided for constructor discrimination
      * @param newEmailAddress   User new email address
-     * @throws SQLException
+     * @throws SQLException     Standard SQL Exception
      */
     public void updateUser(int id, String user_name, String first_name,String last_name, String newEmailAddress) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -186,7 +188,7 @@ public class User {
      * Deletes a user from the User table after ensuring the User isn't in use by a Recipe.
      * Displays an alert if the User is used by a Recipe.
      * @param id                User id number
-     * @throws SQLException
+     * @throws SQLException     Standard SQL Exception
      */
     public void deleteUser(int id) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -229,12 +231,23 @@ public class User {
     public String getEmail_address() {
         return email_address;
     }
+
+    /**
+     * Utility method to support testing. TODO: Comment out before moving to production.
+     * @throws SQLException Standard SQL Exception
+     */
+    public void clearUserTable() throws SQLException {
+        connection = myDatabase.getDatabaseConn();
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM user;");
+        statement.execute();
+        connection.close();
+    }
     
     
     /**
      * Debugging test_classes method; TODO: Comment out before production
      * @param args  Default command-line arguments
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public static void main(String args[]) throws SQLException {
         System.out.println("[!] Begin User Test.");
@@ -250,7 +263,7 @@ public class User {
         System.out.println("[*] Testing updateUser");
         test.updateUser(test.id, "MarkS");
         test.updateUser(test.id, "John", "Joe");
-        test.updateUser(test.id, "Joe", "Doe", "Strong");
+        test.updateUser(test.id, "Joe", "Doe", "Strong", "joes@test_classes.com");
         test.updateUser(test.id, "Joe", "Strong", "", "joes@test_classes.com");
         test.getUserByNumber(test.id);
         System.out.println("[*] User Name is: " + test.user_name);    

@@ -3,11 +3,9 @@ package cmsc495.test_classes;
 import cmsc495.database.Recipe;
 import com.opencsv.CSVReader;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -16,7 +14,7 @@ import java.util.ArrayList;
  * table. Requires recipes arrive in a .csv. Support is provided for the 10 fields used by our test_classes inputs.
  *
  * @author Justin
- * @version 0.1
+ * @version 0.1 9/27/2016
  */
 public class Recipe_Test {
 
@@ -38,7 +36,7 @@ public class Recipe_Test {
         String source = null;
     }
 
-    private ArrayList<Recipe_CSV_Entry> testData = new ArrayList<Recipe_CSV_Entry>();
+    private ArrayList<Recipe_CSV_Entry> testData = new ArrayList<>();
 
     /**
      * Utility method used to convert times to minutes for standardization. Admittedly janky algorithm.
@@ -51,7 +49,7 @@ public class Recipe_Test {
         if (time.contentEquals("")){
             return 0;
         }
-        if (time.matches(".+(?<=\\d)(?=\\D)")){ // WHY DOESN'T THIS MATCH ON "10minutes"
+        if (time.matches(".+(?<=\\d)(?=\\D).+")){ // WHY DOESN'T THIS MATCH ON "10minutes"
             time_elements = time.split("(?<=\\d)(?=\\D)|(?=\\d)(?<=\\D)");
             System.out.println(time_elements[0] + " | " + time_elements[1]);
         } else {
@@ -69,12 +67,12 @@ public class Recipe_Test {
 
     /**
      * Get test_classes data from the .csv; normalize prep / cooking times, create our ArrayList of Recipe elements.
-     * @param file
-     * @throws IOException
+     * @param file          File containing our Recipe test data
+     * @throws IOException  Standard IOException
      */
     private void populateTestData(File file) throws IOException {
 
-        CSVReader reader = null;
+        CSVReader reader;
         try {
             reader = new CSVReader(new FileReader(file));
             String[] recipe;
@@ -111,6 +109,9 @@ public class Recipe_Test {
      * @throws SQLException     Standard SQL Exception
      */
     private void updateRecipeTable() throws SQLException {
+        System.out.println("[!] Deleting all prior recipe entries (we are in test mode!)");
+        Recipe recipeDelete = new Recipe();
+        recipeDelete.clearRecipeTable();
         for (Recipe_CSV_Entry entry : testData){
             Recipe r = new Recipe();
             r.createRecipe(entry.name, entry.serves, entry.author, entry.prep_time, entry.cook_time, entry.difficulty,
@@ -118,11 +119,16 @@ public class Recipe_Test {
         }
     }
 
-
-    public static void main( String[] args ) throws IOException, SQLException, URISyntaxException {
+    /**
+     * Reads data from a .csv & populates the appropriate table in our database.
+     * @param args          Standard cmdline arguments
+     * @throws IOException  Standard IO Exception
+     * @throws SQLException Standard SQL Exception
+     */
+    public static void main( String[] args ) throws IOException, SQLException {
         Recipe_Test rt = new Recipe_Test();
         System.out.println("[!] Begin ingestion of Recipe test_classes data.");
-        rt.populateTestData(new File("src\\main\\java\\cmsc495\\test_data\\recipe_data_optionals_removed.csv"));
+        rt.populateTestData(new File("src/main/java/cmsc495/test_data/recipe_data_optionals_removed.csv"));
         System.out.println("[!] Test data read in; attempting to write to table");
         rt.updateRecipeTable();
         System.out.println("[!] If no stacktrace, assume db recipe table is populated.");

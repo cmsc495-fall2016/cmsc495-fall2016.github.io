@@ -1,13 +1,9 @@
-/**
- * Class to create the database and tables as specified in the ERD
- * 
- */
 package cmsc495.database;
 
 import java.sql.*;
 
 /**
- * Creates and provides connectivity to the project's database, implementing the schema.
+ * Creates and provides connectivity to the project's database, implementing the schema as specified in the ERD
  * @author Claire, Justin
  * @version 1.0
  */
@@ -41,8 +37,7 @@ public class Database {
      */
     public Connection getDatabaseConn(){
         try{
-            Connection connection = DriverManager.getConnection(path);
-            return connection;
+            return DriverManager.getConnection(path);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -106,8 +101,39 @@ public class Database {
     }
 
     /**
+     * Utility method to support testing. TODO: Comment out before moving to production.
+     * The 'uses' table does not have its own entity, so its utility delete is stored in the
+     * parent Database class.
+     * @throws SQLException     Standard SQL Exception
+     */
+    public void clearUsesTable() throws SQLException {
+        Connection connection = this.getDatabaseConn();
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM uses;");
+        statement.execute();
+        this.databaseConn.close();
+    }
+
+    /**
+     * Utility method to support testing. TODO: Comment out before moving to production.
+     * The 'uses' table does not have its own entity, so its utility method for creating entries
+     * is stored in the parent Database class.
+     * @param ingredient    ID # of the Ingredient
+     * @param recipe        ID # of the Recipe
+     * @throws SQLException Standard SQL Exception
+     */
+    public void createUsesEntry(int ingredient, int recipe) throws SQLException {
+        Connection connection = this.getDatabaseConn();
+        PreparedStatement stmtAdd = connection.prepareStatement(
+                "INSERT INTO uses (ingredient_id,recipe_id) VALUES (?,?);");
+        stmtAdd.setInt(1,ingredient);
+        stmtAdd.setInt(2,recipe);
+        stmtAdd.executeUpdate();
+        this.databaseConn.close();
+    }
+
+    /**
      * Test method for development & debugging. TODO: Comment out before moving to production.
-     * @param args
+     * @param args  Standard command-line arguments
      */
     public static void main( String args[] )
     {

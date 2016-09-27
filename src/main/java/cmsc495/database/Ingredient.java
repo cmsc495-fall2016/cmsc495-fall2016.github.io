@@ -12,7 +12,7 @@ import java.sql.*;
  * @version 0.1 - 9/24/2016
  */
 public class Ingredient {
-    Database myDatabase = new Database();
+    private Database myDatabase = new Database();
 
     /** A database connection */
     private Connection connection = null;
@@ -34,7 +34,7 @@ public class Ingredient {
 
     /** Creates an Ingredient with a name.
      * @param name      A string containing the Ingredient's name
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public void createIngredient(String name) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -49,7 +49,7 @@ public class Ingredient {
      * Creates an Ingredient with both name and description.
      * @param name          A string containing the Ingredient's name
      * @param description   A String describing the Ingredient
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public void createIngredient(String name, String description) throws SQLException {
         this.name = name;
@@ -70,8 +70,7 @@ public class Ingredient {
      * Translates the ingredient's name into a number. One of the 'Read' functions for Ingredient;
      * populates the Ingredient's id & description fields.
      * @param name  Ingredient name
-     * @return      Ingredient id number
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public void getIngredientByName(String name) throws SQLException {
         this.name = name;
@@ -89,8 +88,7 @@ public class Ingredient {
      * Translates the ingredient's number into a name. One of the 'Read' functions for Ingredient;
      * populates the Ingredient's name & description fields.
      * @param id    Ingredient id number
-     * @return      Ingredient name
-     * @throws SQLException
+     * @throws SQLException     Standard SQL Exception
      */
     public void getIngredientByNumber(int id) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -107,7 +105,7 @@ public class Ingredient {
      * Update an ingredient's name
      * @param id        Ingredient id number
      * @param newName   Ingredient new name
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public void updateIngredient(int id, String newName) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -124,7 +122,7 @@ public class Ingredient {
      * @param id                Ingredient id number
      * @param name              Ingredient name, provided for constructor discrimination
      * @param newDescription    Ingredient new description
-     * @throws SQLException
+     * @throws SQLException     Standard SQL Exception
      */
     public void updateIngredient(int id, String name, String newDescription) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -141,7 +139,7 @@ public class Ingredient {
      * prompt for confirmation - that's a UI function.
      * Displays an alert if the Ingredient is used by a Recipe.
      * @param id                Ingredient id number
-     * @throws SQLException
+     * @throws SQLException     Standard SQL Exception
      */
     public void deleteIngredient(int id) throws SQLException {
         connection = myDatabase.getDatabaseConn();
@@ -176,9 +174,21 @@ public class Ingredient {
     }
 
     /**
+     * Utility method to support testing. TODO: Comment out before moving to production.
+     * @throws SQLException Standard SQL Exception
+     */
+    public void clearIngredientTable() throws SQLException {
+        connection = myDatabase.getDatabaseConn();
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM ingredient;");
+        statement.execute();
+        connection.close();
+    }
+
+
+    /**
      * Debugging test_classes method; TODO: Comment out before production
      * @param args  Default command-line arguments
-     * @throws SQLException
+     * @throws SQLException Standard SQL Exception
      */
     public static void main(String args[]) throws SQLException {
         System.out.println("[!] Begin Ingredient Test.");

@@ -1,5 +1,7 @@
 package cmsc495.database;
 
+import com.sun.prism.shader.Solid_TextureRGB_AlphaTest_Loader;
+
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -116,7 +118,7 @@ public class Recipe {
     public String getSource(){ return source; }
 
     private String procedures = null;
-    private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+    private ArrayList<Ingredient> ingredients = new ArrayList<>();
 
     // Assumption: There is no need for multiple constructors as anyone creating a recipe *must* provide the right
     // number of fields.
@@ -140,7 +142,7 @@ public class Recipe {
         //testConnection(connection);
         PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO recipe (name,serves,author,prep_time,cook_time,difficulty,procedures,description,source)" +
-                        "VALUES(?,?,?,?,?,?,?,?,?,?);");
+                        "VALUES(?,?,?,?,?,?,?,?,?);");
         statement.setString(1,name);
         this.name = name;
         statement.setInt(2,serves);
@@ -164,16 +166,19 @@ public class Recipe {
         getRecipeByName(this.name); // update the recipe ID #
         connection = myDatabase.getDatabaseConn();
 
-        for (Ingredient i: ingredients) {
-            this.ingredients.add(i);
-            // Create a row in the 'uses' table.
-            PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO uses (ingredient_id,recipe_id) VALUES (?,?);");
-            stmt.setInt(1,i.getId());
-            stmt.setInt(2,this.id);
-            stmt.execute();
-            stmt.close();
+        if(ingredients != null){ // Necessary in case we have no defined ingredients.
+            for (Ingredient i: ingredients) {
+                this.ingredients.add(i);
+                // Create a row in the 'uses' table.
+                PreparedStatement stmt = connection.prepareStatement(
+                        "INSERT INTO uses (ingredient_id,recipe_id) VALUES (?,?);");
+                stmt.setInt(1,i.getId());
+                stmt.setInt(2,this.id);
+                stmt.execute();
+                stmt.close();
+            }
         }
+
         connection.close();
     }
 
@@ -328,17 +333,15 @@ public class Recipe {
     }
 
     /**
-     * Utility method to verify db exists & create it if it doesn't.
-     * @param connection    Database connection to test_classes.
-     *
-    public void testConnection(Connection connection){
-        if(connection == null){
-            JOptionPane.showMessageDialog(null,"Database not found!");
-            Database db = new Database();
-            db.createTables();
-            return;
-        }
-    }*/
+     * Utility method to support testing. TODO: Comment out before moving to production.
+     * @throws SQLException Standard SQL Exception
+     */
+    public void clearRecipeTable() throws SQLException {
+        connection = myDatabase.getDatabaseConn();
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM recipe;");
+        statement.execute();
+        connection.close();
+    }
 
     /**
      * Main method for development testing & debugging. TODO: Comment this out before moving into production.
@@ -354,7 +357,7 @@ public class Recipe {
         flour.createIngredient("flour", "wheat product used to bake most anything");
         Ingredient otherCookieIngredients = new Ingredient();
         otherCookieIngredients.createIngredient("other cookie stuff", "things used to make chocolate chip cookies");
-        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(flour);
         ingredients.add(otherCookieIngredients);
         test.createRecipe("Cookies", 4, "Justin", 15, 30, 2, "Read directions off of cookie pack", "De-lish chocolate cookies", "http://www.recip-ez.com/cookies", ingredients);
