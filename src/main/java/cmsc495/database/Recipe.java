@@ -27,6 +27,7 @@ public class Recipe {
     private int prep_time = -1; // question: is this in seconds? minutes?
     private int cook_time = -1; // question: is this in seconds? minutes?
     private int difficulty = -1;
+    private String source = null;
 
     /**
      *
@@ -108,6 +109,12 @@ public class Recipe {
         return ingredients;
     }
 
+    /**
+     *
+     * @return  Source of this Recipe.
+     */
+    public String getSource(){ return source; }
+
     private String procedures = null;
     private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
 
@@ -127,13 +134,13 @@ public class Recipe {
      * @throws SQLException     Error in case of SQL Exception
      */
     public void createRecipe(String name, int serves, String author, int prep_time, int cook_time,
-                              int difficulty, String procedures, String description, ArrayList<Ingredient> ingredients)
+                              int difficulty, String procedures, String description, String source, ArrayList<Ingredient> ingredients)
             throws SQLException {
         connection = myDatabase.getDatabaseConn();
         //testConnection(connection);
         PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO recipe (name,serves,author,prep_time,cook_time,difficulty,procedures,description)" +
-                        "VALUES(?,?,?,?,?,?,?,?);");
+                "INSERT INTO recipe (name,serves,author,prep_time,cook_time,difficulty,procedures,description,source)" +
+                        "VALUES(?,?,?,?,?,?,?,?,?,?);");
         statement.setString(1,name);
         this.name = name;
         statement.setInt(2,serves);
@@ -150,6 +157,8 @@ public class Recipe {
         this.procedures = procedures;
         statement.setString(8,description);
         this.description = description;
+        statement.setString(9,source);
+        this.source = source;
         statement.executeUpdate();
         connection.close();
         getRecipeByName(this.name); // update the recipe ID #
@@ -251,11 +260,11 @@ public class Recipe {
      * @throws SQLException Error in case of SQL Exception
      */
     public void updateRecipe(int id, String name, int serves, String author, int prep_time, int cook_time,
-                             int difficulty, String procedures, String description) throws SQLException {
+                             int difficulty, String procedures, String description, String source) throws SQLException {
         connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement(
                 "UPDATE recipe SET name = ?,serves = ?,author = ?,prep_time = ?,cook_time = ?,difficulty = ?," +
-                        "procedures = ?,description =? WHERE id = ?;");
+                        "procedures = ?,description =?,source=? WHERE id = ?;");
         statement.setString(1,name);
         this.name = name;
         statement.setInt(2,serves);
@@ -272,7 +281,9 @@ public class Recipe {
         this.procedures = procedures;
         statement.setString(8,description);
         this.description = description;
-        statement.setInt(9,id);
+        statement.setString(9,source);
+        this.source = source;
+        statement.setInt(10,id);
         this.id = id;
 
         // Verify we have all of the appropriate pairings in the 'uses' table - perhaps by delete / create?
@@ -318,7 +329,7 @@ public class Recipe {
 
     /**
      * Utility method to verify db exists & create it if it doesn't.
-     * @param connection    Database connection to test.
+     * @param connection    Database connection to test_classes.
      *
     public void testConnection(Connection connection){
         if(connection == null){
@@ -336,8 +347,8 @@ public class Recipe {
      */
     public static void main( String args[] ) throws SQLException{
         Recipe test = new Recipe();
-        System.out.println("[!] Begin test with Recipe creation.");
-        //test.myDatabase.getDatabaseConn().close();
+        System.out.println("[!] Begin test_classes with Recipe creation.");
+        //test_classes.myDatabase.getDatabaseConn().close();
         // Test ingredients
         Ingredient flour = new Ingredient();
         flour.createIngredient("flour", "wheat product used to bake most anything");
@@ -346,15 +357,15 @@ public class Recipe {
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
         ingredients.add(flour);
         ingredients.add(otherCookieIngredients);
-        test.createRecipe("Cookies", 4, "Justin", 15, 30, 2, "Read directions off of cookie pack", "De-lish chocolate cookies", ingredients);
+        test.createRecipe("Cookies", 4, "Justin", 15, 30, 2, "Read directions off of cookie pack", "De-lish chocolate cookies", "http://www.recip-ez.com/cookies", ingredients);
         System.out.println("[*] Testing getRecipeByName");
         test.getRecipeByName("cookies");
         System.out.println("[*] Serves: " + test.serves);
         System.out.println("[#] Testing updateRecipe to serve 5 instead of 4");
-        test.updateRecipe(test.id, "Cookies", 5, "Justin", 15, 30, 2, "Read directions off of cookie pack", "De-lish chocolate cookies");
+        test.updateRecipe(test.id, "Cookies", 5, "Justin", 15, 30, 2, "Read directions off of cookie pack", "De-lish chocolate cookies", "http://www.recip-ez.com/cookies");
         System.out.println("[*] Serves: " + test.serves);
         System.out.println("[!] Deleting recipe (unless you commented out the next line)");
-        //test.deleteRecipe(test.id); COMMENTED OUT FOR VALIDATION
+        //test_classes.deleteRecipe(test_classes.id); COMMENTED OUT FOR VALIDATION
         System.out.println("[!] Tests complete; check sqlite explorer to verify deletion.");
     }
 }

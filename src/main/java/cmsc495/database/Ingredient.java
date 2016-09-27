@@ -176,7 +176,7 @@ public class Ingredient {
     }
 
     /**
-     * Debugging test method; TODO: Comment out before production
+     * Debugging test_classes method; TODO: Comment out before production
      * @param args  Default command-line arguments
      * @throws SQLException
      */

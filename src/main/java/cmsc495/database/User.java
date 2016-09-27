@@ -145,12 +145,13 @@ public class User {
     /**
      * Update an user's first name
      * @param id                User id number
+     * @param user_name         Username
      * @param first_name        User first name, provided for constructor discrimination
      * @param last_name         User last name, provided for constructor discrimination
      * @param newLastName      User new last name
      * @throws SQLException
      */
-    public void updateUser(int id, String user_name, String last_name,String newLastName) throws SQLException {
+    public void updateUser(int id, String user_name, String first_name, String last_name,String newLastName) throws SQLException {
         connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement("UPDATE "
                 + "user SET last_name = ? WHERE id = ?;");
@@ -231,7 +232,7 @@ public class User {
     
     
     /**
-     * Debugging test method; TODO: Comment out before production
+     * Debugging test_classes method; TODO: Comment out before production
      * @param args  Default command-line arguments
      * @throws SQLException
      */
@@ -239,7 +240,7 @@ public class User {
         System.out.println("[!] Begin User Test.");
         User test = new User();
         test.createUser("JohnD", "John", "Doe");
-        test.createUser("SusanA", "Susan", "Anderson", "susan@test.com");
+        test.createUser("SusanA", "Susan", "Anderson", "susan@test_classes.com");
         test.getUserByName("JohnD");
         System.out.println("[#] Number is: " + test.id);
         System.out.println("[*] User Name is: " + test.user_name);    
@@ -250,7 +251,7 @@ public class User {
         test.updateUser(test.id, "MarkS");
         test.updateUser(test.id, "John", "Joe");
         test.updateUser(test.id, "Joe", "Doe", "Strong");
-        test.updateUser(test.id, "Joe", "Strong", "", "joes@test.com");
+        test.updateUser(test.id, "Joe", "Strong", "", "joes@test_classes.com");
         test.getUserByNumber(test.id);
         System.out.println("[*] User Name is: " + test.user_name);    
         System.out.println("[*] First Name is: " + test.first_name); 
