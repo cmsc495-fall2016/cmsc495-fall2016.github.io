@@ -74,7 +74,8 @@ public class Database {
                                   "cook_time INTEGER,"+
                                   "difficulty INTEGER,"+
                                   "procedures text,"+
-                                  "description text)";
+                                  "description text,"+
+                                  "source text)";
             stmt.executeUpdate(createRecipe);
             //System.out.println("Created recipe table");
             
