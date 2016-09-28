@@ -210,8 +210,11 @@ public class Recipe {
                 "SELECT id,name,serves,author,prep_time,cook_time,difficulty,procedures,description FROM recipe " +
                         "WHERE ? = ? COLLATE NOCASE;");
         statement.setString(1,criteria);
-        statement.setString(2,term);
-        ResultSet results = statement.executeQuery();
+        if(term.contentEquals("name")){
+            statement.setString(2,term);
+        }else{
+            statement.setInt(2,Integer.parseInt(term));
+        }        ResultSet results = statement.executeQuery();
         if(!results.isClosed()){ // else we have no results
             this.id = results.getInt(0);
             this.name = results.getString(1);

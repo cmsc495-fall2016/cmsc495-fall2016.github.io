@@ -91,8 +91,11 @@ public class User {
         + "id,first_name,last_name,email_address,user_name FROM user "
         + "WHERE ? = ?;");
         statement.setString(1,criteria);
-        statement.setString(2,term);
-        ResultSet results = statement.executeQuery();
+        if(term.contentEquals("name")){
+            statement.setString(2,term);
+        }else{
+            statement.setInt(2,Integer.parseInt(term));
+        }        ResultSet results = statement.executeQuery();
         if(!results.isClosed()){
             this.id = results.getInt(1);
             this.first_name = results.getString(2);

@@ -97,7 +97,11 @@ public class Ingredient {
         PreparedStatement statement = connection.prepareStatement("SELECT id,name,description FROM ingredient " +
                 "WHERE ? = ?;");
         statement.setString(1,criteria);
-        statement.setString(2,term);
+        if(term.contentEquals("name")){
+            statement.setString(2,term);
+        }else{
+            statement.setInt(2,Integer.parseInt(term));
+        }
         ResultSet results = statement.executeQuery();
         if(!results.isClosed()){  // else no results
             this.id = results.getInt(1);
