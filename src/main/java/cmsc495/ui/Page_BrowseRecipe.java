@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
@@ -20,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import cmsc495.data.RecipeDao;
 import cmsc495.database.Recipe;
 
 public class Page_BrowseRecipe extends Page implements ActionListener{
@@ -30,13 +32,18 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
   private static final long serialVersionUID = -1007375598685985229L;
 
   private Map<JButton,Recipe> buttonMap = new HashMap<JButton, Recipe>();
+  private RecipeDao recipeDao;
   
   public Page_BrowseRecipe(String title) {
     super(title);
     
+    recipeDao = new RecipeDao();
+    
     // fetch recipe browse default
     // TODO replace this call with the DAO method once it is created
-    ArrayList<Recipe> listRecipes = fetchBrowseDefault();
+    //List<Recipe> listRecipes = fetchBrowseDefault();
+    List<Recipe> listRecipes = recipeDao.getAll();
+    
     
     // build the panel & set its' layout manager
     //JPanel panel = new JPanel();
@@ -89,6 +96,9 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
    */
   private ArrayList<Recipe> fetchBrowseDefault() {
     ArrayList<Recipe> list = new ArrayList<Recipe>();
+    
+
+    
     // TODO reconfigure this to the methods the interface teams' method
     for (int i = 1; i <= 40; i++){
       System.out.println("Getting:"+i);

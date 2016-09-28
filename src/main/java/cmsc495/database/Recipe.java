@@ -12,6 +12,54 @@ import java.util.ArrayList;
  * @version 0.1 - 9/24/2016
  */
 public class Recipe {
+    public void setMyDatabase(Database myDatabase) {
+    this.myDatabase = myDatabase;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setServes(int serves) {
+    this.serves = serves;
+  }
+
+  public void setAuthor(String author) {
+    this.author = author;
+  }
+
+  public void setPrep_time(int prep_time) {
+    this.prep_time = prep_time;
+  }
+
+  public void setCook_time(int cook_time) {
+    this.cook_time = cook_time;
+  }
+
+  public void setDifficulty(int difficulty) {
+    this.difficulty = difficulty;
+  }
+
+  public void setSource(String source) {
+    this.source = source;
+  }
+
+  public void setProcedures(String procedures) {
+    this.procedures = procedures;
+  }
+
+  public void setIngredients(ArrayList<Ingredient> ingredients) {
+    this.ingredients = ingredients;
+  }
+
     private Database myDatabase = new Database();
 
     /** A SQLite statement */

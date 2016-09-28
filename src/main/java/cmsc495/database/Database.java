@@ -21,11 +21,11 @@ public class Database {
          */
         try{
             this.databaseConn = DriverManager.getConnection(path);
-            createTables(); // Create if not exists
-            //System.out.println("Successfully connected");
+            //createTables(); // Create if not exists
+            System.out.println("Successfully connected");
         }
         catch (Exception e){
-        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+          e.printStackTrace();
         }
         
     }
@@ -58,7 +58,7 @@ public class Database {
                                         " name TEXT NOT NULL, "+
                                         " description TEXT)";
             stmt.executeUpdate(createIngredient);
-            //System.out.println("Created Ingredient table");
+            System.out.println("Created Ingredient table");
 
             String createRecipe = "CREATE TABLE IF NOT EXISTS recipe " + 
                                   "(id INTEGER PRIMARY KEY NOT NULL," +
@@ -72,7 +72,7 @@ public class Database {
                                   "description text,"+
                     "source text)";
             stmt.executeUpdate(createRecipe);
-            //System.out.println("Created recipe table");
+            System.out.println("Created recipe table");
             
             String createUses = "CREATE TABLE IF NOT EXISTS uses " + 
                                 "(id INTEGER PRIMARY KEY NOT NULL," +
@@ -81,7 +81,7 @@ public class Database {
                         "FOREIGN KEY(ingredient_id) REFERENCES ingredient(id),"+
                                 "FOREIGN KEY(recipe_id) REFERENCES recipe(id))";
             stmt.executeUpdate(createUses);
-            //System.out.println("Created Uses table");
+            System.out.println("Created Uses table");
             
             String createUserTable = "CREATE TABLE IF NOT EXISTS user "+
                                 "(id INTEGER PRIMARY KEY NOT NULL, "+
@@ -96,7 +96,7 @@ public class Database {
             
         }
         catch (SQLException e){
-            System.out.println(e.getClass().getName()+e.getMessage()+":"+e.getSQLState());
+            e.printStackTrace();
         }
     }
 
