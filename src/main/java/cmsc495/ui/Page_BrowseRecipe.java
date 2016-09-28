@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,8 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import cmsc495.database.Recipe;
+
 public class Page_BrowseRecipe extends Page implements ActionListener{
 
   /**
@@ -26,14 +29,14 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
    */
   private static final long serialVersionUID = -1007375598685985229L;
 
-  private Map<JButton,Recipe_Hold> buttonMap = new HashMap<JButton, Recipe_Hold>();
+  private Map<JButton,Recipe> buttonMap = new HashMap<JButton, Recipe>();
   
   public Page_BrowseRecipe(String title) {
     super(title);
     
     // fetch recipe browse default
     // TODO replace this call with the DAO method once it is created
-    ArrayList<Recipe_Hold> listRecipes = fetchBrowseDefault();
+    ArrayList<Recipe> listRecipes = fetchBrowseDefault();
     
     // build the panel & set its' layout manager
     //JPanel panel = new JPanel();
@@ -44,11 +47,11 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
      *    recipe map (helps with action listener
      *    panel 
      */
-    for( Recipe_Hold recipe : listRecipes){
+    for( Recipe recipe : listRecipes){
       JButton button  = buildButton(recipe);
       buttonMap.put(button, recipe);
       button.addActionListener( this );
-      button.setActionCommand("Recipe_"+ recipe.get_id());
+      button.setActionCommand("Recipe_"+ recipe.getId());
       add(button);
     }// end for listRecipes
     
@@ -59,7 +62,7 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
    * @param recipe
    * @return JButton
    */
-  private JButton buildButton(Recipe_Hold recipe) {
+  private JButton buildButton(Recipe recipe) {
     // Creates a button that resembles a webpage's link
     JButton button = new JButton();
     button.setText(
@@ -68,8 +71,8 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
                 "Recipe: <FONT color=\"#000099\"><U>%s</U></FONT><BR>" + 
                 "Description: <BR>%s" + 
                 "</HTML>",
-            recipe.get_recipeName(),
-            recipe.get_description()
+            recipe.getName(),
+            recipe.getDescription()
             )
         );
     button.setHorizontalAlignment(SwingConstants.LEFT);
@@ -84,18 +87,22 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
    * TODO Update this with the DAO from the interface team
    * @return ArrayList<Recipe> 
    */
-  private ArrayList<Recipe_Hold> fetchBrowseDefault() {
-    ArrayList<Recipe_Hold> list = new ArrayList<Recipe_Hold>();
+  private ArrayList<Recipe> fetchBrowseDefault() {
+    ArrayList<Recipe> list = new ArrayList<Recipe>();
     // TODO reconfigure this to the methods the interface teams' method
-    list.add(new Recipe_Hold(1,   "Cheesy Mac and Trees","Yummy Mac & Cheese with brocolli"));
-    list.add(new Recipe_Hold(2,   "Mexi Mac and Cheese","Description here"));
-    list.add(new Recipe_Hold(3,   "Strawberry Shortcakes","Yummy Ymuuy Yummy"));
-    list.add(new Recipe_Hold(4,   "Duck Stock","Duck, Duck, oh yeah DUCK!"));
-    list.add(new Recipe_Hold(5,   "Warm Mexican rice salad with borlotti beans & avocado salsa","Sound like a whole lot of messy"));
-    list.add(new Recipe_Hold(6,   "Crispy Tortillas with Guacamole","Chips & Huac"));
-    list.add(new Recipe_Hold(7,   "Lamb Shanks Braise with Figs and Root Vegetables","Who knew I like ROOTS"));
-    list.add(new Recipe_Hold(8,   "RoastTurkey with Spiked Gravy","ok cool"));
-    list.add(new Recipe_Hold(10,  "Ham in Coca-Cola","Ham & Coke? What"));
+    for (int i = 1; i <= 40; i++){
+      System.out.println("Getting:"+i);
+      try {
+        Recipe recipe = new Recipe();
+        recipe.getRecipeByNumber(i);
+        System.out.println("NAME:"+recipe.getName());
+        if (recipe.getName() != null)
+          list.add(recipe);
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
     
     return list;
   }//end fetchBrowseDefault
@@ -111,7 +118,7 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
       
       // Determine if the button is in the buttonMap
       if (buttonMap.containsKey( button ) ){
-        Recipe_Hold recipe = (Recipe_Hold) buttonMap.get(button);
+        Recipe recipe = (Recipe) buttonMap.get(button);
         
         // set the panel to the main page
         SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);

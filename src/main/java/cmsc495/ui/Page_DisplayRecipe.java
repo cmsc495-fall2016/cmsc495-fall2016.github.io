@@ -25,6 +25,9 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import cmsc495.database.Ingredient;
+import cmsc495.database.Recipe;
+
 /**
  * @author Adam Howell, Obinna Ojialor
  * @date   2016-09-19
@@ -36,40 +39,11 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
    */
   private static final long serialVersionUID = -3430232989667398763L;
   
-  private Recipe_Hold recipe;
+  private Recipe recipe;
   
-  public Page_DisplayRecipe(Recipe_Hold recipe) {
+  public Page_DisplayRecipe(Recipe recipe) {
     super("Display");
     this.recipe = recipe;
-    // TODO update when DAO is ready 
-    if (!recipe.is_full()){
-      String [] ingredients = {
-        "broccoli",  
-      };
-      String procedure = "Cook pasta \"al dente\" (2 minutes less than you would cook pasta for immediate serving) and cool following HACCP procedures one day prior to serving.\n" +
-              "Cut and blanch* broccoli and peppers one day prior to serving.\n" +
-              "On the stove in a medium sized sauce pot make a roux** with the flour and oil.\n" +
-              "In a steam kettle on medium heat bring the milk to a simmer, add the roux and mix thoroughly.\n" +
-              "As the milk thickens add the chicken stock.\n" +
-              "When this thickens to a medium consistency add the cheese slowly mixing well to incorporate it into the milk.\n" +
-              "Add the blanched vegetables and pasta.\n" +
-              "Season with black pepper to taste.\n" +
-              "Transfer to four 2-inch deep serving pans and top with 1� cups cheddar cheese each. (25 servings per pan)\n" +
-              "Bake in oven at 350 degrees for 10 minutes.\n" +
-              "Cover and hold according to HACCP Hot Food Holding Guidelines.'\n";
-      this.recipe = new Recipe_Hold(
-          1,
-          "Cheesy Mac and Trees",
-          100,
-          "John Doe",
-          "00:10:00",
-          "00:10:00",
-          2,
-          procedure,
-          "Try this tasty Rachael Ray recipe for Cheesy Mac and Trees today!",
-          ingredients
-          );
-    }
     
     // set layout manager
     setLayout(new BorderLayout());
@@ -112,7 +86,7 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
     
     // build & add label 
     JLabel label = new JLabel(
-        "<html><span style='font-size:20px'>"+recipe.get_recipeName()+"</span></html>",
+        "<html><span style='font-size:20px'>"+recipe.getName()+"</span></html>",
         SwingConstants.LEFT);
     panel.add(label,BorderLayout.LINE_START);
     
@@ -149,23 +123,23 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
      *    "boldlarge","small","large",
      */
     String nl = new String ("\n");
-    insertString(doc,recipe.get_recipeName() + nl,"boldlarge");
+    insertString(doc,recipe.getName() + nl,"boldlarge");
     insertString(doc,"By: " ,"italicsmallbold");
-    insertString(doc,recipe.get_author() + nl + nl,"small");
+    insertString(doc,recipe.getAuthor() + nl + nl,"small");
     //insertString(doc,"Description:\t" ,"italicbold");
-    insertString(doc,recipe.get_description() + nl + nl,"regular");
+    insertString(doc,recipe.getDescription() + nl + nl,"regular");
     insertString(doc,"Cook Time:\t" ,"italicbold");
-    insertString(doc,recipe.get_cookTime() + nl, "regular");
+    insertString(doc,recipe.getCook_time() + nl, "regular");
     insertString(doc,"Prep Time:\t" ,"italicbold");
-    insertString(doc,recipe.get_prepTime() + nl, "regular");
+    insertString(doc,recipe.getPrep_time() + nl, "regular");
     insertString(doc,"Difficulty:\t" ,"italicbold");
-    insertString(doc,recipe.get_difficulty() + nl, "regular");
+    insertString(doc,recipe.getDifficulty() + nl, "regular");
     insertString(doc,"Ingredients:" + nl,"italicbold");
-    for (String ingredient : recipe.get_ingredients()){
-      insertString(doc,"\t" + ingredient + nl, "regular");
+    for (Ingredient ingredient : recipe.getIngredients()){
+      insertString(doc,"\t" + ingredient.getName() + nl, "regular");
     }
     insertString(doc,"Procedures:" + nl,"italicbold");
-    insertString(doc, recipe.get_procedures() + nl, "regular");
+    insertString(doc, recipe.getProcedures() + nl, "regular");
     
     
     // Create the scrolled area
@@ -267,11 +241,6 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
 
   
   public static void main(String[] args) {
-    Recipe_Hold testRecipe = new Recipe_Hold(5,
-        "Warm Mexican rice salad with borlotti beans & avocado salsa",
-        "Sound like a whole lot of messy"
-        );
 
-    Page_DisplayRecipe test_DisplayOnly = new Page_DisplayRecipe(testRecipe); 
   }// end main
 }//end class Page_DisplayRecipe
