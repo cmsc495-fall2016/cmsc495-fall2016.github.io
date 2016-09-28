@@ -73,15 +73,7 @@ public class Ingredient {
      * @throws SQLException Standard SQL Exception
      */
     public void getIngredientByName(String name) throws SQLException {
-        this.name = name;
-        connection = myDatabase.getDatabaseConn();
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT id,description FROM ingredient WHERE name = ? COLLATE NOCASE;");
-        statement.setString(1,name);
-        ResultSet results = statement.executeQuery();
-        this.id = results.getInt(1);
-        this.description = results.getString(2);
-        connection.close();
+        getIngredientByCriteria("name", name);
     }
 
     /**
@@ -91,13 +83,27 @@ public class Ingredient {
      * @throws SQLException     Standard SQL Exception
      */
     public void getIngredientByNumber(int id) throws SQLException {
+        getIngredientByCriteria("id", String.valueOf(id));
+    }
+
+    /**
+     * Retrieves Ingredient information based on search criteria. Populates the Ingredient's id, name & description.
+     * @param criteria      Search criteria (id or name)
+     * @param term          Search term
+     * @throws SQLException Standard SQL Exception
+     */
+    private void getIngredientByCriteria(String criteria, String term) throws SQLException {
         connection = myDatabase.getDatabaseConn();
-        PreparedStatement statement = connection.prepareStatement("SELECT name,description FROM ingredient " +
-                "WHERE id = ?;");
-        statement.setInt(1,id);
+        PreparedStatement statement = connection.prepareStatement("SELECT id,name,description FROM ingredient " +
+                "WHERE ? = ?;");
+        statement.setString(1,criteria);
+        statement.setString(2,term);
         ResultSet results = statement.executeQuery();
-        this.name = results.getString(1);
-        this.description = results.getString(2);
+        if(!results.isClosed()){  // else no results
+            this.id = results.getInt(1);
+            this.name = results.getString(2);
+            this.description = results.getString(3);
+        }
         connection.close();
     }
 
@@ -147,7 +153,7 @@ public class Ingredient {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM uses WHERE ingredient_id = ?;");
         statement.setInt(1,id);
         ResultSet results = statement.executeQuery();
-        if(results.next()){
+        if(!results.isClosed()){
             JOptionPane.showMessageDialog(null, "This ingredient is in use by at least one recipe and cannot be deleted.");
         } else{
             statement = connection.prepareStatement("DELETE FROM ingredient WHERE id = ?;");

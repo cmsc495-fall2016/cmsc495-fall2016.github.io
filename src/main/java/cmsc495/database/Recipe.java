@@ -185,23 +185,7 @@ public class Recipe {
      * @throws SQLException     Error in case of SQL Exception
      */
     public void getRecipeByNumber(int id) throws SQLException {
-        connection = myDatabase.getDatabaseConn();
-        //testConnection(connection);
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT name,serves,author,prep_time,cook_time,difficulty,procedures,description FROM recipe " +
-                "WHERE id = ?;");
-        statement.setInt(1,id);
-        ResultSet results = statement.executeQuery();
-        this.name = results.getString(1);
-        this.serves = results.getInt(2);
-        this.author = results.getString(3);
-        this.prep_time = results.getInt(4);
-        this.cook_time = results.getInt(5);
-        this.difficulty = results.getInt(6);
-        this.procedures = results.getString(7);
-        this.description = results.getString(8);
-        populateIngredients(id, connection);
-        //connection.close();
+        getRecipeByCriteria("id", String.valueOf(id));
     }
 
     /**
@@ -210,23 +194,37 @@ public class Recipe {
      * @throws SQLException     Error in case of SQL Exception
      */
     public void getRecipeByName(String name) throws SQLException {
+        getRecipeByCriteria("name", name);
+    }
+
+    /**
+     * Consolidated method to map a ResultSet to Recipe attributes. Checks to ensure nonzero results.
+     * @param criteria      String for either 'id' or 'name'
+     * @param term          String for search term
+     * @throws SQLException Standard SQL Exception
+     */
+    private void getRecipeByCriteria(String criteria, String term) throws SQLException {
+
         connection = myDatabase.getDatabaseConn();
-        //testConnection(connection);
         PreparedStatement statement = connection.prepareStatement(
-                "SELECT id,serves,author,prep_time,cook_time,difficulty,procedures,description FROM recipe " +
-                        "WHERE name = ? COLLATE NOCASE;");
-        statement.setString(1,name);
+                "SELECT id,name,serves,author,prep_time,cook_time,difficulty,procedures,description FROM recipe " +
+                        "WHERE ? = ? COLLATE NOCASE;");
+        statement.setString(1,criteria);
+        statement.setString(2,term);
         ResultSet results = statement.executeQuery();
-        this.id = results.getInt(1);
-        this.serves = results.getInt(2);
-        this.author = results.getString(3);
-        this.prep_time = results.getInt(4);
-        this.cook_time = results.getInt(5);
-        this.difficulty = results.getInt(6);
-        this.procedures = results.getString(7);
-        this.description = results.getString(8);
+        if(!results.isClosed()){ // else we have no results
+            this.id = results.getInt(0);
+            this.name = results.getString(1);
+            this.serves = results.getInt(2);
+            this.author = results.getString(3);
+            this.prep_time = results.getInt(4);
+            this.cook_time = results.getInt(5);
+            this.difficulty = results.getInt(6);
+            this.procedures = results.getString(7);
+            this.description = results.getString(8);
+        }
         populateIngredients(this.id, connection);
-        //connection.close();
+        connection.close();
     }
 
     /**
@@ -234,16 +232,17 @@ public class Recipe {
      * @param id            The Recipe's id number
      * @throws SQLException Standard SQL Exception
      */
-    public void populateIngredients(int id, Connection connection) throws SQLException {
+    private void populateIngredients(int id, Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT ingredient_id FROM uses WHERE recipe_id = ?;");
         statement.setInt(1,id);
         ResultSet results = statement.executeQuery();
-        connection.close();
         this.ingredients.clear();
-        while(results.next()){
-            Ingredient i = new Ingredient();
-            i.getIngredientByNumber(results.getInt(1));
-            this.ingredients.add(i);
+        if(!results.isClosed()) { // else no Ingredients.
+            while (results.next()) {
+                Ingredient i = new Ingredient();
+                i.getIngredientByNumber(results.getInt(1));
+                this.ingredients.add(i);
+            }
         }
     }
 
@@ -312,14 +311,7 @@ public class Recipe {
      */
     public void deleteRecipe(int id) throws SQLException {
         connection = myDatabase.getDatabaseConn();
-        //testConnection(connection);
-        // First, ensure this ingredient isn't in use by any recipes; must maintain data integrity
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM uses WHERE recipe_id = ?;");
-        statement.setInt(1,id);
-        ResultSet results = statement.executeQuery();
-        // We don't need the same if/else as is in the Ingredient delete; we can keep tracking ingredients even if
-        // they're not presently used in any Recipes - as they may be in the future.
-        statement = connection.prepareStatement("DELETE FROM recipe WHERE id = ?;");
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM recipe WHERE id = ?;");
         statement.setInt(1,id);
         statement.execute();
         // Execute a delete statement from the Uses table for every row with our Recipe id.

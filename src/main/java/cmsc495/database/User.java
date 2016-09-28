@@ -69,20 +69,8 @@ public class User {
      * @throws SQLException Standard SQL Exception
      */
     public int getUserByName(String user_name) throws SQLException {
-        this.user_name = user_name;
-        connection = myDatabase.getDatabaseConn();
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT id,user_name, first_name, last_name, email_address FROM "
-                        + "user WHERE user_name = ? COLLATE NOCASE;");
-        statement.setString(1,user_name);
-        ResultSet results = statement.executeQuery();
-        this.id = results.getInt(1);
-        this.user_name = results.getString(2);
-        this.first_name = results.getString(3);
-        this.last_name = results.getString(4);
-        this.email_address = results.getString(5);
-        connection.close();
-        return results.getInt(1);
+        getUserByCriteria("user_name", user_name);
+        return this.id;
     }
 
     /**
@@ -93,18 +81,26 @@ public class User {
      * @throws SQLException Standard SQL Exception
      */
     public String getUserByNumber(int id) throws SQLException {
+        getUserByCriteria("id", String.valueOf(id));
+        return this.user_name;
+    }
+
+    private void getUserByCriteria(String criteria, String term) throws SQLException {
         connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement("SELECT "
-                + "user_name, first_name, last_name, email_address FROM user "
-                + "WHERE id = ?;");
-        statement.setInt(1,id);
+        + "id,first_name,last_name,email_address,user_name FROM user "
+        + "WHERE ? = ?;");
+        statement.setString(1,criteria);
+        statement.setString(2,term);
         ResultSet results = statement.executeQuery();
-        this.user_name = results.getString(1);
-        this.first_name = results.getString(2);
-        this.last_name = results.getString(3);
-        this.email_address = results.getString(4);
+        if(!results.isClosed()){
+            this.id = results.getInt(1);
+            this.first_name = results.getString(2);
+            this.last_name = results.getString(3);
+            this.email_address = results.getString(4);
+            this.user_name = results.getString(5);
+        }
         connection.close();
-        return results.getString(1);
     }
 
     /**
