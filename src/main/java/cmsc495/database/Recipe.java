@@ -14,10 +14,7 @@ import java.util.ArrayList;
 public class Recipe {
     private Database myDatabase = new Database();
 
-    /** A database connection */
-    private Connection connection = null;
     /** A SQLite statement */
-    private Statement statement = null;
     private int id = -1;
     private String name = null;
     private String description = null;
@@ -135,7 +132,7 @@ public class Recipe {
     public void createRecipe(String name, int serves, String author, int prep_time, int cook_time,
                               int difficulty, String procedures, String description, String source, ArrayList<Ingredient> ingredients)
             throws SQLException {
-        connection = myDatabase.getDatabaseConn();
+        Connection connection = myDatabase.getDatabaseConn();
         //testConnection(connection);
         PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO recipe (name,serves,author,prep_time,cook_time,difficulty,procedures,description,source)" +
@@ -205,29 +202,32 @@ public class Recipe {
      */
     private void getRecipeByCriteria(String criteria, String term) throws SQLException {
 
-        connection = myDatabase.getDatabaseConn();
+        Connection connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement(
-                "SELECT id,name,serves,author,prep_time,cook_time,difficulty,procedures,description FROM recipe " +
-                        "WHERE ? = ? COLLATE NOCASE;");
-        statement.setString(1,criteria);
+                "SELECT id,name,serves,author,prep_time,cook_time,difficulty,procedures,description,source FROM recipe " +
+                        "WHERE " + criteria + " = ? COLLATE NOCASE;");
+        //statement.setString(1,criteria);
         if(criteria.contentEquals("name")){
-            statement.setString(2,term);
+            statement.setString(1,term);
         }else{
-            statement.setInt(2,Integer.parseInt(term));
-        }        ResultSet results = statement.executeQuery();
-        if(!results.isClosed()){ // else we have no results
-            this.id = results.getInt(1);
-            this.name = results.getString(2);
-            this.serves = results.getInt(3);
-            this.author = results.getString(4);
-            this.prep_time = results.getInt(5);
-            this.cook_time = results.getInt(6);
-            this.difficulty = results.getInt(7);
-            this.procedures = results.getString(8);
-            this.description = results.getString(9);
+            statement.setInt(1,Integer.parseInt(term));
         }
-        populateIngredients(this.id, connection);
-        connection.close();
+        try (ResultSet recipeResults = statement.executeQuery()) {
+            if (recipeResults.next()) { // else we have no results
+                this.id = recipeResults.getInt("id");
+                this.name = recipeResults.getString("name");
+                this.serves = recipeResults.getInt("serves");
+                this.author = recipeResults.getString("author");
+                this.prep_time = recipeResults.getInt("prep_time");
+                this.cook_time = recipeResults.getInt("cook_time");
+                this.difficulty = recipeResults.getInt("difficulty");
+                this.procedures = recipeResults.getString("procedures");
+                this.description = recipeResults.getString("description");
+                this.source = recipeResults.getString("source");
+                connection.close();
+                populateIngredients(this.id);
+            }
+        }
     }
 
     /**
@@ -235,18 +235,20 @@ public class Recipe {
      * @param id            The Recipe's id number
      * @throws SQLException Standard SQL Exception
      */
-    private void populateIngredients(int id, Connection connection) throws SQLException {
+    private void populateIngredients(int id) throws SQLException {
+        Connection connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement("SELECT ingredient_id FROM uses WHERE recipe_id = ?;");
         statement.setInt(1,id);
-        ResultSet results = statement.executeQuery();
+        ResultSet ingredientResults = statement.executeQuery();
         this.ingredients.clear();
-        if(!results.isClosed()) { // else no Ingredients.
-            while (results.next()) {
+        if(ingredientResults.next()) { // else no Ingredients.
+            while (ingredientResults.next()) {
                 Ingredient i = new Ingredient();
-                i.getIngredientByNumber(results.getInt(1));
+                i.getIngredientByNumber(ingredientResults.getInt(1));
                 this.ingredients.add(i);
             }
         }
+        connection.close();
     }
 
     /**
@@ -265,7 +267,7 @@ public class Recipe {
      */
     public void updateRecipe(int id, String name, int serves, String author, int prep_time, int cook_time,
                              int difficulty, String procedures, String description, String source) throws SQLException {
-        connection = myDatabase.getDatabaseConn();
+        Connection connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement(
                 "UPDATE recipe SET name = ?,serves = ?,author = ?,prep_time = ?,cook_time = ?,difficulty = ?," +
                         "procedures = ?,description =?,source=? WHERE id = ?;");
@@ -313,7 +315,7 @@ public class Recipe {
      * @throws SQLException Error for SQL Exceptions
      */
     public void deleteRecipe(int id) throws SQLException {
-        connection = myDatabase.getDatabaseConn();
+        Connection connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement("DELETE FROM recipe WHERE id = ?;");
         statement.setInt(1,id);
         statement.execute();
@@ -329,7 +331,7 @@ public class Recipe {
      * @throws SQLException Standard SQL Exception
      */
     public void clearRecipeTable() throws SQLException {
-        connection = myDatabase.getDatabaseConn();
+        Connection connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement("DELETE FROM recipe;");
         statement.execute();
         connection.close();

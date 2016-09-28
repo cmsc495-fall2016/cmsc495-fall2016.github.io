@@ -89,12 +89,11 @@ public class User {
         connection = myDatabase.getDatabaseConn();
         PreparedStatement statement = connection.prepareStatement("SELECT "
         + "id,first_name,last_name,email_address,user_name FROM user "
-        + "WHERE ? = ?;");
-        statement.setString(1,criteria);
+        + "WHERE " + criteria + " = ?;");
         if(criteria.contentEquals("name")){
-            statement.setString(2,term);
+            statement.setString(1,term);
         }else{
-            statement.setInt(2,Integer.parseInt(term));
+            statement.setInt(1,Integer.parseInt(term));
         }
         ResultSet results = statement.executeQuery();
         if(!results.isClosed()){

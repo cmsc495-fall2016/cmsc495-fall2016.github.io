@@ -102,11 +102,12 @@ public class Ingredient {
         }else{
             statement.setInt(2,Integer.parseInt(term));
         }
-        ResultSet results = statement.executeQuery();
-        if(!results.isClosed()){  // else no results
-            this.id = results.getInt(1);
-            this.name = results.getString(2);
-            this.description = results.getString(3);
+        try (ResultSet results = statement.executeQuery()) {
+            if (results.next()) {  // else no results
+                this.id = results.getInt("id");
+                this.name = results.getString("name");
+                this.description = results.getString("description");
+            }
         }
         connection.close();
     }
