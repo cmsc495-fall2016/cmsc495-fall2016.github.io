@@ -210,21 +210,21 @@ public class Recipe {
                 "SELECT id,name,serves,author,prep_time,cook_time,difficulty,procedures,description FROM recipe " +
                         "WHERE ? = ? COLLATE NOCASE;");
         statement.setString(1,criteria);
-        if(term.contentEquals("name")){
+        if(criteria.contentEquals("name")){
             statement.setString(2,term);
         }else{
             statement.setInt(2,Integer.parseInt(term));
         }        ResultSet results = statement.executeQuery();
         if(!results.isClosed()){ // else we have no results
-            this.id = results.getInt(0);
-            this.name = results.getString(1);
-            this.serves = results.getInt(2);
-            this.author = results.getString(3);
-            this.prep_time = results.getInt(4);
-            this.cook_time = results.getInt(5);
-            this.difficulty = results.getInt(6);
-            this.procedures = results.getString(7);
-            this.description = results.getString(8);
+            this.id = results.getInt(1);
+            this.name = results.getString(2);
+            this.serves = results.getInt(3);
+            this.author = results.getString(4);
+            this.prep_time = results.getInt(5);
+            this.cook_time = results.getInt(6);
+            this.difficulty = results.getInt(7);
+            this.procedures = results.getString(8);
+            this.description = results.getString(9);
         }
         populateIngredients(this.id, connection);
         connection.close();
