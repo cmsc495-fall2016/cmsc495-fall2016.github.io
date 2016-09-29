@@ -56,3 +56,5 @@ documents/week1/~$todo.docx
 .classpath
 .project
 *.prefs
+*.db-journal
+recipe.db
