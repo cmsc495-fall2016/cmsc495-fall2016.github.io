@@ -33,6 +33,10 @@ import javax.swing.border.TitledBorder;
 
 public class SimpleGui extends JFrame implements ActionListener {
   /**
+   * Generated serial ID
+   */
+  private static final long serialVersionUID = 6580341315626032237L;
+  /**
    * Private variables
    */
   private JPanel mainPanel, currentPage;

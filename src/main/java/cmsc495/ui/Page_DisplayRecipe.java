@@ -9,6 +9,9 @@ package cmsc495.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -62,19 +65,55 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
   
   
   public void actionPerformed(ActionEvent e) {
-    // TODO Auto-generated method stub
-    System.out.println(e.getSource());
+    /*
+     * Determine the source and act 
+     * NOTE: May need to change to  
+     */
     if (e.getSource() instanceof JButton){
       JButton button = (JButton) e.getSource();
 
-      // set the panel to the main page
+      // set the panel to the main page TODO Update with appropriate pages
+      PopUp.Warning(this, "Page not implemented yet", "This is a place holder for the edit/export/delete pages");
       SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
-      PopUp.Warning(this, "Page not implemented yet", "This is a place holder for the create/edit page");
-      //gui.setCurrentPage(new Page_edit(recipe));
+      switch (button.getActionCommand()){
+        case "Edit": 
+          //gui.setCurrentPage(new Page_Edit(recipe));
+          break;
+        case "Export": 
+          //gui.setCurrentPage(new Page_Export(recipe));
+          break;
+        case "Delete": 
+          //gui.setCurrentPage(new Page_Delete(recipe));
+          break;
+      }
+      
     }//end if 
     
   }// end actionPerformed
 
+  /**
+   * Method to build buttons for this page & set action command
+   * @param commandAction   string to set as display and to determine what action to preform
+   * @return JButton
+   */
+  private JButton buildNavButton(String commandAction) {
+    // TODO Auto-generated method stub
+    JButton button = new JButton();
+    button.setText(
+        String.format(
+            "<HTML><FONT color=\"#000099\"><U>%s</U></FONT></HTML>",
+            commandAction
+            )
+        );
+    button.setHorizontalAlignment(SwingConstants.LEFT);
+    button.setBorderPainted(false);
+    button.setOpaque(false);
+    button.setBackground(Color.WHITE);
+    button.setActionCommand(commandAction);
+    button.addActionListener(this);
+    
+    return button;
+  }
   /**
    * Method to create the North panel that will contain the Recipe Name & buttons to edit
    * @return JPanel
@@ -88,23 +127,19 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
     JLabel label = new JLabel(
         "<html><span style='font-size:20px'>"+recipe.getName()+"</span></html>",
         SwingConstants.LEFT);
-    panel.add(label,BorderLayout.LINE_START);
+    panel.add(label,BorderLayout.PAGE_START);
     
-    // build & add button
-    JButton button = new JButton();
-    button.setText(
-            "<HTML><FONT color=\"#000099\"><U>Edit</U></FONT></HTML>"
-            );
-    button.setHorizontalAlignment(SwingConstants.LEFT);
-    button.setBorderPainted(false);
-    button.setOpaque(false);
-    button.setBackground(Color.WHITE);
-    button.addActionListener(this);
+    // build panel & add buttons
+    JPanel buttonPanel = new JPanel((LayoutManager) new FlowLayout(FlowLayout.RIGHT));
+    buttonPanel.add(buildNavButton("Edit"));
+    buttonPanel.add(buildNavButton("Export"));
+    buttonPanel.add(buildNavButton("Delete"));
     
-    panel.add(button,BorderLayout.LINE_END);
+    panel.add(buttonPanel,BorderLayout.PAGE_END);
     
     return panel;
   }// end createNorthPanel
+
   /**
    * Method to center panel that will contain the Recipe data
    * @param recipe
