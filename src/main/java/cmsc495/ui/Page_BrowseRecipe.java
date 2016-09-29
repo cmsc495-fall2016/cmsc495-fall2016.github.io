@@ -6,18 +6,18 @@
  */
 package cmsc495.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.LayoutManager;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -34,27 +34,29 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
   
   public Page_BrowseRecipe(String title) {
     super(title);
-    
+    this.setLayout(new BorderLayout());
+
     // fetch recipe browse default
     List<Recipe> listRecipes = new Recipe().getAll();
     
-    
     // build the panel & set its' layout manager
-    //JPanel panel = new JPanel();
-    this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    
+
     /*
      *  build the button & add to:
-     *    recipe map (helps with action listener
-     *    panel 
+     *    recipe map (helps with action listener)
+     *    panel helps to align things
      */
+    JPanel panel = new JPanel(new GridLayout(0, 1));
     for( Recipe recipe : listRecipes){
       JButton button  = buildButton(recipe);
       buttonMap.put(button, recipe);
       button.addActionListener( this );
       button.setActionCommand("Recipe_"+ recipe.getId());
-      add(button);
+      panel.add(button);
     }// end for listRecipes
+    
+    JScrollPane scrollPane = new JScrollPane(panel);
+    add(scrollPane,BorderLayout.CENTER);
     
   }// end constructor
   
@@ -83,34 +85,6 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
     
     return button;
   }
-
-  /**
-   * TODO Update this with the DAO from the interface team
-   * @return ArrayList<Recipe> 
-   */
-  private ArrayList<Recipe> fetchBrowseDefault() {
-    ArrayList<Recipe> list = new ArrayList<Recipe>();
-    
-
-    
-    // TODO reconfigure this to the methods the interface teams' method
-    for (int i = 1; i <= 40; i++){
-      System.out.println("Getting:"+i);
-      try {
-        Recipe recipe = new Recipe();
-        recipe.getRecipeByNumber(i);
-        System.out.println("NAME:"+recipe.getName());
-        if (recipe.getName() != null)
-          list.add(recipe);
-      } catch (SQLException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
-    
-    return list;
-  }//end fetchBrowseDefault
-
 
   /**
    * Add in the ActionListener methods required from implementation 
