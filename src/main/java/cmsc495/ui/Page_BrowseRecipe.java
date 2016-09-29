@@ -21,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import cmsc495.data.RecipeDao;
 import cmsc495.database.Recipe;
 
 public class Page_BrowseRecipe extends Page implements ActionListener{
@@ -32,17 +31,12 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
   private static final long serialVersionUID = -1007375598685985229L;
 
   private Map<JButton,Recipe> buttonMap = new HashMap<JButton, Recipe>();
-  private RecipeDao recipeDao;
   
   public Page_BrowseRecipe(String title) {
     super(title);
     
-    recipeDao = new RecipeDao();
-    
     // fetch recipe browse default
-    // TODO replace this call with the DAO method once it is created
-    //List<Recipe> listRecipes = fetchBrowseDefault();
-    List<Recipe> listRecipes = recipeDao.getAll();
+    List<Recipe> listRecipes = new Recipe().getAll();
     
     
     // build the panel & set its' layout manager

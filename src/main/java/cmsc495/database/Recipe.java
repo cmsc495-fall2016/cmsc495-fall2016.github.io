@@ -2,6 +2,7 @@ package cmsc495.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Specifies a Recipe. A Recipe is an index number (used as the primary key for the Recipe database
@@ -10,9 +11,30 @@ import java.util.ArrayList;
  *
  * @author  Justin Helphenstine
  * @version 0.1 - 9/24/2016
+ * 
+ * @author  Eliot Pearson
+ * @version 0.2 - 9/28/2016
  */
 public class Recipe {
-    public void setMyDatabase(Database myDatabase) {
+  
+    public Recipe() { }
+
+    public Recipe(int id, String name, String description, int serves, String author, int prep_time, int cook_time,
+      int difficulty, String source, String procedures, ArrayList<Ingredient> ingredients) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.serves = serves;
+    this.author = author;
+    this.prep_time = prep_time;
+    this.cook_time = cook_time;
+    this.difficulty = difficulty;
+    this.source = source;
+    this.procedures = procedures;
+    this.ingredients = ingredients;
+  }
+
+  public void setMyDatabase(Database myDatabase) {
     this.myDatabase = myDatabase;
   }
 
@@ -374,6 +396,37 @@ public class Recipe {
         connection.close();
     }
 
+    public List<Recipe> getAll() {
+      List<Recipe> results = new ArrayList<>();
+      try {
+        Connection connection = myDatabase.getDatabaseConn();
+        PreparedStatement statement = connection.prepareStatement(
+            "SELECT id,name,serves,author,prep_time,cook_time,difficulty,procedures,description,source FROM recipe");
+
+        ResultSet recipeResults = statement.executeQuery();
+        while (recipeResults.next()) {
+          Recipe recipe = new Recipe();
+
+          recipe.setId(recipeResults.getInt("id"));
+          recipe.setName(recipeResults.getString("name"));
+          recipe.setServes(recipeResults.getInt("serves"));
+          recipe.setAuthor(recipeResults.getString("author"));
+          recipe.setPrep_time(recipeResults.getInt("prep_time"));
+          recipe.setCook_time(recipeResults.getInt("cook_time"));
+          recipe.setDifficulty(recipeResults.getInt("difficulty"));
+          recipe.setProcedures(recipeResults.getString("procedures"));
+          recipe.setDescription(recipeResults.getString("description"));
+          recipe.setSource(recipeResults.getString("source"));
+
+          results.add(recipe);
+
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+      return results;
+    }
+    
     /**
      * Utility method to support testing. TODO: Comment out before moving to production.
      * @throws SQLException Standard SQL Exception

@@ -22,7 +22,7 @@ public class Database {
         try{
             this.databaseConn = DriverManager.getConnection(path);
             createTables(); // Create if not exists
-            System.out.println("Successfully connected");
+            //System.out.println("Successfully connected");
         }
         catch (Exception e){
           e.printStackTrace();
