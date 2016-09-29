@@ -61,12 +61,11 @@ public class User_Test {
      * @throws SQLException Standard SQL Exception
      */
     private void updateIngredientTable() throws SQLException {
-        System.out.println("[!] Deleting all prior ingredient entries (we are in test mode!)");
-        User userDelete = new User();
-        userDelete.clearUserTable();
+        System.out.println("[!] Deleting all prior user entries (we are in test mode!)");
+        User user = new User();
+        user.clearUserTable();
         for (User_CSV_Entry entry : testData){
-            User u = new User();
-            u.createUser(entry.first_name, entry.last_name, entry.email, entry.username);
+            user.createUser(entry.first_name, entry.last_name, entry.email, entry.username);
         }
     }
 

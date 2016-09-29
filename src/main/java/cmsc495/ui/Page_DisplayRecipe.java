@@ -10,7 +10,6 @@ package cmsc495.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,7 +66,7 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     /*
      * Determine the source and act 
-     * NOTE: May need to change to  
+     * NOTE: May need to change to Action Commands
      */
     if (e.getSource() instanceof JButton){
       JButton button = (JButton) e.getSource();
@@ -97,7 +96,6 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
    * @return JButton
    */
   private JButton buildNavButton(String commandAction) {
-    // TODO Auto-generated method stub
     JButton button = new JButton();
     button.setText(
         String.format(

@@ -56,12 +56,11 @@ public class Uses_Test {
      * @throws SQLException Standard SQL Exception
      */
     private void updateIngredientTable() throws SQLException {
-        System.out.println("[!] Deleting all prior ingredient entries (we are in test mode!)");
-        Database recipeDelete = new Database();
-        recipeDelete.clearUsesTable();
+        System.out.println("[!] Deleting all prior uses entries (we are in test mode!)");
+        Database uses = new Database();
+        uses.clearUsesTable();
         for (Uses_CSV_Entry entry : testData){
-            Database usesConnection = new Database();
-            usesConnection.createUsesEntry(entry.ingredient, entry.recipe);
+            uses.createUsesEntry(entry.ingredient, entry.recipe);
         }
     }
 

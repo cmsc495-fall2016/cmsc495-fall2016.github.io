@@ -29,7 +29,7 @@ import cmsc495.ui.SimpleGui;
 public class Page_UI_All_Test extends Page implements ActionListener{
 
   /**
-   * 
+   * Generated serial ID
    */
   private static final long serialVersionUID = -8580704290926577189L;
 
@@ -38,7 +38,6 @@ public class Page_UI_All_Test extends Page implements ActionListener{
 
   public Page_UI_All_Test() {
     super("Test Running");
-
     
     // set layout manager
     setLayout(new BorderLayout());
@@ -49,33 +48,31 @@ public class Page_UI_All_Test extends Page implements ActionListener{
     // create the center panel
     JScrollPane centerPanel = createCenterPanel();
     
-    // add panels 
+    // add panels to this panel
     this.add(northPanel, BorderLayout.NORTH);
     this.add(centerPanel, BorderLayout.CENTER);
     
   }// end constructor Page_DisplayRecipe
   
-  
+  /**
+   * Method to define actions for the buttons in this Page
+   * @param ActionEvent An event triggered by an object
+   */
   public void actionPerformed(ActionEvent e) {
     /*
      * Determine the source and act 
-     * NOTE: May need to change to  
      */
     if (e.getSource() instanceof JButton){
       JButton button = (JButton) e.getSource();
 
       switch (button.getActionCommand()){
         case "Create All Data": 
+          /*
+           * Since this method is a long one, thread it out
+           */
           CreateaAllData cad = new CreateaAllData(test);
           Thread t = new Thread(cad);
           t.start();
-          /*try {
-            test.createaAllData(null);
-          } catch (SQLException e1) {
-            e1.printStackTrace();
-          } catch (IOException e1) {
-            e1.printStackTrace();
-          }*/
           break;
         case "Delete All Data": 
           try {
@@ -84,7 +81,14 @@ public class Page_UI_All_Test extends Page implements ActionListener{
             e1.printStackTrace();
           }
           break;
-      }
+        case "Make an error print":
+          System.err.println("a manual ErRoR PRINT");
+          try{
+            String.format("Attempting to divide by zero: %s", 1/0);
+          }catch (Exception e2) {
+            e2.printStackTrace();
+          }
+      }// end switch | case
       
     }//end if 
     
@@ -111,7 +115,8 @@ public class Page_UI_All_Test extends Page implements ActionListener{
     button.addActionListener(this);
     
     return button;
-  }
+  }// end buildNavButton
+  
   /**
    * Method to create the North panel that will contain the Recipe Name & buttons to edit
    * @return JPanel
@@ -131,6 +136,7 @@ public class Page_UI_All_Test extends Page implements ActionListener{
     JPanel buttonPanel = new JPanel((LayoutManager) new FlowLayout(FlowLayout.RIGHT));
     buttonPanel.add(buildNavButton("Create All Data"));
     buttonPanel.add(buildNavButton("Delete All Data"));
+    buttonPanel.add(buildNavButton("Make an error print"));
     
     panel.add(buttonPanel,BorderLayout.PAGE_END);
     
@@ -138,9 +144,9 @@ public class Page_UI_All_Test extends Page implements ActionListener{
   }// end createNorthPanel
 
   /**
-   * Method to center panel that will contain the Recipe data
-   * @param recipe
-   * @return 
+   * Method to create a panel with a JTextPane & re-route the STDOU & STDERR to that JTextPane
+   * @param Recipe
+   * @return JScrollPane
    */
   private JScrollPane createCenterPanel() {
     // create the text are to contain the information
@@ -171,60 +177,23 @@ public class Page_UI_All_Test extends Page implements ActionListener{
    * @param doc
    */
   protected void addStylesToDocument(StyledDocument doc) {
-    //Initialize some styles.
-    int smallFontSize = 10;
-    int regFontSize   = 12;
-    int largeFontSize = 16;
     Style def = StyleContext.getDefaultStyleContext().
                     getStyle(StyleContext.DEFAULT_STYLE);
 
-    Style regular = doc.addStyle("regular", def);
+    doc.addStyle("regular", def);
     StyleConstants.setFontFamily(def, "SansSerif");
-
-    // italics
-    Style s = doc.addStyle("italic", regular);
-    StyleConstants.setItalic(s, true);
-    StyleConstants.setFontSize(s, regFontSize);
-    
-    s = doc.addStyle("italicsmall", regular);
-    StyleConstants.setItalic(s, true);
-    StyleConstants.setFontSize(s, smallFontSize);
-
-    s = doc.addStyle("italicsmallbold", regular);
-    StyleConstants.setItalic(s, true);
-    StyleConstants.setFontSize(s, smallFontSize);
-    StyleConstants.setBold(s, true);
-    
-    s = doc.addStyle("italicbold", regular);
-    StyleConstants.setItalic(s, true);
-    StyleConstants.setFontSize(s, regFontSize);
-    StyleConstants.setBold(s, true);
-
-    s = doc.addStyle("bold", regular);
-    StyleConstants.setBold(s, true);
-    
-    s = doc.addStyle("boldlarge", regular);
-    StyleConstants.setBold(s, true);
-    StyleConstants.setFontSize(s, largeFontSize);
-
-    s = doc.addStyle("small", regular);
-    StyleConstants.setFontSize(s, smallFontSize);
-
-    s = doc.addStyle("large", regular);
-    StyleConstants.setFontSize(s, largeFontSize);
-    
   }//end addStylesToDocument
 
   
   public static void main(String[] args) {
     /*
-     * Call the tests in the actionPerformed(....)
+     * Call the tests in the actionPerformed(....) not here
      * SO ..... Can't touch this (oh-oh oh oh oh-oh-oh)
      */
     SimpleGui gui = new SimpleGui();
     gui.setVisible(true);
     gui.setCurrentPage(new Page_UI_All_Test());
-  }
+  }// end main
 
 }
 
@@ -234,32 +203,55 @@ public class Page_UI_All_Test extends Page implements ActionListener{
  *
  */
 class CustomOutputStream extends OutputStream {
-    private StyledDocument doc;
+    private StyledDocument styledDocument;
     private JTextPane textpane;
-     
-    public CustomOutputStream(JTextPane textpane, StyledDocument doc) {
+    private PrintStream originalSysOut,originalSysErr;
+
+    public CustomOutputStream(JTextPane textpane, StyledDocument styledDocument) {
       this.textpane = textpane;  
-      this.doc = doc;
-    }
+      this.styledDocument = styledDocument;
+      originalSysOut = System.out;
+      originalSysErr = System.err;
+    }// end constructor
      
+    /**
+     * Method to write data to the StyledDocument
+     */
     @Override
     public void write(int b) throws IOException {
       // redirects data to the text area
       try {
-        doc.insertString(
-            doc.getLength(),
+        styledDocument.insertString(
+            styledDocument.getLength(),
             String.valueOf((char)b),
-            doc.getStyle("regular")
+            styledDocument.getStyle("regular")
             );
       } catch (BadLocationException e) {
-        // TODO Auto-generated catch block
+        /*
+         *  not sure what would happen here
+         *  this class is utilized to re-route the stdout & stderr
+         *     to the JTextPane.
+         *  if the try fails ... then it is going to attempt to write it again
+         *  this could be very bad it the issue occurs ... but how to test it?
+         *  
+         */
+        System.setErr(originalSysErr);
+        System.setOut(originalSysOut);
         e.printStackTrace();
-      }
+      }// end try & catch
+      
       // scrolls the text area to the end of data
-      textpane.setCaretPosition(doc.getLength());  
-      //textArea.setCaretPosition(textArea.getDocument().getLength());
-    }
+      textpane.setCaretPosition(styledDocument.getLength());  
+    }// end write
 }
+
+/**
+ * Method needed to thread out the All_Test class...it takes too long
+ * @author Adam
+ * @date   2016-09-29
+ * @version 0.1
+ * @category single usage
+ */
 class CreateaAllData implements Runnable{
   All_Test test;
 
@@ -267,16 +259,16 @@ class CreateaAllData implements Runnable{
     this.test = test;
   }
 
+  /**
+   * Interface method
+   */
   @Override
   public void run() {
-    // TODO Auto-generated method stub
     try {
       test.createaAllData(null);
     } catch (SQLException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     System.out.println("---------\nCreateAllData Thread Actions Complete");
