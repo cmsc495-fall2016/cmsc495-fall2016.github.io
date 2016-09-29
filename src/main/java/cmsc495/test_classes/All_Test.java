@@ -28,7 +28,7 @@ public class All_Test {
      * @throws SQLException Standard SQL Exception
      * @throws IOException  Standard IO Exception
      */
-    private void createaAllData(String[] args) throws SQLException, IOException {
+    public void createaAllData(String[] args) throws SQLException, IOException {
         Recipe_Test.main(args);
         Ingredient_Test.main(args);
         User_Test.main(args);
@@ -39,7 +39,7 @@ public class All_Test {
      * Delete all data from the database
      * @throws SQLException Standard SQL Exception
      */
-    private void deleteAllData() throws SQLException {
+    public void deleteAllData() throws SQLException {
         System.out.println("Deleting all data from Recipe, Ingredient, User, Uses tables");
         d.clearUsesTable();
         r.clearRecipeTable();
