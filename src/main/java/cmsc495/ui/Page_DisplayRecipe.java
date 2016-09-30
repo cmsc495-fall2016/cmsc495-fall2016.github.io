@@ -71,8 +71,8 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
     if (e.getSource() instanceof JButton){
       JButton button = (JButton) e.getSource();
 
-      // set the panel to the main page TODO Update with appropriate pages
-      PopUp.Warning(this, "Page not implemented yet", "This is a place holder for the edit/export/delete pages");
+      // set the panel to the main page 
+      // TODO Update with appropriate pages
       SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
       switch (button.getActionCommand()){
         case "Edit": 
@@ -80,9 +80,11 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
           break;
         case "Export": 
           //gui.setCurrentPage(new Page_Export(recipe));
+          PopUp.Warning(this, "Page not implemented yet", "This is a place holder for the export function");
           break;
         case "Delete": 
-          //gui.setCurrentPage(new Page_Delete(recipe));
+          //TODO make confirmations maybe have add to the popups with a confirm method
+          PopUp.Warning(this, "Page not implemented yet", "This is a place holder for the delete function");
           break;
       }
       
