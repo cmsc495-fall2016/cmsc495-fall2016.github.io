@@ -1,5 +1,6 @@
 package cmsc495.database;
 
+import java.io.File;
 import java.sql.*;
 
 /**
@@ -8,7 +9,7 @@ import java.sql.*;
  * @version 1.0
  */
 public class Database {
-    private String path = "jdbc:sqlite:recipe.db";
+    private String path = null;
     private Connection databaseConn = null;
     private Statement stmt = null;
     private boolean verbose = false;
@@ -31,6 +32,10 @@ public class Database {
           Try to connect to the database, or create it if it doesn't exist
          */
         try{
+            //The database path should be cmsc495-fall2016.github.io/database/
+            File currentDirectory = new File(new File(".").getCanonicalPath());
+            this.path = "jdbc:sqlite:"+currentDirectory+File.separator+"database"
+                    +File.separator+"recipe.db";
             this.databaseConn = DriverManager.getConnection(path);
             createTables(); // Create if not exists
             if (verbose)
