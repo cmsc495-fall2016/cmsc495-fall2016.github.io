@@ -3,6 +3,7 @@
  * 
  * Essentially, these methods are interfaces to JOptionPanes
  */
+
 package cmsc495.ui;
 
 import java.awt.Container;

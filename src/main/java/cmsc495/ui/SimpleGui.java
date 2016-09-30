@@ -1,6 +1,7 @@
 /**
  * Class to construct the GUI
  */
+
 package cmsc495.ui;
 
 import java.awt.BorderLayout;
@@ -27,21 +28,30 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 /**
+ * The simple gui class.
+ * 
  * @author Adam Howell, Obinna Ojialor
  * @date   2016-09-20
  */
 
 public class SimpleGui extends JFrame implements ActionListener {
+  
   /**
-   * Generated serial ID
+   * Generated serial ID.
    */
   private static final long serialVersionUID = 6580341315626032237L;
+  
   /**
-   * Private variables
+   * Private variables for panels.
    */
-  private JPanel mainPanel, currentPage;
+  private JPanel mainPanel;
+  private JPanel currentPage;
+  
   private Map<JButton,Pages> buttonMap = new HashMap<JButton, Pages>();
   
+  /**
+   * The Simple GUI default construction.
+   */
   public SimpleGui() {
     // set the title
     this.setTitle("Shark Bread's Recipe Repository");
@@ -66,18 +76,18 @@ public class SimpleGui extends JFrame implements ActionListener {
     
     // add the page container
     this.add(mainPanel);
-  }// end default constructor SimpleGui()
+  }
 
   /**
-   * Add in the ActionListener methods required from implementation 
+   * Add in the ActionListener methods required from implementation.
    */
-  public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent event) {
     // Determine what the ActionEvent is
-    if (e.getSource() instanceof JButton){
-      JButton button = (JButton) e.getSource();
+    if (event.getSource() instanceof JButton) {
+      JButton button = (JButton) event.getSource();
       
       // Determine if the button is in the buttonMap
-      if (buttonMap.containsKey( button ) ){
+      if (buttonMap.containsKey( button ) ) {
         Pages enumPage = (Pages) buttonMap.get(button);
         
         // pull the panel from the enum
@@ -85,28 +95,30 @@ public class SimpleGui extends JFrame implements ActionListener {
         
         // set the panel to the main page
         setCurrentPage( page );
-      }else{
+      } else {
         // show a PopUp.error() if there is no action associated
         PopUp.Error(this,
             "Unknown Action", 
             "A JButton has been found, but there is no action associated\n"
-            + " Please open a ticket against this"
-            );
-      }//end if button map contains check & else
-    }// end if e.getSource is a button
-  }//end actionPerformed
+            + " Please open a ticket against this");
+      }
+    }
+  }
+  
   /**
    * method to create and return the navigation panel which allows the
-   *   calls the changing of pages
+   * calls the changing of pages.
+   *   
    * @return Jpanel
    */
+  
   private JPanel getNavigation() {
     // utilize Grid layout(<any number of rows>,<column>)
     JPanel panel = new JPanel( );
     panel.setLayout((LayoutManager) new BoxLayout(panel, BoxLayout.Y_AXIS));
     
     // Build buttons for all the enumerated Pages
-    for (Pages enumPage : Pages.values()){
+    for (Pages enumPage : Pages.values()) {
       JButton button = buildNavButton(enumPage.toString());
       
       /*
@@ -121,17 +133,18 @@ public class SimpleGui extends JFrame implements ActionListener {
       // add the buttons
       panel.add(button);
       
-    }// end for loop of the buttons
+    }
 
     // set the titled border
     setBorder_titled(panel, "Navigation");
     
     return panel; 
-  }// end getNavigation
+  }
 
   /**
-   * Method to generate web-like link buttons
-   * @param string
+   * Method to generate web-like link buttons.
+   * 
+   * @param string - Name of navButton.
    * @return JButton
    */
   private JButton buildNavButton(String string) {
@@ -140,8 +153,8 @@ public class SimpleGui extends JFrame implements ActionListener {
     button.setText(
         String.format(
             "<HTML><FONT color=\"#000099\"><U>%s</U></FONT></HTML>",
-            string)
-        );
+            string));
+    
     button.setHorizontalAlignment(SwingConstants.LEFT);
     button.setBorderPainted(false);
     button.setOpaque(false);
@@ -152,7 +165,8 @@ public class SimpleGui extends JFrame implements ActionListener {
 
   /**
    * Method to to create a label that spans the width of the 
-   * frame to represent the footer & return said footer
+   * frame to represent the footer & return said footer.
+   * 
    * @return JFrame
    */
   private Component getFooter() {
@@ -162,10 +176,11 @@ public class SimpleGui extends JFrame implements ActionListener {
     setBorder(panel);
     
     return panel;
-  }// end getFooter
+  }
 
   /**
-   * Method to create and return the header
+   * Method to create and return the header.
+   * 
    * @return JFrame
    */
   private Component getHeader() {
@@ -175,17 +190,17 @@ public class SimpleGui extends JFrame implements ActionListener {
     setBorder(panel);
     
     return panel;
-  }// end getHeader
+  }
   
   /**
    * Method set what page is currently shown in the BorderLayout.Center
-   *    of the SimpleGui
-   * @param page
+   *    of the SimpleGui.
+   *    
+   * @param page - Page object to set to current Page.
    */
   public void setCurrentPage(Page page) {
     // remove the current page if it has been defined
-    if (currentPage != null)
-    {
+    if (currentPage != null) {
       mainPanel.remove(currentPage);
     }
     
@@ -193,10 +208,9 @@ public class SimpleGui extends JFrame implements ActionListener {
     currentPage = page;
 
     // set the border; titled if defined
-    if (page.getTitleName() != null)
-    {
+    if (page.getTitleName() != null) {
       setBorder_titled(page, page.getTitleName());
-    }else{
+    } else {
       setBorder(page);
     }
     
@@ -206,11 +220,12 @@ public class SimpleGui extends JFrame implements ActionListener {
     // revalidate the JFrame
     revalidate();
 
-  }// end setCurrentPage
+  }
 
   /**
-   * Method to have all the JFrames have the same common actions applied
-   * @param frame
+   * Method to have all the JFrames have the same common actions applied.
+   * 
+   * @param frame - the frame
    */
   private static void setCommonActions_JFrame(JFrame frame) {
     // ensure the close operations are set accordingly
@@ -222,36 +237,37 @@ public class SimpleGui extends JFrame implements ActionListener {
     // Set it visible
     frame.setVisible(true);
     
-  }//end setCommonActions_JFrame
+  }
 
-  /* *******************************************************
-   * Methods to set borders to JPanels
-   */
+
   /**
-   * Method to keep all the borders the same
-   * @return
+   * Method to keep all the borders the same.
+   * 
+   * @return Border - a common border
    */
   private Border getCommonBorder() {
     return BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-  }//end getCommonBorder
+  }
   
   /**
-   * Method to set a border to a jpanel
-   * @param panel
+   * Method to set a border to a jpanel.
+   * 
+   * @param panel - a panel to have a borer set.
    */
-  private void setBorder(JPanel panel){
+  private void setBorder(JPanel panel) {
     panel.setBorder( getCommonBorder() );
-  }//end setTitleBorder
+  }
 
   /**
-   * Method to set a border with a title to a jpanel
-   * @param panel
+   * Method to set a border with a title to a jpanel.
+   * 
+   * @param panel - a panel to have its title set.
    */
-  private void setBorder_titled(JPanel panel, String string){
+  private void setBorder_titled(JPanel panel, String string) {
     TitledBorder title = BorderFactory.createTitledBorder(getCommonBorder(), string);
     Font titleFont = UIManager.getFont("TitledBorder.font");
     title.setTitleFont( titleFont.deriveFont(Font.ITALIC + Font.BOLD) );
     panel.setBorder( title );
-  }//end setTitleBorder
+  }
 
-}//end class SimpleGui
+}

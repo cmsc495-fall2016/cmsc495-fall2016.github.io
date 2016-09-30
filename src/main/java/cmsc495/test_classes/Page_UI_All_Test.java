@@ -205,7 +205,8 @@ public class Page_UI_All_Test extends Page implements ActionListener{
 class CustomOutputStream extends OutputStream {
     private StyledDocument styledDocument;
     private JTextPane textpane;
-    private PrintStream originalSysOut,originalSysErr;
+    private PrintStream originalSysOut;
+    private PrintStream originalSysErr;
 
     public CustomOutputStream(JTextPane textpane, StyledDocument styledDocument) {
       this.textpane = textpane;  

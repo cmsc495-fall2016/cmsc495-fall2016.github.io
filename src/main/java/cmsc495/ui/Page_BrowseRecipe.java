@@ -4,6 +4,7 @@
  *    Once the user selects a recipe, the Display Recipe page will be loaded
  *     with the selected recipe
  */
+
 package cmsc495.ui;
 
 import java.awt.BorderLayout;

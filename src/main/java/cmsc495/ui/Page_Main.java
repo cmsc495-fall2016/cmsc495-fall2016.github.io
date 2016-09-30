@@ -1,6 +1,7 @@
 /**
  * Class to create the main page Design is to be simple & show the logo, description
  */
+
 package cmsc495.ui;
 
 import java.awt.BorderLayout;

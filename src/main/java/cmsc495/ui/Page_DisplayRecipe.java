@@ -5,6 +5,7 @@
  *  1) Panel: contains Recipe name & buttons (Edit)
  *  2) Scrollable panel:JTextArea added into the center
  */
+
 package cmsc495.ui;
 
 import java.awt.BorderLayout;
@@ -118,6 +119,7 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
    * Method to create the North panel that will contain the Recipe Name & buttons to edit
    * @return JPanel
    */
+  
   private JPanel createNorthPanel() {
     // Create the north panel 
     JPanel panel = new JPanel(new BorderLayout());

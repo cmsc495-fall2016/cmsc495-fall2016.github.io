@@ -1,7 +1,8 @@
 package cmsc495.database;
 
-import javax.swing.*;
 import java.sql.*;
+import javax.swing.*;
+
 
 /**
  * Specifies an Ingredient. An Ingredient is an index number (used as the primary key for the Ingredient database

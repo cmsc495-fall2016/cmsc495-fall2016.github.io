@@ -1,6 +1,7 @@
 /**
  * Parent Class for all pages
  */
+
 package cmsc495.ui;
 
 import java.awt.Color;
