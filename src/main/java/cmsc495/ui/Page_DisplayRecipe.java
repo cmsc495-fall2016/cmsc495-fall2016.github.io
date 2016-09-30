@@ -76,7 +76,7 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
       SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
       switch (button.getActionCommand()){
         case "Edit": 
-          //gui.setCurrentPage(new Page_Edit(recipe));
+          gui.setCurrentPage(new Page_CreateEdit(recipe));
           break;
         case "Export": 
           //gui.setCurrentPage(new Page_Export(recipe));
@@ -92,7 +92,7 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
 
   /**
    * Method to build buttons for this page & set action command
-   * @param commandAction   string to set as display and to determine what action to preform
+   * @param commandAction   string to set as display and to determine what action to perform
    * @return JButton
    */
   private JButton buildNavButton(String commandAction) {

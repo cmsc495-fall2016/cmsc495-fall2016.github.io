@@ -31,7 +31,7 @@ public enum Pages {
   },
   CREATE {
     public Page getPanel(){
-      return new Page(this.toString());
+      return new Page_CreateEdit(this.toString());
     }
   },
   ;

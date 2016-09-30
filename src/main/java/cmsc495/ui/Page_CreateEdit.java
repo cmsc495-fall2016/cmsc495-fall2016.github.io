@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,14 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.text.StyledDocument;
+
+import cmsc495.database.Recipe;
 
 public class Page_CreateEdit  extends Page implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private Recipe_Hold recipe;
+	private Recipe recipe;
 	
 	private JLabel author;
 	private JLabel prepTime;
@@ -59,7 +58,7 @@ public class Page_CreateEdit  extends Page implements ActionListener {
 	}
 	
 	
-	public Page_CreateEdit(Recipe_Hold recip) {
+	public Page_CreateEdit(Recipe recip) {
 		 super("Ediit");
 		 this.recipe = recip;   
 		  
@@ -69,17 +68,9 @@ public class Page_CreateEdit  extends Page implements ActionListener {
 		    setall();
 	}
 	private void setall(){ 
-	this.autho.setText(this.recipe.author);;
-	this.prepTim.setText(this.recipe.prepTime);
-	this.cookTim.setText(this.recipe.cookTime);
-	this.recipeNam.setText(this.recipe.recipeName);
-	this.descriptio.setText(this.recipe.description);
-	this.procedure.setText(this.recipe.procedures);
-	this.fullRecipe.setSelected(this.recipe.is_full());
-	this.is_halal.setSelected(this.recipe.is_halal()) ;
-	this.is_kosher.setSelected(this.recipe.is_kosher());
-	this.is_vegan.setSelected(this.recipe.is_vegan());
-	this.has_gluten.setSelected(this.recipe.has_gluten());
+	this.recipeNam.setText(this.recipe.getName());
+	this.descriptio.setText(this.recipe.getDescription());
+	this.procedure.setText(this.recipe.getProcedures());
 	}
 	 private JPanel createNorthPanel() {
 		    // Create the north panel 
