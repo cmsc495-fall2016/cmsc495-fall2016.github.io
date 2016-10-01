@@ -46,8 +46,8 @@ public class UsesTest {
         entry.recipe = Integer.parseInt(uses[2]);
         testData.add(entry);
       }
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException exception) {
+      exception.printStackTrace();
     }
   }
 

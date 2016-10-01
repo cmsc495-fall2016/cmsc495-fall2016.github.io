@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class IngredientTest {
 
-  File ingredient_test_data = null;
+  File ingredientTestData = null;
 
   private class IngredientCsvEntry {
     int id = -1;
@@ -65,8 +65,8 @@ public class IngredientTest {
     Ingredient recipeDelete = new Ingredient();
     recipeDelete.clearIngredientTable();
     for (IngredientCsvEntry entry : testData) {
-      Ingredient i = new Ingredient();
-      i.createIngredient(entry.name, entry.description);
+      Ingredient ingredient = new Ingredient();
+      ingredient.createIngredient(entry.name, entry.description);
     }
   }
 

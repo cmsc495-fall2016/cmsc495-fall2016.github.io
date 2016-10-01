@@ -18,12 +18,12 @@ import java.util.ArrayList;
  */
 public class UserTest {
 
-  File user_test_data = null;
+  File userTestData = null;
 
   private class UserCsvEntry {
     int id = -1;
-    String first_name = null;
-    String last_name = null;
+    String firstName = null;
+    String lastName = null;
     String email = null;
     String username = null;
   }
@@ -45,8 +45,8 @@ public class UserTest {
       while ((user = reader.readNext()) != null) {
         UserCsvEntry entry = new UserCsvEntry();
         entry.id = Integer.parseInt(user[0]);
-        entry.first_name = user[1];
-        entry.last_name = user[2];
+        entry.firstName = user[1];
+        entry.lastName = user[2];
         entry.email = user[3];
         entry.username = user[4];
         testData.add(entry);
@@ -67,7 +67,7 @@ public class UserTest {
     User user = new User();
     user.clearUserTable();
     for (UserCsvEntry entry : testData) {
-      user.createUser(entry.first_name, entry.last_name, entry.email, entry.username);
+      user.createUser(entry.firstName, entry.lastName, entry.email, entry.username);
     }
   }
 

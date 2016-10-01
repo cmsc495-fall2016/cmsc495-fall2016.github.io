@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class RecipeTest {
 
-  File recipe_test_data = null;
+  File recipeTestData = null;
 
 
   private class RecipeCsvEntry {
@@ -27,10 +27,10 @@ public class RecipeTest {
     String name = null;
     int serves = -1;
     String author = null;
-    String prep_time_as_String = null;
-    int prep_time = 0;
-    String cook_time_as_String = null;
-    int cook_time = 0;
+    String prepTimeAsString = null;
+    int prepTime = 0;
+    String cookTimeAsString = null;
+    int cookTime = 0;
     int difficulty = 0;
     String procedures = null;
     String description = null;
@@ -47,21 +47,21 @@ public class RecipeTest {
    * @return an integer expressing the given time in minutes
    */
   private int ensureTimeInMinutes(String time) {
-    String[] time_elements;
+    String[] timeElements;
 
     if (time.contentEquals("")) {
       return 0;
     }
     if (time.matches(".+(?<=\\d)(?=\\D).+")) { // WHY DOESN'T THIS MATCH ON "10minutes"
-      time_elements = time.split("(?<=\\d)(?=\\D)|(?=\\d)(?<=\\D)");
-      System.out.println(time_elements[0] + " | " + time_elements[1]);
+      timeElements = time.split("(?<=\\d)(?=\\D)|(?=\\d)(?<=\\D)");
+      System.out.println(timeElements[0] + " | " + timeElements[1]);
     } else {
-      time_elements = time.split(" ");
-      System.out.println("DEBUG: " + time_elements[0]);
-      System.out.println(time_elements[0] + " | " + time_elements[1]);
+      timeElements = time.split(" ");
+      System.out.println("DEBUG: " + timeElements[0]);
+      System.out.println(timeElements[0] + " | " + timeElements[1]);
     }
 
-    int minutes = Integer.parseInt(time_elements[0]);
+    int minutes = Integer.parseInt(timeElements[0]);
     if (time.toLowerCase().contains("min")) {
       minutes *= 60;
     }
@@ -89,10 +89,10 @@ public class RecipeTest {
         entry.serves = Integer.parseInt(recipe[2].split(" ")[0]); // in case our Serves field has
                                                                   // non-nummeric data.
         entry.author = recipe[3];
-        entry.prep_time_as_String = recipe[4];
-        entry.prep_time = ensureTimeInMinutes(entry.prep_time_as_String);
-        entry.cook_time_as_String = recipe[5];
-        entry.cook_time = ensureTimeInMinutes(entry.cook_time_as_String);
+        entry.prepTimeAsString = recipe[4];
+        entry.prepTime = ensureTimeInMinutes(entry.prepTimeAsString);
+        entry.cookTimeAsString = recipe[5];
+        entry.cookTime = ensureTimeInMinutes(entry.cookTimeAsString);
         if (recipe[6].contentEquals("")) {
           entry.difficulty = 0;
         } else {
@@ -120,8 +120,8 @@ public class RecipeTest {
     Recipe recipeDelete = new Recipe();
     recipeDelete.clearRecipeTable();
     for (RecipeCsvEntry entry : testData) {
-      Recipe r = new Recipe();
-      r.createRecipe(entry.name, entry.serves, entry.author, entry.prep_time, entry.cook_time, entry.difficulty,
+      Recipe recipe = new Recipe();
+      recipe.createRecipe(entry.name, entry.serves, entry.author, entry.prepTime, entry.cookTime, entry.difficulty,
           entry.procedures, entry.description, entry.source, null);
     }
   }
