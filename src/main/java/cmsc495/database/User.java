@@ -1,6 +1,10 @@
 package cmsc495.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Specifies a User. A user is an index number (used as the primary key for the Ingredient database
