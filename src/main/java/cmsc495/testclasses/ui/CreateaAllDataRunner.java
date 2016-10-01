@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * 
  * @author Adam
  */
-class CreateaAllDataRunner implements Runnable {
+public class CreateaAllDataRunner implements Runnable {
   AllTest test;
 
   public CreateaAllDataRunner(AllTest test) {

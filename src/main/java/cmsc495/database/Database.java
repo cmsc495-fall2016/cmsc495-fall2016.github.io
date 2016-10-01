@@ -1,7 +1,11 @@
 package cmsc495.database;
 
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Creates and provides connectivity to the project's database, implementing the schema as specified
