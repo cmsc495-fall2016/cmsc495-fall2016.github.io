@@ -24,7 +24,7 @@ import javax.swing.SwingUtilities;
 
 import cmsc495.database.Recipe;
 
-public class Page_BrowseRecipe extends Page implements ActionListener {
+public class PageBrowseRecipe extends Page implements ActionListener {
 
   /**
    * Generated serial ID.
@@ -38,7 +38,7 @@ public class Page_BrowseRecipe extends Page implements ActionListener {
    * 
    * @param title - A string that's the tile for the page.
    */
-  public Page_BrowseRecipe(String title) {
+  public PageBrowseRecipe(String title) {
     super(title);
     this.setLayout(new BorderLayout());
 
@@ -54,7 +54,7 @@ public class Page_BrowseRecipe extends Page implements ActionListener {
      */
     JPanel panel = new JPanel(new GridLayout(0, 1));
     
-    for(Recipe recipe : listRecipes) {
+    for (Recipe recipe : listRecipes) {
       JButton button  = buildButton(recipe);
       buttonMap.put(button, recipe);
       button.addActionListener( this );
@@ -107,10 +107,10 @@ public class Page_BrowseRecipe extends Page implements ActionListener {
         
         // set the panel to the main page
         SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
-        gui.setCurrentPage(new Page_DisplayRecipe(recipe));
+        gui.setCurrentPage(new PageDisplayRecipe(recipe));
       } else {
         // show a PopUp.error() if there is no action associated
-        PopUp.Error(this,
+        PopUp.error(this,
             "Unknown Action", 
             "A JButton has been found, but there is no action associated\n"
             + " Please open a ticket against this");

@@ -32,10 +32,10 @@ import cmsc495.database.Ingredient;
 import cmsc495.database.Recipe;
 
 /**
- * @author Adam Howell, Obinna Ojialor
+ * @author Adam Howell, Obinna Ojialor.
  * @date   2016-09-19
  */
-public class Page_DisplayRecipe extends Page implements ActionListener {
+public class PageDisplayRecipe extends Page implements ActionListener {
 
   /**
    * Generated serial ID.
@@ -44,7 +44,11 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
   
   private Recipe recipe;
   
-  public Page_DisplayRecipe(Recipe recipe) {
+  /**
+   * Constructor method to display recipe.
+   * @param recipe Recipe to display
+   */
+  public PageDisplayRecipe( Recipe recipe ) {
     super("Display");
     this.recipe = recipe;
     
@@ -63,39 +67,45 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
     
   }
   
-  
-  public void actionPerformed(ActionEvent e) {
+  /**
+   * Method to define the actions to be performed by objects in this class. 
+   */
+  public void actionPerformed( ActionEvent event ) {
     /*
      * Determine the source and act 
      * NOTE: May need to change to Action Commands
      */
-    if (e.getSource() instanceof JButton) {
-      JButton button = (JButton) e.getSource();
+    if (event.getSource() instanceof JButton) {
+      JButton button = (JButton) event.getSource();
 
       // set the panel to the main page 
       // TODO Update with appropriate pages
       SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
       switch (button.getActionCommand()) {
         case "Edit": 
-          gui.setCurrentPage(new Page_CreateEdit(recipe));
+          gui.setCurrentPage(new PageCreateEdit(recipe));
           break;
         case "Export": 
           //gui.setCurrentPage(new Page_Export(recipe));
-          PopUp.Warning(this, "Page not implemented yet", "This is a place holder for the export function");
+          PopUp.warning(this,
+              "Page not implemented yet",
+              "This is a place holder for the export function");
           break;
         case "Delete": 
-          //TODO make confirmations maybe have add to the popups with a confirm method
-          PopUp.Warning(this, "Page not implemented yet", "This is a place holder for the delete function");
+          //TODO make confirmations maybe have add to the pop ups with a confirm method
+          PopUp.warning(this,
+              "Page not implemented yet",
+              "This is a place holder for the delete function");
           break;
         default:
       }
       
-    }//end if 
+    } //end if 
     
-  }// end actionPerformed
+  } // end actionPerformed
 
   /**
-   * Method to build buttons for this page & set action command
+   * Method to build buttons for this page & set action command.
    * @param commandAction   string to set as display and to determine what action to perform
    * @return JButton
    */
@@ -191,8 +201,8 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
   /**
    * Method to structure the insert of the displayed information to the 
    *   Style Document.
-   * 
-   * Methods defined in Style Document as seen in addStylesToDocument:
+   *
+   * <p>Methods defined in Style Document as seen in addStylesToDocument:
    *   regular  : SanSerif  (all are based upon this & modified later)
    *   italic   
    *   bold
@@ -218,8 +228,8 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
           doc.getLength(),
           display,
           doc.getStyle(format));
-    } catch (BadLocationException e) {
-      PopUp.Error(this, 
+    } catch (BadLocationException execption) {
+      PopUp.error(this, 
           "Error in doc.insertString",
           "Couldn't insert initial text into text pane.");
     }
@@ -235,8 +245,8 @@ public class Page_DisplayRecipe extends Page implements ActionListener {
    */
   protected void addStylesToDocument(StyledDocument doc) {
     //Initialize some styles.
-    Style def = StyleContext.getDefaultStyleContext().
-                    getStyle(StyleContext.DEFAULT_STYLE);
+    Style def = StyleContext.getDefaultStyleContext()
+        .getStyle(StyleContext.DEFAULT_STYLE);
 
     Style regular = doc.addStyle("regular", def);
     StyleConstants.setFontFamily(def, "SansSerif");

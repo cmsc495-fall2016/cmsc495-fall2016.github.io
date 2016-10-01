@@ -19,15 +19,17 @@ import javax.swing.SwingConstants;
 import cmsc495.database.Recipe;
 
 /**
+ * TODO: Add a Class descriptor on this line.
  * TODO OO: populate method headers & comment throughout
  * TODO AH: make the display resize nicely
  * TODO : implement ingredients
- * TODO : implement ingredient new field creator from the page ie start with one field and add more at the discretion of the user
+ * TODO : implement ingredient new field creator from the page ie start with one field and add more
+ *  at the discretion of the user
  *  
  * @author Obinna Ojialor
  *
  */
-public class Page_CreateEdit extends Page implements ActionListener {
+public class PageCreateEdit extends Page implements ActionListener {
 
   private static final long serialVersionUID = 1L;
   private Recipe recipe;
@@ -47,25 +49,32 @@ public class Page_CreateEdit extends Page implements ActionListener {
   private JTextField descriptio;
   private JTextArea procedure;
 
-  public Page_CreateEdit(String title) {
+  /**
+   * Constructor method to create the creating the recipe.
+   * @param title String to be displayed as the title
+   */
+  public PageCreateEdit( String title ) {
     super(title);
 
 
 
     this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    JPanel Panel = createNorthPanel();
-    this.add(Panel, BorderLayout.NORTH);
+    JPanel panel = createNorthPanel();
+    this.add(panel, BorderLayout.NORTH);
 
   }
 
-
-  public Page_CreateEdit(Recipe recip) {
+  /**
+   * Constructor method to edit an existing recipe.
+   * @param recip Recipe to edit
+   */
+  public PageCreateEdit( Recipe recip ) {
     super("Ediit");
     this.recipe = recip;
 
     this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    JPanel Panel = createNorthPanel();
-    this.add(Panel, BorderLayout.NORTH);
+    JPanel panel = createNorthPanel();
+    this.add(panel, BorderLayout.NORTH);
     setall();
   }
 
@@ -148,27 +157,26 @@ public class Page_CreateEdit extends Page implements ActionListener {
     panel.add(sp);
 
     return panel;
-  }// end createNorthPanel
+  } // end createNorthPanel
 
 
   @Override
-  public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent event) {
     // TODO Auto-generated method stub
-    if (e.getSource() instanceof JButton) {
-      switch (e.getActionCommand()) {
+    if (event.getSource() instanceof JButton) {
+      switch (event.getActionCommand()) {
         case "Save":
           // TODO save actions go here; may need two types 1) update if editing 2) creating if not
           // editing
           break;
         default:
-          PopUp.Warning(this, "Button action undefined",
-              "There is no action defined for " + e.getActionCommand());
-      }// end switch
-    } // end test of JButton
-    else {
-      PopUp.Warning(this, "Action listener undefined",
-          "There is no action defined for " + e.getSource());
-    }
+          PopUp.warning(this, "Button action undefined",
+              "There is no action defined for " + event.getActionCommand());
+      } // end switch
+    } else {
+      PopUp.warning(this, "Action listener undefined",
+          "There is no action defined for " + event.getSource());
+    } //end if/else test for event source is a JButton
   }
 
 }

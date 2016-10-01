@@ -12,19 +12,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
+ * The Page Main class.
  * @author Adam Howell, Obinna Ojialor
  * @date 2016-09-19
  */
-public class Page_Main extends Page {
+public class PageMain extends Page {
 
   /**
-   * The Page Main class.
-   * 
-   * Generated serial ID
+   * Generated serial ID.
    */
   private static final long serialVersionUID = 4670577079792236241L;
 
-  public Page_Main() {
+  /**
+   * Child constructor for Page class.
+   */
+  public PageMain() {
     super("Main");
     this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
     JPanel panels = createPanel();

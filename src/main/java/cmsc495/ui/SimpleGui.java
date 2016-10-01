@@ -68,7 +68,7 @@ public class SimpleGui extends JFrame implements ActionListener {
     mainPanel.add(getNavigation(), BorderLayout.LINE_START);
     
     // add the main page
-    setCurrentPage(new Page_Main());
+    setCurrentPage(new PageMain());
    
     // set configurations
     setCommonActions_JFrame(this);
@@ -97,7 +97,7 @@ public class SimpleGui extends JFrame implements ActionListener {
         setCurrentPage( page );
       } else {
         // show a PopUp.error() if there is no action associated
-        PopUp.Error(this,
+        PopUp.error(this,
             "Unknown Action", 
             "A JButton has been found, but there is no action associated\n"
             + " Please open a ticket against this");
@@ -171,6 +171,7 @@ public class SimpleGui extends JFrame implements ActionListener {
    */
   private Component getFooter() {
     JPanel panel = new JPanel();
+    // check style alerts to the usage of escaped unicodes ... cna you do it in ascii  
     JLabel label = new JLabel("\u00a9 2016 UMUC CMSC 495");
     panel.add(label);
     setBorder(panel);

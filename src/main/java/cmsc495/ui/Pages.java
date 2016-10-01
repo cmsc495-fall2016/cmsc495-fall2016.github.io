@@ -19,7 +19,7 @@ package cmsc495.ui;
 public enum Pages {
   MAIN {
     public Page getPanel() {
-      return new Page_Main();
+      return new PageMain();
     }
   },
   SEARCH {
@@ -29,12 +29,12 @@ public enum Pages {
   },
   BROWSE {
     public Page getPanel() {
-      return new Page_BrowseRecipe(this.toString());
+      return new PageBrowseRecipe(this.toString());
     }
   },
   CREATE {
     public Page getPanel() {
-      return new Page_CreateEdit(this.toString());
+      return new PageCreateEdit(this.toString());
     }
   },
   ;

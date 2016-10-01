@@ -34,7 +34,7 @@ public class Page extends JPanel {
    * 
    * @param title - title of the page
    */
-  public Page(String title){
+  public Page(String title) {
     this.title = title;
   }
 
