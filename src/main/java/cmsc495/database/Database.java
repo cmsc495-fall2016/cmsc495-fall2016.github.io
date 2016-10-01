@@ -20,7 +20,7 @@ public class Database {
    * Constructor that sets verbose debugging Constructor that creates the recipe database & executes
    * the schema.
    * 
-   * @param verbose
+   * @param verbose boolean flag to prints lots of stuff
    */
   public Database(boolean verbose) {
     this();
@@ -45,8 +45,8 @@ public class Database {
       if (verbose) {
         System.out.println("Successfully connected");
       }
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
 
   }
@@ -59,8 +59,8 @@ public class Database {
   public Connection getDatabaseConn() {
     try {
       return DriverManager.getConnection(path);
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } catch (SQLException exception) {
+      exception.printStackTrace();
       return null;
     }
   }
@@ -86,22 +86,25 @@ public class Database {
       String createIngredient = "CREATE TABLE IF NOT EXISTS ingredient " + "(id INTEGER PRIMARY KEY  NOT NULL, "
           + " name TEXT NOT NULL, " + " description TEXT)";
       stmt.executeUpdate(createIngredient);
-      if (verbose)
+      if (verbose) {
         System.out.println("Created Ingredient table");
+      }
 
       String createRecipe = "CREATE TABLE IF NOT EXISTS recipe " + "(id INTEGER PRIMARY KEY NOT NULL,"
           + "name text NOT NULL," + "serves INTEGER," + "author text," + "prep_time INTEGER," + "cook_time INTEGER,"
           + "difficulty INTEGER," + "procedures text," + "description text," + "source text)";
       stmt.executeUpdate(createRecipe);
-      if (verbose)
+      if (verbose) {
         System.out.println("Created recipe table");
+      }
 
       String createUses = "CREATE TABLE IF NOT EXISTS uses " + "(id INTEGER PRIMARY KEY NOT NULL,"
           + "ingredient_id INTEGER NOT NULL," + "recipe_id INTEGER NOT NULL,"
           + "FOREIGN KEY(ingredient_id) REFERENCES ingredient(id)," + "FOREIGN KEY(recipe_id) REFERENCES recipe(id))";
       stmt.executeUpdate(createUses);
-      if (verbose)
+      if (verbose) {
         System.out.println("Created Uses table");
+      }
 
       String createUserTable = "CREATE TABLE IF NOT EXISTS user " + "(id INTEGER PRIMARY KEY NOT NULL, "
           + "user_name TEXT," + "first_name TEXT," + "last_name TEXT, " + "email_address TEXT)";
@@ -110,8 +113,8 @@ public class Database {
       stmt.close();
       this.databaseConn.close();
 
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } catch (SQLException exception) {
+      exception.printStackTrace();
     }
   }
 
@@ -152,7 +155,7 @@ public class Database {
    * 
    * @param args Standard command-line arguments
    */
-  public static void main(String args[]) {
+  public static void main(String[] args) {
     Database test = new Database();
     test.createTables();
   }

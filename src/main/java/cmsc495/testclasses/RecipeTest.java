@@ -104,8 +104,8 @@ public class RecipeTest {
 
         testData.add(entry);
       }
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException exception) {
+      exception.printStackTrace();
     }
   }
 

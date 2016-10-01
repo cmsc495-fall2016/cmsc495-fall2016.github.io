@@ -49,8 +49,8 @@ public class IngredientTest {
         entry.description = ingredient[2];
         testData.add(entry);
       }
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException exception) {
+      exception.printStackTrace();
     }
   }
 
