@@ -39,7 +39,8 @@ public class User {
   public void createUser(String userName, String firstName, String lastName) throws SQLException {
     connection = myDatabase.getDatabaseConn();
     PreparedStatement statement =
-        connection.prepareStatement("INSERT INTO " + "user (user_name, first_name, last_name) VALUES(?,?,?)");
+        connection.prepareStatement(
+            "INSERT INTO user (user_name, first_name, last_name) VALUES(?,?,?)");
     statement.setString(1, userName);
     statement.setString(2, firstName);
     statement.setString(3, lastName);
@@ -59,8 +60,8 @@ public class User {
   public void createUser(String userName, String firstName, String lastName, String emailAddress)
       throws SQLException {
     connection = myDatabase.getDatabaseConn();
-    PreparedStatement statement = connection
-        .prepareStatement("INSERT INTO " + "user (user_name, first_name, last_name, email_address) VALUES(?,?,?,?)");
+    PreparedStatement statement = connection.prepareStatement("INSERT INTO " 
+            + "user (user_name, first_name, last_name, email_address) VALUES(?,?,?,?)");
     statement.setString(1, userName);
     statement.setString(2, firstName);
     statement.setString(3, lastName);
@@ -98,7 +99,8 @@ public class User {
   private void getUserByCriteria(String criteria, String term) throws SQLException {
     connection = myDatabase.getDatabaseConn();
     PreparedStatement statement = connection.prepareStatement(
-        "SELECT " + "id,first_name,last_name,email_address,user_name FROM user " + "WHERE " + criteria + " = ?;");
+        "SELECT " + "id,first_name,last_name,email_address,user_name FROM user " 
+        + "WHERE " + criteria + " = ?;");
     if (criteria.contentEquals("name")) {
       statement.setString(1, term);
     } else {
@@ -185,10 +187,12 @@ public class User {
    * @param newEmailAddress User new email address
    * @throws SQLException Standard SQL Exception
    */
-  public void updateUser(int id, String userName, String firstName, String lastName, String newEmailAddress)
+  public void updateUser(
+      int id, String userName, String firstName, String lastName, String newEmailAddress)
       throws SQLException {
     connection = myDatabase.getDatabaseConn();
-    PreparedStatement statement = connection.prepareStatement("UPDATE " + "user SET email_address = ? WHERE id = ?;");
+    PreparedStatement statement = connection.prepareStatement(
+        "UPDATE " + "user SET email_address = ? WHERE id = ?;");
     statement.setString(1, newEmailAddress);
     statement.setInt(2, id);
     statement.executeUpdate();
