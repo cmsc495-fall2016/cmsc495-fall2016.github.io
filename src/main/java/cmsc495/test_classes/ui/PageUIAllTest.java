@@ -1,4 +1,4 @@
-package cmsc495.test_classes;
+package cmsc495.test_classes.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,20 +23,22 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import cmsc495.test_classes.All_Test;
 import cmsc495.ui.Page;
+import cmsc495.ui.PopUp;
 import cmsc495.ui.SimpleGui;
 
-public class Page_UI_All_Test extends Page implements ActionListener {
+public class PageUIAllTest extends Page implements ActionListener {
 
-  /**
-   * Generated serial ID
-   */
   private static final long serialVersionUID = -8580704290926577189L;
 
   // build the all mighty all_test
   private All_Test test = new All_Test();
 
-  public Page_UI_All_Test() {
+  /**
+   * Method to construct a Page to wrap around the test cases.
+   */
+  public PageUIAllTest() {
     super("Test Running");
 
     // set layout manager
@@ -55,25 +57,25 @@ public class Page_UI_All_Test extends Page implements ActionListener {
   }
 
   /**
-   * Method to define actions for the buttons in this Page
+   * Method to define actions for the buttons in this Page.
    * 
-   * @param ActionEvent An event triggered by an object
+   * @param event An event triggered by an object
    */
-  public void actionPerformed(ActionEvent e) {
+  public void actionPerformed( ActionEvent event ) {
     /*
      * Determine the source and act
      */
-    if (e.getSource() instanceof JButton) {
-      JButton button = (JButton) e.getSource();
+    if (event.getSource() instanceof JButton) {
+      JButton button = (JButton) event.getSource();
 
       switch (button.getActionCommand()) {
         case "Create All Data":
           /*
            * Since this method is a long one, thread it out
            */
-          CreateaAllData cad = new CreateaAllData(test);
-          Thread t = new Thread(cad);
-          t.start();
+          CreateaAllDataRunner cad = new CreateaAllDataRunner(test);
+          Thread thread = new Thread(cad);
+          thread.start();
           break;
         case "Delete All Data":
           try {
@@ -89,6 +91,10 @@ public class Page_UI_All_Test extends Page implements ActionListener {
           } catch (Exception e2) {
             e2.printStackTrace();
           }
+          break;
+        default:
+          PopUp.error(this, "Error", "There is a missing action for the object in this page");
+          break;
       }
 
     }
@@ -103,7 +109,12 @@ public class Page_UI_All_Test extends Page implements ActionListener {
    */
   private JButton buildNavButton(String commandAction) {
     JButton button = new JButton();
-    button.setText(String.format("<HTML><FONT color=\"#000099\"><U>%s</U></FONT></HTML>", commandAction));
+    button.setText(
+        String.format(
+            "<HTML><FONT color=\"#000099\"><U>%s</U></FONT></HTML>",
+            commandAction
+            )
+    );
     button.setHorizontalAlignment(SwingConstants.LEFT);
     button.setBorderPainted(false);
     button.setOpaque(false);
@@ -115,7 +126,7 @@ public class Page_UI_All_Test extends Page implements ActionListener {
   }
 
   /**
-   * Method to create the North panel that will contain the Recipe Name & buttons to edit
+   * Method to create the North panel that will contain the Recipe Name & buttons to edit.
    * 
    * @return JPanel
    */
@@ -125,7 +136,9 @@ public class Page_UI_All_Test extends Page implements ActionListener {
     panel.setOpaque(true);
 
     // build & add label
-    JLabel label = new JLabel("<html><span style='font-size:20px'>Testing Cases</span></html>", SwingConstants.LEFT);
+    JLabel label = new JLabel(
+        "<html><span style='font-size:20px'>Testing Cases</span></html>",
+        SwingConstants.LEFT);
     panel.add(label, BorderLayout.PAGE_START);
 
     // build panel & add buttons
@@ -137,13 +150,10 @@ public class Page_UI_All_Test extends Page implements ActionListener {
     panel.add(buttonPanel, BorderLayout.PAGE_END);
 
     return panel;
-  }// end createNorthPanel
+  } // end createNorthPanel
 
   /**
-   * Method to create a panel with a JTextPane & re-route the STDOU & STDERR to that JTextPane
-   * 
-   * @param Recipe
-   * @return JScrollPane
+   * Method to create a panel with a JTextPane & re-route the STDOU & STDERR to that JTextPane.
    */
   private JScrollPane createCenterPanel() {
     // create the text are to contain the information
@@ -165,108 +175,34 @@ public class Page_UI_All_Test extends Page implements ActionListener {
     JScrollPane scrollPane = new JScrollPane(textPane);
 
     return scrollPane;
-  }// end createCenterPanel
+  } // end createCenterPanel
 
   /**
    * Method to set the styles to the JTextPane Example obtained from
    * http://docs.oracle.com/javase/tutorial/displayCode.html?code=http://docs.oracle.com/javase/
    * tutorial/uiswing/examples/components/TextSamplerDemoProject/src/components/TextSamplerDemo.java
    * 
-   * @param doc
+   * @param doc Styled Document to add definitions to for outputting
    */
   protected void addStylesToDocument(StyledDocument doc) {
     Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
     doc.addStyle("regular", def);
     StyleConstants.setFontFamily(def, "SansSerif");
-  }// end addStylesToDocument
+  } // end addStylesToDocument
 
-
+  /**
+   * Main to call the SimpleGui.
+   * @param args command line arguments
+   */
   public static void main(String[] args) {
     /*
-     * Call the tests in the actionPerformed(....) not here SO ..... Can't touch this (oh-oh oh oh
-     * oh-oh-oh)
+     * Call the tests in the actionPerformed(....) not here
+     * SO ..... Can't touch this (oh-oh oh oh oh-oh-oh)
      */
     SimpleGui gui = new SimpleGui();
     gui.setVisible(true);
-    gui.setCurrentPage(new Page_UI_All_Test());
-  }// end main
-
-}
-
-
-/**
- * This class extends from OutputStream to redirect output to a JTextArrea
- * 
- * @author www.codejava.net
- *
- */
-class CustomOutputStream extends OutputStream {
-  private StyledDocument styledDocument;
-  private JTextPane textpane;
-  private PrintStream originalSysOut;
-  private PrintStream originalSysErr;
-
-  public CustomOutputStream(JTextPane textpane, StyledDocument styledDocument) {
-    this.textpane = textpane;
-    this.styledDocument = styledDocument;
-    originalSysOut = System.out;
-    originalSysErr = System.err;
-  }// end constructor
-
-  /**
-   * Method to write data to the StyledDocument
-   */
-  @Override
-  public void write(int b) throws IOException {
-    // redirects data to the text area
-    try {
-      styledDocument.insertString(styledDocument.getLength(), String.valueOf((char) b),
-          styledDocument.getStyle("regular"));
-    } catch (BadLocationException e) {
-      /*
-       * not sure what would happen here this class is utilized to re-route the stdout & stderr to
-       * the JTextPane. if the try fails ... then it is going to attempt to write it again this
-       * could be very bad it the issue occurs ... but how to test it?
-       * 
-       */
-      System.setErr(originalSysErr);
-      System.setOut(originalSysOut);
-      e.printStackTrace();
-    } // end try & catch
-
-    // scrolls the text area to the end of data
-    textpane.setCaretPosition(styledDocument.getLength());
-  }// end write
-}
-
-
-/**
- * Method needed to thread out the All_Test class...it takes too long
- * 
- * @author Adam
- * @date 2016-09-29
- * @version 0.1
- * @category single usage
- */
-class CreateaAllData implements Runnable {
-  All_Test test;
-
-  public CreateaAllData(All_Test test) {
-    this.test = test;
-  }
-
-  /**
-   * The run method.
-   */
-  @Override
-  public void run() {
-    try {
-      test.createaAllData(null);
-    } catch (SQLException | IOException exception) {
-      exception.printStackTrace();
-    }
-    System.out.println("---------\nCreateAllData Thread Actions Complete");
-  }
+    gui.setCurrentPage(new PageUIAllTest());
+  } // end main
 
 }
