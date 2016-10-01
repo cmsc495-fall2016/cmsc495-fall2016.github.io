@@ -48,6 +48,7 @@ public class Ingredient {
     PreparedStatement statement = 
         connection.prepareStatement("INSERT INTO ingredient (name) VALUES(?)");
     statement.setString(1, name);
+    this.name = name;
     statement.executeUpdate();
     connection.close();
     getIngredientByName(name); // Set the id #
