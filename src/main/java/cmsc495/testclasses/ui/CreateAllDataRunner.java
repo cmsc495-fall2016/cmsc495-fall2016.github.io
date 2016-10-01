@@ -1,4 +1,4 @@
-package cmsc495.test_classes.ui;
+package cmsc495.testclasses.ui;
 
 import java.io.IOException;
 import java.sql.SQLException;
