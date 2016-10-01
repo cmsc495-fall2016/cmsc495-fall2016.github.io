@@ -1,4 +1,4 @@
-package cmsc495.test_classes;
+package cmsc495.testclasses;
 
 import cmsc495.database.Database;
 import cmsc495.database.Ingredient;
@@ -17,12 +17,12 @@ import java.util.Scanner;
  * @version 0.1 9/27/2016
  */
 
-public class All_Test {
+public class AllTest {
 
-  private Database d = new Database();
-  private Recipe r = new Recipe();
-  private Ingredient i = new Ingredient();
-  private User u = new User();
+  private Database database = new Database();
+  private Recipe recipe = new Recipe();
+  private Ingredient ingredient = new Ingredient();
+  private User user = new User();
 
   /**
    * Populate the database with test information.
@@ -31,10 +31,10 @@ public class All_Test {
    * @throws IOException Standard IO Exception
    */
   public void createaAllData(String[] args) throws SQLException, IOException {
-    Recipe_Test.main(args);
-    Ingredient_Test.main(args);
-    User_Test.main(args);
-    Uses_Test.main(args);
+    RecipeTest.main(args);
+    IngredientTest.main(args);
+    UserTest.main(args);
+    UsesTest.main(args);
   }
 
   /**
@@ -44,10 +44,10 @@ public class All_Test {
    */
   public void deleteAllData() throws SQLException {
     System.out.println("Deleting all data from Recipe, Ingredient, User, Uses tables");
-    d.clearUsesTable();
-    r.clearRecipeTable();
-    i.clearIngredientTable();
-    u.clearUserTable();
+    database.clearUsesTable();
+    recipe.clearRecipeTable();
+    ingredient.clearIngredientTable();
+    user.clearUserTable();
   }
 
   /**
@@ -59,7 +59,7 @@ public class All_Test {
    * @throws SQLException Standard SQL Exception
    */
   public static void main(String[] args) throws IOException, SQLException {
-    All_Test at = new All_Test();
+    AllTest at = new AllTest();
     System.out.println("[*] Recipe Repository Test Suite");
     System.out.println("[*] Please select one of our menu options:");
     System.out.println("[1] Populate the database with test information");

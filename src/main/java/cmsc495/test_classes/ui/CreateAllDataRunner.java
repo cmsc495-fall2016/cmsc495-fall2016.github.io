@@ -3,7 +3,7 @@ package cmsc495.test_classes.ui;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import cmsc495.test_classes.All_Test;
+import cmsc495.testclasses.AllTest;
 
 /**
  * Method needed to thread out the All_Test class...it takes too long
@@ -11,9 +11,9 @@ import cmsc495.test_classes.All_Test;
  * @author Adam
  */
 class CreateaAllDataRunner implements Runnable {
-  All_Test test;
+  AllTest test;
 
-  public CreateaAllDataRunner(All_Test test) {
+  public CreateaAllDataRunner(AllTest test) {
     this.test = test;
   }
 

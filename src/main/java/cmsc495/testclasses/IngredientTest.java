@@ -1,4 +1,4 @@
-package cmsc495.test_classes;
+package cmsc495.testclasses;
 
 import cmsc495.database.Ingredient;
 import com.opencsv.CSVReader;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Justin
  * @version 0.1 9/27/2016
  */
-public class Ingredient_Test {
+public class IngredientTest {
 
   File ingredient_test_data = null;
 
@@ -78,7 +78,7 @@ public class Ingredient_Test {
    * @throws SQLException Standard SQL Exception
    */
   public static void main(String[] args) throws IOException, SQLException {
-    Ingredient_Test it = new Ingredient_Test();
+    IngredientTest it = new IngredientTest();
     System.out.println("[!] Begin ingestion of Ingredient test_classes data.");
     it.populateTestData(new File("src/main/java/cmsc495/test_data/ingredient_data.csv"));
     System.out.println("[!] Test data read in; attempting to write to table");

@@ -1,4 +1,4 @@
-package cmsc495.test_classes;
+package cmsc495.testclasses;
 
 import cmsc495.database.Database;
 import com.opencsv.CSVReader;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @version 0.1 9/27/2016
  */
 
-public class Uses_Test {
+public class UsesTest {
 
   private class Uses_CSV_Entry {
     int id = -1;
@@ -74,7 +74,7 @@ public class Uses_Test {
    * @throws SQLException Standard SQL Exception
    */
   public static void main(String[] args) throws IOException, SQLException {
-    Uses_Test ut = new Uses_Test();
+    UsesTest ut = new UsesTest();
     System.out.println("[!] Begin ingestion of Uses test_classes data.");
     ut.populateTestData(new File("src/main/java/cmsc495/test_data/uses_data.csv"));
     System.out.println("[!] Test data read in; attempting to write to table");

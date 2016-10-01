@@ -23,7 +23,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-import cmsc495.test_classes.All_Test;
+import cmsc495.testclasses.AllTest;
 import cmsc495.ui.Page;
 import cmsc495.ui.PopUp;
 import cmsc495.ui.SimpleGui;
@@ -33,7 +33,7 @@ public class PageUIAllTest extends Page implements ActionListener {
   private static final long serialVersionUID = -8580704290926577189L;
 
   // build the all mighty all_test
-  private All_Test test = new All_Test();
+  private AllTest test = new AllTest();
 
   /**
    * Method to construct a Page to wrap around the test cases.
