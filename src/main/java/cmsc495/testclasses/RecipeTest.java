@@ -22,7 +22,7 @@ public class RecipeTest {
   File recipe_test_data = null;
 
 
-  private class Recipe_CSV_Entry {
+  private class RecipeCsvEntry {
     int id = -1;
     String name = null;
     int serves = -1;
@@ -37,7 +37,7 @@ public class RecipeTest {
     String source = null;
   }
 
-  private ArrayList<Recipe_CSV_Entry> testData = new ArrayList<>();
+  private ArrayList<RecipeCsvEntry> testData = new ArrayList<>();
 
   /**
    * Utility method used to convert times to minutes for standardization. Admittedly janky
@@ -83,7 +83,7 @@ public class RecipeTest {
       String[] recipe;
       reader.readNext(); // Get rid of the header line
       while ((recipe = reader.readNext()) != null) {
-        Recipe_CSV_Entry entry = new Recipe_CSV_Entry();
+        RecipeCsvEntry entry = new RecipeCsvEntry();
         entry.id = Integer.parseInt(recipe[0]);
         entry.name = recipe[1];
         entry.serves = Integer.parseInt(recipe[2].split(" ")[0]); // in case our Serves field has
@@ -119,7 +119,7 @@ public class RecipeTest {
     System.out.println("[!] Deleting all prior recipe entries (we are in test mode!)");
     Recipe recipeDelete = new Recipe();
     recipeDelete.clearRecipeTable();
-    for (Recipe_CSV_Entry entry : testData) {
+    for (RecipeCsvEntry entry : testData) {
       Recipe r = new Recipe();
       r.createRecipe(entry.name, entry.serves, entry.author, entry.prep_time, entry.cook_time, entry.difficulty,
           entry.procedures, entry.description, entry.source, null);

@@ -19,13 +19,13 @@ import java.util.ArrayList;
 
 public class UsesTest {
 
-  private class Uses_CSV_Entry {
+  private class UsesCsvEntry {
     int id = -1;
     int ingredient = -1;
     int recipe = -1;
   }
 
-  private ArrayList<Uses_CSV_Entry> testData = new ArrayList<>();
+  private ArrayList<UsesCsvEntry> testData = new ArrayList<>();
 
   /**
    * Reads Uses information from a test file, populating our testData ArrayList
@@ -40,7 +40,7 @@ public class UsesTest {
       String[] uses;
       reader.readNext(); // discard column header line
       while ((uses = reader.readNext()) != null) {
-        Uses_CSV_Entry entry = new Uses_CSV_Entry();
+        UsesCsvEntry entry = new UsesCsvEntry();
         entry.id = Integer.parseInt(uses[0]);
         entry.ingredient = Integer.parseInt(uses[1]);
         entry.recipe = Integer.parseInt(uses[2]);
@@ -61,7 +61,7 @@ public class UsesTest {
     System.out.println("[!] Deleting all prior uses entries (we are in test mode!)");
     Database uses = new Database();
     uses.clearUsesTable();
-    for (Uses_CSV_Entry entry : testData) {
+    for (UsesCsvEntry entry : testData) {
       uses.createUsesEntry(entry.ingredient, entry.recipe);
     }
   }

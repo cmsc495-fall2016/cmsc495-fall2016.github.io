@@ -20,7 +20,7 @@ public class UserTest {
 
   File user_test_data = null;
 
-  private class User_CSV_Entry {
+  private class UserCsvEntry {
     int id = -1;
     String first_name = null;
     String last_name = null;
@@ -28,7 +28,7 @@ public class UserTest {
     String username = null;
   }
 
-  private ArrayList<User_CSV_Entry> testData = new ArrayList<>();
+  private ArrayList<UserCsvEntry> testData = new ArrayList<>();
 
   /**
    * Reads User information from a test file, populating our testData ArrayList
@@ -43,7 +43,7 @@ public class UserTest {
       String[] user;
       reader.readNext(); // discard header line
       while ((user = reader.readNext()) != null) {
-        User_CSV_Entry entry = new User_CSV_Entry();
+        UserCsvEntry entry = new UserCsvEntry();
         entry.id = Integer.parseInt(user[0]);
         entry.first_name = user[1];
         entry.last_name = user[2];
@@ -66,7 +66,7 @@ public class UserTest {
     System.out.println("[!] Deleting all prior user entries (we are in test mode!)");
     User user = new User();
     user.clearUserTable();
-    for (User_CSV_Entry entry : testData) {
+    for (UserCsvEntry entry : testData) {
       user.createUser(entry.first_name, entry.last_name, entry.email, entry.username);
     }
   }

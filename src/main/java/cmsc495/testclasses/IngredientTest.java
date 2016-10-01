@@ -21,13 +21,13 @@ public class IngredientTest {
 
   File ingredient_test_data = null;
 
-  private class Ingredient_CSV_Entry {
+  private class IngredientCsvEntry {
     int id = -1;
     String name = null;
     String description = null;
   }
 
-  private ArrayList<Ingredient_CSV_Entry> testData = new ArrayList<>();
+  private ArrayList<IngredientCsvEntry> testData = new ArrayList<>();
 
   /**
    * Reads Ingredient information from a test file, populating our testData ArrayList
@@ -43,7 +43,7 @@ public class IngredientTest {
       reader.readNext(); // discard title line
       reader.readNext(); // discard column titles line
       while ((ingredient = reader.readNext()) != null) {
-        Ingredient_CSV_Entry entry = new Ingredient_CSV_Entry();
+        IngredientCsvEntry entry = new IngredientCsvEntry();
         entry.id = Integer.parseInt(ingredient[0]);
         entry.name = ingredient[1];
         entry.description = ingredient[2];
@@ -64,7 +64,7 @@ public class IngredientTest {
     System.out.println("[!] Deleting all prior ingredient entries (we are in test mode!)");
     Ingredient recipeDelete = new Ingredient();
     recipeDelete.clearIngredientTable();
-    for (Ingredient_CSV_Entry entry : testData) {
+    for (IngredientCsvEntry entry : testData) {
       Ingredient i = new Ingredient();
       i.createIngredient(entry.name, entry.description);
     }
