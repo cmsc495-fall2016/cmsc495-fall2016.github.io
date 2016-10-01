@@ -7,6 +7,8 @@
 
 package cmsc495.ui;
 
+import cmsc495.database.Recipe;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -16,13 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import cmsc495.database.Recipe;
 
 public class PageBrowseRecipe extends Page implements ActionListener {
 

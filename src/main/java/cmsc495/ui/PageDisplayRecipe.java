@@ -8,6 +8,9 @@
 
 package cmsc495.ui;
 
+import cmsc495.database.Ingredient;
+import cmsc495.database.Recipe;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -28,8 +31,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-import cmsc495.database.Ingredient;
-import cmsc495.database.Recipe;
 
 /**
  * @author Adam Howell, Obinna Ojialor.

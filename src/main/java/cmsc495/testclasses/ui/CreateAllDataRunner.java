@@ -1,9 +1,9 @@
 package cmsc495.testclasses.ui;
 
+import cmsc495.testclasses.AllTest;
+
 import java.io.IOException;
 import java.sql.SQLException;
-
-import cmsc495.testclasses.AllTest;
 
 /**
  * Method needed to thread out the All_Test class...it takes too long

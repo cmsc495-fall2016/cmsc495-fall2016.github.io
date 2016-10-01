@@ -1,13 +1,16 @@
 package cmsc495.testclasses.ui;
 
+import cmsc495.testclasses.AllTest;
+import cmsc495.ui.Page;
+import cmsc495.ui.PopUp;
+import cmsc495.ui.SimpleGui;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.sql.SQLException;
 
@@ -17,16 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
-
-import cmsc495.testclasses.AllTest;
-import cmsc495.ui.Page;
-import cmsc495.ui.PopUp;
-import cmsc495.ui.SimpleGui;
 
 public class PageUIAllTest extends Page implements ActionListener {
 

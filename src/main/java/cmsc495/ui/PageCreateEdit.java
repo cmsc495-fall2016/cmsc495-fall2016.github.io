@@ -1,5 +1,7 @@
 package cmsc495.ui;
 
+import cmsc495.database.Recipe;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.LayoutManager;
@@ -8,15 +10,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import cmsc495.database.Recipe;
 
 /**
  * TODO: Add a Class descriptor on this line.
