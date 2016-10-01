@@ -257,16 +257,14 @@ class CreateaAllData implements Runnable {
   }
 
   /**
-   * Interface method
+   * The run method.
    */
   @Override
   public void run() {
     try {
       test.createaAllData(null);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (SQLException | IOException exception) {
+      exception.printStackTrace();
     }
     System.out.println("---------\nCreateAllData Thread Actions Complete");
   }

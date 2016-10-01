@@ -25,7 +25,7 @@ public class All_Test {
   private User u = new User();
 
   /**
-   * Populate the database with test information
+   * Populate the database with test information.
    * 
    * @throws SQLException Standard SQL Exception
    * @throws IOException Standard IO Exception
@@ -38,7 +38,7 @@ public class All_Test {
   }
 
   /**
-   * Delete all data from the database
+   * Delete all data from the database.
    * 
    * @throws SQLException Standard SQL Exception
    */
@@ -68,7 +68,8 @@ public class All_Test {
     Scanner scanner = new Scanner(System.in);
     String choice = scanner.next();
     while (!(choice.contentEquals("3"))) {
-      while (!((choice.contentEquals("1") | (choice.contentEquals("2") | (choice.contentEquals("3")))))) {
+      while (!((choice.contentEquals("1") | (choice.contentEquals("2") 
+          | (choice.contentEquals("3")))))) {
         System.out.print("[>] Choice (1/2/3): ");
         choice = scanner.next();
       }

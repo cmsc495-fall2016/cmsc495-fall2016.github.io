@@ -38,11 +38,13 @@ public class Database {
     try {
       // The database path should be cmsc495-fall2016.github.io/database/
       File currentDirectory = new File(new File(".").getCanonicalPath());
-      this.path = "jdbc:sqlite:" + currentDirectory + File.separator + "database" + File.separator + "recipe.db";
+      this.path = "jdbc:sqlite:" + currentDirectory + File.separator + "database" 
+          + File.separator + "recipe.db";
       this.databaseConn = DriverManager.getConnection(path);
       createTables(); // Create if not exists
-      if (verbose)
+      if (verbose) {
         System.out.println("Successfully connected");
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -74,7 +76,7 @@ public class Database {
   }
 
   /**
-   * This method creates the tables as specified in the project ERD
+   * This method creates the tables as specified in the project ERD.
    */
   public void createTables() {
     try {

@@ -149,7 +149,7 @@ public class User {
   }
 
   /**
-   * Update an user's first name
+   * Update an user's first name.
    * 
    * @param id User id number
    * @param user_name Username

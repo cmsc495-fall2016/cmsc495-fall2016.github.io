@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 public class Page_Main extends Page {
 
   /**
+   * The Page Main class.
+   * 
    * Generated serial ID
    */
   private static final long serialVersionUID = 4670577079792236241L;
@@ -25,9 +27,9 @@ public class Page_Main extends Page {
   public Page_Main() {
     super("Main");
     this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    JPanel Panels = createPanel();
-    this.add(Panels);
-  }// end constructor
+    JPanel panels = createPanel();
+    this.add(panels);
+  }
 
   private JPanel createPanel() {
     // Create the north panel
@@ -43,6 +45,6 @@ public class Page_Main extends Page {
     logo.setBounds(300, 200, 200, 20);
     panel.add(logo);
     return panel;
-  }// end createNorthPanel
+  }
 
-}// end class Page_Main
+}

@@ -24,15 +24,20 @@ import javax.swing.SwingUtilities;
 
 import cmsc495.database.Recipe;
 
-public class Page_BrowseRecipe extends Page implements ActionListener{
+public class Page_BrowseRecipe extends Page implements ActionListener {
 
   /**
-   * Generated serial ID
+   * Generated serial ID.
    */
   private static final long serialVersionUID = -1007375598685985229L;
 
   private Map<JButton,Recipe> buttonMap = new HashMap<JButton, Recipe>();
   
+  /**
+   * Constructor that takes a title.
+   * 
+   * @param title - A string that's the tile for the page.
+   */
   public Page_BrowseRecipe(String title) {
     super(title);
     this.setLayout(new BorderLayout());
@@ -48,22 +53,24 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
      *    panel helps to align things
      */
     JPanel panel = new JPanel(new GridLayout(0, 1));
-    for( Recipe recipe : listRecipes){
+    
+    for(Recipe recipe : listRecipes) {
       JButton button  = buildButton(recipe);
       buttonMap.put(button, recipe);
       button.addActionListener( this );
-      button.setActionCommand("Recipe_"+ recipe.getId());
+      button.setActionCommand("Recipe_" + recipe.getId());
       panel.add(button);
-    }// end for listRecipes
+    }
     
     JScrollPane scrollPane = new JScrollPane(panel);
     add(scrollPane,BorderLayout.CENTER);
     
-  }// end constructor
+  }
   
   /**
-   * Method to generate web-like link buttons
-   * @param recipe
+   * Method to generate web-like link buttons.
+   * 
+   * @param recipe - Recipe used to build a button.
    * @return JButton
    */
   private JButton buildButton(Recipe recipe) {
@@ -71,14 +78,13 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
     JButton button = new JButton();
     button.setText(
         String.format(
-            "<HTML><HR>" + 
-                "Recipe: <FONT color=\"#000099\"><U>%s</U></FONT><BR>" + 
-                "Description: <BR>%s" + 
-                "</HTML>",
+            "<HTML><HR>" 
+            + "Recipe: <FONT color=\"#000099\"><U>%s</U></FONT><BR>"
+            + "Description: <BR>%s" 
+            + "</HTML>",
             recipe.getName(),
             recipe.getDescription()
-            )
-        );
+            ));
     button.setHorizontalAlignment(SwingConstants.LEFT);
     button.setBorderPainted(false);
     button.setOpaque(false);
@@ -88,28 +94,27 @@ public class Page_BrowseRecipe extends Page implements ActionListener{
   }
 
   /**
-   * Add in the ActionListener methods required from implementation 
+   * Add in the ActionListener methods required from implementation. 
    */
-  public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent event) {
     // Determine what the ActionEvent is
-    if (e.getSource() instanceof JButton){
-      JButton button = (JButton) e.getSource();
+    if (event.getSource() instanceof JButton) {
+      JButton button = (JButton) event.getSource();
       
       // Determine if the button is in the buttonMap
-      if (buttonMap.containsKey( button ) ){
+      if (buttonMap.containsKey( button ) ) {
         Recipe recipe = (Recipe) buttonMap.get(button);
         
         // set the panel to the main page
         SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
         gui.setCurrentPage(new Page_DisplayRecipe(recipe));
-      }else{
+      } else {
         // show a PopUp.error() if there is no action associated
         PopUp.Error(this,
             "Unknown Action", 
             "A JButton has been found, but there is no action associated\n"
-            + " Please open a ticket against this"
-            );
-      }//end if button map contains check & else
-    }// end if e.getSource is a button
-  }//end actionPerformed
-}// end class Page_BroseRecipe
+            + " Please open a ticket against this");
+      }
+    }
+  }
+}
