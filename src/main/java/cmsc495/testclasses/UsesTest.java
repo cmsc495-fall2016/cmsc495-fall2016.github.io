@@ -28,7 +28,7 @@ public class UsesTest {
   private ArrayList<UsesCsvEntry> testData = new ArrayList<>();
 
   /**
-   * Reads Uses information from a test file, populating our testData ArrayList
+   * Reads Uses information from a test file, populating our testData ArrayList.
    * 
    * @param file File containing Uses relationship information
    * @throws IOException Standard IOException
