@@ -87,15 +87,18 @@ public class Database {
 
       stmt = this.databaseConn.createStatement();
 
-      String createIngredient = "CREATE TABLE IF NOT EXISTS ingredient " + "(id INTEGER PRIMARY KEY  NOT NULL, "
+      String createIngredient = "CREATE TABLE IF NOT EXISTS ingredient " 
+          + "(id INTEGER PRIMARY KEY  NOT NULL, "
           + " name TEXT NOT NULL, " + " description TEXT)";
       stmt.executeUpdate(createIngredient);
       if (verbose) {
         System.out.println("Created Ingredient table");
       }
 
-      String createRecipe = "CREATE TABLE IF NOT EXISTS recipe " + "(id INTEGER PRIMARY KEY NOT NULL,"
-          + "name text NOT NULL," + "serves INTEGER," + "author text," + "prep_time INTEGER," + "cook_time INTEGER,"
+      String createRecipe = "CREATE TABLE IF NOT EXISTS recipe "
+          + "(id INTEGER PRIMARY KEY NOT NULL,"
+          + "name text NOT NULL," + "serves INTEGER," + "author text,"
+          + "prep_time INTEGER," + "cook_time INTEGER,"
           + "difficulty INTEGER," + "procedures text," + "description text," + "source text)";
       stmt.executeUpdate(createRecipe);
       if (verbose) {
@@ -104,13 +107,15 @@ public class Database {
 
       String createUses = "CREATE TABLE IF NOT EXISTS uses " + "(id INTEGER PRIMARY KEY NOT NULL,"
           + "ingredient_id INTEGER NOT NULL," + "recipe_id INTEGER NOT NULL,"
-          + "FOREIGN KEY(ingredient_id) REFERENCES ingredient(id)," + "FOREIGN KEY(recipe_id) REFERENCES recipe(id))";
+          + "FOREIGN KEY(ingredient_id) REFERENCES ingredient(id)," 
+          + "FOREIGN KEY(recipe_id) REFERENCES recipe(id))";
       stmt.executeUpdate(createUses);
       if (verbose) {
         System.out.println("Created Uses table");
       }
 
-      String createUserTable = "CREATE TABLE IF NOT EXISTS user " + "(id INTEGER PRIMARY KEY NOT NULL, "
+      String createUserTable = "CREATE TABLE IF NOT EXISTS user " 
+          + "(id INTEGER PRIMARY KEY NOT NULL, "
           + "user_name TEXT," + "first_name TEXT," + "last_name TEXT, " + "email_address TEXT)";
       stmt.executeUpdate(createUserTable);
 
@@ -147,7 +152,8 @@ public class Database {
    */
   public void createUsesEntry(int ingredient, int recipe) throws SQLException {
     Connection connection = this.getDatabaseConn();
-    PreparedStatement stmtAdd = connection.prepareStatement("INSERT INTO uses (ingredient_id,recipe_id) VALUES (?,?);");
+    PreparedStatement stmtAdd = connection.prepareStatement(
+        "INSERT INTO uses (ingredient_id,recipe_id) VALUES (?,?);");
     stmtAdd.setInt(1, ingredient);
     stmtAdd.setInt(2, recipe);
     stmtAdd.executeUpdate();

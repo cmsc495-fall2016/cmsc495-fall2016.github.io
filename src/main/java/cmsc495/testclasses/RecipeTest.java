@@ -121,7 +121,8 @@ public class RecipeTest {
     recipeDelete.clearRecipeTable();
     for (RecipeCsvEntry entry : testData) {
       Recipe recipe = new Recipe();
-      recipe.createRecipe(entry.name, entry.serves, entry.author, entry.prepTime, entry.cookTime, entry.difficulty,
+      recipe.createRecipe(
+          entry.name, entry.serves, entry.author, entry.prepTime, entry.cookTime, entry.difficulty,
           entry.procedures, entry.description, entry.source, null);
     }
   }
@@ -136,7 +137,9 @@ public class RecipeTest {
   public static void main(String[] args) throws IOException, SQLException {
     RecipeTest rt = new RecipeTest();
     System.out.println("[!] Begin ingestion of Recipe test_classes data.");
-    rt.populateTestData(new File("src/main/java/cmsc495/test_data/recipe_data_optionals_removed.csv"));
+    rt.populateTestData(
+        new File("src/main/java/cmsc495/test_data/recipe_data_optionals_removed.csv")
+    );
     System.out.println("[!] Test data read in; attempting to write to table");
     rt.updateRecipeTable();
     System.out.println("[!] If no stacktrace, assume db recipe table is populated.");
