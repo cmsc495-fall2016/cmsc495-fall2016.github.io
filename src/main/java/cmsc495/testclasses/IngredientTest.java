@@ -30,7 +30,7 @@ public class IngredientTest {
   private ArrayList<IngredientCsvEntry> testData = new ArrayList<>();
 
   /**
-   * Reads Ingredient information from a test file, populating our testData ArrayList
+   * Reads Ingredient information from a test file, populating our testData ArrayList.
    * 
    * @param file File containing Ingredient information
    * @throws IOException Standard IOException

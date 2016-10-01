@@ -31,7 +31,7 @@ public class UserTest {
   private ArrayList<UserCsvEntry> testData = new ArrayList<>();
 
   /**
-   * Reads User information from a test file, populating our testData ArrayList
+   * Reads User information from a test file, populating our testData ArrayList.
    * 
    * @param file File containing User information
    * @throws IOException Standard IOException
