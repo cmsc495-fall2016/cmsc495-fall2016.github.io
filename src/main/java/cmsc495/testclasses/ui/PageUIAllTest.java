@@ -25,7 +25,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-public class PageUIAllTest extends Page implements ActionListener {
+public class PageUiAllTest extends Page implements ActionListener {
 
   private static final long serialVersionUID = -8580704290926577189L;
 
@@ -35,7 +35,7 @@ public class PageUIAllTest extends Page implements ActionListener {
   /**
    * Method to construct a Page to wrap around the test cases.
    */
-  public PageUIAllTest() {
+  public PageUiAllTest() {
     super("Test Running");
 
     // set layout manager
@@ -199,7 +199,7 @@ public class PageUIAllTest extends Page implements ActionListener {
      */
     SimpleGui gui = new SimpleGui();
     gui.setVisible(true);
-    gui.setCurrentPage(new PageUIAllTest());
+    gui.setCurrentPage(new PageUiAllTest());
   } // end main
 
 }
