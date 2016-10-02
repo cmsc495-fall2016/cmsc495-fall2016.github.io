@@ -20,28 +20,28 @@ import cmsc495.testclasses.ui.PageUIAllTest;
  */
 public enum Navigations {
   MAIN {
-    public Page getPanel() {
+    public Page getPanel(SimpleGui simpleGui) {
       return new PageMain();
     }
   },
   SEARCH {
-    public Page getPanel() {
+    public Page getPanel(SimpleGui simpleGui) {
       return new Page(this.toString());
     }
   },
   BROWSE {
-    public Page getPanel() {
+    public Page getPanel(SimpleGui simpleGui) {
       return new PageBrowseRecipe(this.toString());
     }
   },
   CREATE {
-    public Page getPanel() {
+    public Page getPanel(SimpleGui simpleGui) {
       return new PageCreateEdit(this.toString());
     }
   },
   IMPORT {
-    public Page getPanel() {
-      new ImportExport(null);
+    public Page getPanel(SimpleGui simpleGui) {
+      new ImportExport(simpleGui);
       return null;
     }
   },
@@ -58,7 +58,7 @@ public enum Navigations {
    *    
    * @return Page
    */
-  public abstract Page getPanel();
+  public abstract Page getPanel(SimpleGui simpleGui);
  
   /**
    * override the default toString to provide

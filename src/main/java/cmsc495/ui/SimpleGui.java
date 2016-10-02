@@ -91,7 +91,7 @@ public class SimpleGui extends JFrame implements ActionListener {
         Navigations enumPage = (Navigations) buttonMap.get(button);
         
         // pull the panel from the enum
-        Page page = enumPage.getPanel();
+        Page page = enumPage.getPanel(this);
         
         // set the panel to the main page
         if (page != null) {

@@ -9,6 +9,8 @@ import java.io.File;
 import java.sql.SQLException;
 
 import javax.swing.JFileChooser;
+import javax.swing.Popup;
+import javax.swing.SwingUtilities;
 
 
 /**
@@ -49,7 +51,20 @@ public class ImportExport {
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = fc.getSelectedFile();
       if (this.isImporting) {
-        new Import(file); 
+         Recipe imported;
+         try {
+           imported = new Import(file).imported;
+           //test for the component to != null, 
+           //no sense attempting to put the display in the gui
+           if (component != null) {
+             SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(component);
+             gui.setCurrentPage(new PageDisplayRecipe(imported));
+           } // end component test
+         } catch (Exception execption) {
+           PopUp.error(null,
+               "Invalid Recipe File",
+               "The selected file is in the incorrect format,please try again");
+         } //end try/catch
       } else {
         new Export(file, recipe);
       } // end if importing

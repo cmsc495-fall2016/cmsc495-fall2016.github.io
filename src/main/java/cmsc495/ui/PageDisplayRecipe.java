@@ -94,7 +94,6 @@ public class PageDisplayRecipe extends Page implements ActionListener {
             boolean confirm = PopUp.confirm(this,
                 "Are you sure that you want to delete: " + recipe.getName()
             );
-            System.out.println("CONFIRM:" + confirm);
             if (confirm == true) {
               try {
                 recipe.deleteRecipe(recipe.getId());
@@ -259,6 +258,9 @@ public class PageDisplayRecipe extends Page implements ActionListener {
       }
       insertString(doc,"Procedures:" + nl,"italicbold");
       insertString(doc, recipe.getProcedures() + nl, "regular");
+      
+      // set the text pane to the first line
+      textPane.setCaretPosition(0);
     }
     
     // Create the scrolled area

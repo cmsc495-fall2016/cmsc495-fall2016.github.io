@@ -19,6 +19,7 @@ import java.util.Iterator;
 
 public class Import {
   private String path = null;
+  public Recipe imported;
 
   /**
    * Constructor method via relative path.
@@ -36,7 +37,7 @@ public class Import {
    * Constructor method via File Object.
    * @param file File object to read from
    */
-  public Import(File file) {
+  public Import(File file) throws Exception{
     createDbRecipe(file);
   }
   
@@ -44,9 +45,8 @@ public class Import {
    * Method to insert a recipe into the database.
    * @param file File object to read from
    */
-  private void createDbRecipe(File file) {
+  private void createDbRecipe(File file) throws Exception{
     // Read in the JSON file
-    try {
       FileReader reader = new FileReader(file);
       JSONParser parser = new JSONParser();
       Object input = parser.parse(reader);
@@ -67,7 +67,7 @@ public class Import {
       // Process ingredient array
       Iterator<JSONObject> itr = ingredArray.iterator();
       while (itr.hasNext()) {
-        JSONObject ingredObj = (JSONObject) itr.next();
+        JSONObject ingredObj = itr.next();
         String ingredName = (String) ingredObj.get("Name");
         Ingredient sample = new Ingredient();
         String ingredDescript = "";
@@ -76,19 +76,16 @@ public class Import {
         ingredList.add(sample);
       }
       // Now create recipe
-      Recipe imported = new Recipe();
+      imported = new Recipe();
       imported.createRecipe(name, serves, author, prepTime, cookTime, difficulty, procedures,
           description, source, ingredList);
-    } catch (Exception exception) {
-      exception.printStackTrace();
-    }
   } //end createDbRecipe
   
   /**
    * Method to import a recipe from a File Object
    * @param file File object to import from 
    */
-  public void importRecipe(File file) {
+  public void importRecipe(File file) throws Exception {
     createDbRecipe(file);
   } //end importRecipe File
   
@@ -96,7 +93,7 @@ public class Import {
    * Method to import a recipe
    * @param filename String object to infer relative File object path 
    */
-  public void importRecipe(String filename) {
+  public void importRecipe(String filename) throws Exception {
     File reader = new File(this.path + filename);
     createDbRecipe(reader);   
   }
@@ -107,7 +104,11 @@ public class Import {
    */
   public static void main(String[] args) {
     Import test = new Import();
-    test.importRecipe("Test.json");
+    try {
+      test.importRecipe("Test.json");
+    } catch (Exception execption) {
+      execption.printStackTrace();
+    }
     //Import test2 = new Import();
     //test2.importRecipe("CrazyRecipe.json");
   }
