@@ -10,13 +10,15 @@
 
 package cmsc495.ui;
 
+import cmsc495.testclasses.ui.PageUIAllTest;
+
 /**
  * The Pages classes.
  * 
  * @author Adam
  *
  */
-public enum Pages {
+public enum Navigations {
   MAIN {
     public Page getPanel() {
       return new PageMain();
@@ -37,7 +39,18 @@ public enum Pages {
       return new PageCreateEdit(this.toString());
     }
   },
-  ;
+  IMPORT {
+    public Page getPanel() {
+      new ImportExport(null);
+      return null;
+    }
+  },
+/*  TESTING {
+    public Page getPanel() {
+      return new PageUIAllTest();
+    }
+  },
+*/  ;
   
   /**
    * Abstract method that each enum must implement for their own type of 

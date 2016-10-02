@@ -47,7 +47,7 @@ public class SimpleGui extends JFrame implements ActionListener {
   private JPanel mainPanel;
   private JPanel currentPage;
   
-  private Map<JButton,Pages> buttonMap = new HashMap<JButton, Pages>();
+  private Map<JButton,Navigations> buttonMap = new HashMap<JButton, Navigations>();
   
   /**
    * The Simple GUI default construction.
@@ -88,13 +88,15 @@ public class SimpleGui extends JFrame implements ActionListener {
       
       // Determine if the button is in the buttonMap
       if (buttonMap.containsKey( button ) ) {
-        Pages enumPage = (Pages) buttonMap.get(button);
+        Navigations enumPage = (Navigations) buttonMap.get(button);
         
         // pull the panel from the enum
         Page page = enumPage.getPanel();
         
         // set the panel to the main page
-        setCurrentPage( page );
+        if (page != null){
+          setCurrentPage( page );
+        }
       } else {
         // show a PopUp.error() if there is no action associated
         PopUp.error(this,
@@ -118,7 +120,7 @@ public class SimpleGui extends JFrame implements ActionListener {
     panel.setLayout((LayoutManager) new BoxLayout(panel, BoxLayout.Y_AXIS));
     
     // Build buttons for all the enumerated Pages
-    for (Pages enumPage : Pages.values()) {
+    for (Navigations enumPage : Navigations.values()) {
       JButton button = buildNavButton(enumPage.toString());
       
       /*

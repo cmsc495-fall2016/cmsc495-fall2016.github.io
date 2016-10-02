@@ -17,6 +17,7 @@ import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -87,23 +88,86 @@ public class PageDisplayRecipe extends Page implements ActionListener {
           gui.setCurrentPage(new PageCreateEdit(recipe));
           break;
         case "Export": 
-          //gui.setCurrentPage(new Page_Export(recipe));
-          PopUp.warning(this,
-              "Page not implemented yet",
-              "This is a place holder for the export function");
+          new ImportExport(this, recipe);
           break;
         case "Delete": 
-          //TODO make confirmations maybe have add to the pop ups with a confirm method
-          PopUp.warning(this,
-              "Page not implemented yet",
-              "This is a place holder for the delete function");
+          if (recipe != null) {
+            boolean confirm = PopUp.confirm(this,
+                "Are you sure that you want to delete: " + recipe.getName()
+            );
+            System.out.println("CONFIRM:" + confirm);
+            if (confirm == true) {
+              try {
+                recipe.deleteRecipe(recipe.getId());
+                gui.setCurrentPage(new PageDisplayRecipe(null));
+              } catch (SQLException exception) {
+                exception.printStackTrace();
+              } //end try/catch
+            } // end confirmation of delete
+          } //end test for recipe to not be null
           break;
         default:
+          break;
       }
       
     } //end if 
     
   } // end actionPerformed
+
+  /**
+   * Method to set the styles to the JTextPane
+   * Example obtained from 
+   * http://docs.oracle.com/javase/tutorial/displayCode.html?code=http://docs.oracle.com/javase/tutorial/uiswing/examples/components/TextSamplerDemoProject/src/components/TextSamplerDemo.java
+   * 
+   * @param doc - the StyledDocument
+   */
+  protected void addStylesToDocument(StyledDocument doc) {
+    //Initialize some styles.
+    Style def = StyleContext.getDefaultStyleContext()
+        .getStyle(StyleContext.DEFAULT_STYLE);
+  
+    Style regular = doc.addStyle("regular", def);
+    StyleConstants.setFontFamily(def, "SansSerif");
+    
+    int regFontSize = 12;
+    
+    // italics
+    Style style = doc.addStyle("italic", regular);
+    StyleConstants.setItalic(style, true);
+    StyleConstants.setFontSize(style, regFontSize);
+    
+    int smallFontSize = 10;
+    
+    style = doc.addStyle("italicsmall", regular);
+    StyleConstants.setItalic(style, true);
+    StyleConstants.setFontSize(style, smallFontSize);
+  
+    style = doc.addStyle("italicsmallbold", regular);
+    StyleConstants.setItalic(style, true);
+    StyleConstants.setFontSize(style, smallFontSize);
+    StyleConstants.setBold(style, true);
+    
+    style = doc.addStyle("italicbold", regular);
+    StyleConstants.setItalic(style, true);
+    StyleConstants.setFontSize(style, regFontSize);
+    StyleConstants.setBold(style, true);
+  
+    style = doc.addStyle("bold", regular);
+    StyleConstants.setBold(style, true);
+    
+    int largeFontSize = 16;
+    
+    style = doc.addStyle("boldlarge", regular);
+    StyleConstants.setBold(style, true);
+    StyleConstants.setFontSize(style, largeFontSize);
+  
+    style = doc.addStyle("small", regular);
+    StyleConstants.setFontSize(style, smallFontSize);
+  
+    style = doc.addStyle("large", regular);
+    StyleConstants.setFontSize(style, largeFontSize);
+    
+  }
 
   /**
    * Method to build buttons for this page & set action command.
@@ -141,7 +205,9 @@ public class PageDisplayRecipe extends Page implements ActionListener {
     
     // build & add label 
     JLabel label = new JLabel(
-        "<html><span style='font-size:20px'>" + recipe.getName() + "</span></html>",
+        "<html><span style='font-size:20px'>"
+        + ((recipe == null) ? "" : recipe.getName() ) 
+        + "</span></html>",
         SwingConstants.LEFT);
     panel.add(label,BorderLayout.PAGE_START);
     
@@ -173,25 +239,26 @@ public class PageDisplayRecipe extends Page implements ActionListener {
      *    "regular", "italic","italicsmall","italicsmallbold","bold", 
      *    "boldlarge","small","large",
      */
-    String nl = new String("\n");
-    insertString(doc,recipe.getName() + nl,"boldlarge");
-    insertString(doc,"By: " ,"italicsmallbold");
-    insertString(doc,recipe.getAuthor() + nl + nl,"small");
-    //insertString(doc,"Description:\t" ,"italicbold");
-    insertString(doc,recipe.getDescription() + nl + nl,"regular");
-    insertString(doc,"Cook Time:\t" ,"italicbold");
-    insertString(doc,recipe.getCook_time() + nl, "regular");
-    insertString(doc,"Prep Time:\t" ,"italicbold");
-    insertString(doc,recipe.getPrep_time() + nl, "regular");
-    insertString(doc,"Difficulty:\t" ,"italicbold");
-    insertString(doc,recipe.getDifficulty() + nl, "regular");
-    insertString(doc,"Ingredients:" + nl,"italicbold");
-    for (Ingredient ingredient : recipe.getIngredients()) {
-      insertString(doc,"\t" + ingredient.getName() + nl, "regular");
+    if (recipe != null) {
+      String nl = new String("\n");
+      insertString(doc,recipe.getName() + nl,"boldlarge");
+      insertString(doc,"By: " ,"italicsmallbold");
+      insertString(doc,recipe.getAuthor() + nl + nl,"small");
+      //insertString(doc,"Description:\t" ,"italicbold");
+      insertString(doc,recipe.getDescription() + nl + nl,"regular");
+      insertString(doc,"Cook Time:\t" ,"italicbold");
+      insertString(doc,recipe.getCook_time() + nl, "regular");
+      insertString(doc,"Prep Time:\t" ,"italicbold");
+      insertString(doc,recipe.getPrep_time() + nl, "regular");
+      insertString(doc,"Difficulty:\t" ,"italicbold");
+      insertString(doc,recipe.getDifficulty() + nl, "regular");
+      insertString(doc,"Ingredients:" + nl,"italicbold");
+      for (Ingredient ingredient : recipe.getIngredients()) {
+        insertString(doc,"\t" + ingredient.getName() + nl, "regular");
+      }
+      insertString(doc,"Procedures:" + nl,"italicbold");
+      insertString(doc, recipe.getProcedures() + nl, "regular");
     }
-    insertString(doc,"Procedures:" + nl,"italicbold");
-    insertString(doc, recipe.getProcedures() + nl, "regular");
-    
     
     // Create the scrolled area
     JScrollPane scrollPane = new JScrollPane(textPane);
@@ -234,66 +301,5 @@ public class PageDisplayRecipe extends Page implements ActionListener {
           "Error in doc.insertString",
           "Couldn't insert initial text into text pane.");
     }
-  }
-
-
-  /**
-   * Method to set the styles to the JTextPane
-   * Example obtained from 
-   * http://docs.oracle.com/javase/tutorial/displayCode.html?code=http://docs.oracle.com/javase/tutorial/uiswing/examples/components/TextSamplerDemoProject/src/components/TextSamplerDemo.java
-   * 
-   * @param doc - the StyledDocument
-   */
-  protected void addStylesToDocument(StyledDocument doc) {
-    //Initialize some styles.
-    Style def = StyleContext.getDefaultStyleContext()
-        .getStyle(StyleContext.DEFAULT_STYLE);
-
-    Style regular = doc.addStyle("regular", def);
-    StyleConstants.setFontFamily(def, "SansSerif");
-    
-    int regFontSize = 12;
-    
-    // italics
-    Style style = doc.addStyle("italic", regular);
-    StyleConstants.setItalic(style, true);
-    StyleConstants.setFontSize(style, regFontSize);
-    
-    int smallFontSize = 10;
-    
-    style = doc.addStyle("italicsmall", regular);
-    StyleConstants.setItalic(style, true);
-    StyleConstants.setFontSize(style, smallFontSize);
-
-    style = doc.addStyle("italicsmallbold", regular);
-    StyleConstants.setItalic(style, true);
-    StyleConstants.setFontSize(style, smallFontSize);
-    StyleConstants.setBold(style, true);
-    
-    style = doc.addStyle("italicbold", regular);
-    StyleConstants.setItalic(style, true);
-    StyleConstants.setFontSize(style, regFontSize);
-    StyleConstants.setBold(style, true);
-
-    style = doc.addStyle("bold", regular);
-    StyleConstants.setBold(style, true);
-    
-    int largeFontSize = 16;
-    
-    style = doc.addStyle("boldlarge", regular);
-    StyleConstants.setBold(style, true);
-    StyleConstants.setFontSize(style, largeFontSize);
-
-    style = doc.addStyle("small", regular);
-    StyleConstants.setFontSize(style, smallFontSize);
-
-    style = doc.addStyle("large", regular);
-    StyleConstants.setFontSize(style, largeFontSize);
-    
-  }
-
-  
-  public static void main(String[] args) {
-
   }
 }

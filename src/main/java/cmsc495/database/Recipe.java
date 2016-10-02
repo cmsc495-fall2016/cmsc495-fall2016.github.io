@@ -342,12 +342,10 @@ public class Recipe {
     statement.setInt(1, id);
     ResultSet ingredientResults = statement.executeQuery();
     this.ingredients.clear();
-    if (ingredientResults.next()) {
-      while (ingredientResults.next()) {
-        Ingredient ingredient = new Ingredient();
-        ingredient.getIngredientByNumber(ingredientResults.getInt(1));
-        this.ingredients.add(ingredient);
-      }
+    while (ingredientResults.next()) {
+      Ingredient ingredient = new Ingredient();
+      ingredient.getIngredientByNumber(ingredientResults.getInt(1));
+      this.ingredients.add(ingredient);
     }
     connection.close();
   }
@@ -440,32 +438,32 @@ public class Recipe {
    */
   public List<Recipe> getAll() {
     List<Recipe> results = new ArrayList<>();
+    ArrayList<Integer> recipeIds = new ArrayList<Integer>();
     try {
       Connection connection = myDatabase.getDatabaseConn();
       PreparedStatement statement = connection.prepareStatement(
-          "SELECT id,name,serves,author,prep_time,cook_time,difficulty,procedures"
-          + ",description,source FROM recipe");
+          "SELECT id FROM recipe");
 
       ResultSet recipeResults = statement.executeQuery();
+      
       while (recipeResults.next()) {
-        Recipe recipe = new Recipe();
-
-        recipe.setId(recipeResults.getInt("id"));
-        recipe.setName(recipeResults.getString("name"));
-        recipe.setServes(recipeResults.getInt("serves"));
-        recipe.setAuthor(recipeResults.getString("author"));
-        recipe.setPrepTime(recipeResults.getInt("prep_time"));
-        recipe.setCookTime(recipeResults.getInt("cook_time"));
-        recipe.setDifficulty(recipeResults.getInt("difficulty"));
-        recipe.setProcedures(recipeResults.getString("procedures"));
-        recipe.setDescription(recipeResults.getString("description"));
-        recipe.setSource(recipeResults.getString("source"));
-
-        results.add(recipe);
-
+        recipeIds.add(recipeResults.getInt("id"));
       }
+      
+      connection.close();
     } catch (SQLException exception) {
       exception.printStackTrace();
+    }
+    //fetch the recipes by id
+    for (int integer : recipeIds){
+      try {
+        Recipe recipe = new Recipe();
+        recipe.getRecipeByNumber(integer);
+        results.add(recipe);
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
     return results;
   }

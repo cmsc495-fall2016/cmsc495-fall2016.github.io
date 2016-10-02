@@ -108,13 +108,13 @@ public class Ingredient {
    */
   private void getIngredientByCriteria(String criteria, String term) throws SQLException {
     connection = myDatabase.getDatabaseConn();
-    PreparedStatement statement =
-        connection.prepareStatement("SELECT id,name,description FROM ingredient " + "WHERE ? = ?;");
-    statement.setString(1, criteria);
+    PreparedStatement statement = connection.prepareStatement(
+            "SELECT id,name,description FROM ingredient " + "WHERE " + criteria + " = ?;");
+
     if (criteria.contentEquals("name")) {
-      statement.setString(2, term);
+      statement.setString(1, term);
     } else {
-      statement.setInt(2, Integer.parseInt(term));
+      statement.setInt(1, Integer.parseInt(term));
     }
     try (ResultSet results = statement.executeQuery()) {
       if (results.next()) { // else no results
@@ -122,6 +122,8 @@ public class Ingredient {
         this.name = results.getString("name");
         this.description = results.getString("description");
       }
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
     connection.close();
   }
