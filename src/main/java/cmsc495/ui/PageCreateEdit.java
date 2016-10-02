@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JCheckBox;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
@@ -30,8 +29,8 @@ import javax.swing.SwingConstants;
  *
  */
 public class PageCreateEdit extends Page implements ActionListener {
-
-  private static final long serialVersionUID = 1L;
+  
+  private static final long serialVersionUID = -7189486032976973625L;
   private Recipe recipe;
   private String sw;
   //Label
@@ -51,43 +50,38 @@ public class PageCreateEdit extends Page implements ActionListener {
   private JTextArea procedure;
 
   /**
-   * Constructor method to create the creating the recipe.
+   * Constructor method to create the creating a new recipe.
    * @param title String to be displayed as the title
    */
-  //Create new recipe
   public PageCreateEdit( String title ) {
     super(title);
 
-    //Initialized panel
-    EntryList panel = new EntryList();
+    //Initialized panel    
     this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    JPanel Panel = createNorthPanel("Save");
-    this.sw="Save";
+    this.sw = "Create";
     //add panel Layout
-    this.add(Panel, BorderLayout.NORTH);
-    this.add(panel,BorderLayout.CENTER);
+    this.add(createNorthPanel("Save"), BorderLayout.NORTH);
+    this.add(new EntryList(),BorderLayout.CENTER);
 
-  }
+  } //end constructor for creating
 
   /**
    * Constructor method to edit an existing recipe.
    * @param recip Recipe to edit
    */
-  
-   //Edit recipe
   public PageCreateEdit( Recipe recip ) {
-    super("Ediit");
+    super("Edit");
     this.recipe = recip;
-    EntryList panel = new EntryList();
     this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    JPanel Panel = createNorthPanel("Confirm");
-    this.sw="Confirm";
-    this.add(Panel, BorderLayout.NORTH);
-    this.add(panel,BorderLayout.CENTER);
+    this.sw = "Edit";
+    this.add(createNorthPanel("Confirm"), BorderLayout.NORTH);
+    this.add(new EntryList(), BorderLayout.CENTER);
     setall();
-  }
+  } // end constructor for editing
   
-//Initialized all recipe field
+  /**
+   * Initialized all recipe field.
+   */
   private void setall() {
     this.autho.setText(String.format("%s", this.recipe.getAuthor()));
     this.prepTim.setText(String.format("%s", this.recipe.getPrep_time()));
@@ -96,7 +90,12 @@ public class PageCreateEdit extends Page implements ActionListener {
     this.descriptio.setText(this.recipe.getDescription());
     this.procedure.setText(this.recipe.getProcedures());
   }
-  //Create panel with fields
+
+  /**
+   * Create panel with fields.
+   * @param but TODO OO: what is this used for
+   * @return JPanel
+   */
   private JPanel createNorthPanel(String but) {
     // Create the north panel
     JPanel panel = new JPanel(new BorderLayout());
@@ -122,8 +121,6 @@ public class PageCreateEdit extends Page implements ActionListener {
     this.recipeName = new JLabel("Recipe Name:");
     this.recipeName.setBounds(10, 0, 80, 20);
     this.recipeNam.setBounds(90, 0, 150, 20);
-
-
 
     this.autho = new JTextField();
     this.author = new JLabel("Author:");
@@ -171,28 +168,28 @@ public class PageCreateEdit extends Page implements ActionListener {
     return panel;
   } // end createNorthPanel
 
-
+  /**
+   * Method to define the actions to be performed by objects in this class. 
+   */
   @Override
-  public void actionPerformed(ActionEvent e) {
-    // TODO Auto-generated method stub
-    if (e.getSource() instanceof JButton) {
+  public void actionPerformed(ActionEvent event) {
+    if (event.getSource() instanceof JButton) {
       switch (this.sw) {
-        case "Save":
-          // 1) creating 
-         
+        case "Create":
+          //TODO
+          PopUp.warning(this, "Place Holder", " This is a place holder for Creating a recipe");
           break;
-        case "Confirm":
-            // 2) update 
-            
-            break;
+        case "Edit":
+          //TODO
+          PopUp.warning(this, "Place Holder", " This is a place holder for editing a recipe");
+          break;
         default:
-          PopUp.Warning(this, "Button action undefined",
-              "There is no action defined for " + e.getActionCommand());
-      }// end switch
-    } // end test of JButton
-    else {
-      PopUp.Warning(this, "Action listener undefined",
-          "There is no action defined for " + e.getSource());
+          PopUp.warning(this, "Button action undefined",
+              "There is no action defined for " + event.getActionCommand());
+      } // end switch
+    } else {
+      PopUp.warning(this, "Action listener undefined",
+          "There is no action defined for " + event.getSource());
     }
   }
 

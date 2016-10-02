@@ -41,6 +41,7 @@ public class Export {
    */
   public Export(File file, Recipe recipe) {
     JSONObject jsonObject = createJsonFromRecipe(recipe);
+    writeJsonObject(jsonObject,file);
   }
 
   /**
@@ -104,6 +105,7 @@ public class Export {
    * @param jsonObject JSONObject to ouput
    * @param file File object to output to
    */
+  public void writeJsonObject(JSONObject jsonObject, File file) {
     try {
       file.createNewFile();
       FileWriter fileWrite = new FileWriter(file);
