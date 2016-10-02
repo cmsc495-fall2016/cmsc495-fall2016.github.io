@@ -89,7 +89,7 @@ public class Database {
 
       String createIngredient = "CREATE TABLE IF NOT EXISTS ingredient " 
           + "(id INTEGER PRIMARY KEY  NOT NULL, "
-          + " name TEXT NOT NULL, " + " description TEXT)";
+          + " name TEXT NOT NULL UNIQUE, " + " description TEXT)";
       stmt.executeUpdate(createIngredient);
       if (verbose) {
         System.out.println("Created Ingredient table");
