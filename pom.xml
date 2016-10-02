@@ -1,55 +1,81 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>cmsc495</groupId>
-  <artifactId>sharkbread-app</artifactId>
-  <version>0.0.1</version>
-  <packaging>jar</packaging>
-  <name>SharkBread App</name>
-  <build>
-  <plugins>
-    <plugin>
-      <!-- Build an executable JAR -->
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <version>3.0.2</version>
-      <configuration>
-        <archive>
-          <manifest>
-            <addClasspath>true</addClasspath>
-            <classpathPrefix>lib/</classpathPrefix>
-            <mainClass>cmsc495.Main</mainClass>
-          </manifest>
-        </archive>
-      </configuration>
-    </plugin>
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-compiler-plugin</artifactId>
-      <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-      </configuration>
-    </plugin>
-  </plugins>
-</build>
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.8.11.2</version>
-        </dependency>
-        <!-- http://opencsv.sourceforge.net -->
-        <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>3.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-    </dependencies>
-    
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>cmsc495</groupId>
+	<artifactId>sharkbread-app</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+	<name>SharkBread App</name>
+	<build>
+		<plugins>
+			<plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <executions>
+      <execution>
+        <phase>package</phase>
+        <goals>
+          <goal>single</goal>
+        </goals>
+      </execution>
+    </executions>
+    <configuration>
+
+      <archive>
+      <manifest>
+        <addClasspath>true</addClasspath>
+        <mainClass>cmsc495.Main</mainClass>
+      </manifest>
+      </archive>
+
+      <descriptorRefs>
+        <descriptorRef>jar-with-dependencies</descriptorRef>
+      </descriptorRefs>
+
+    </configuration>
+  </plugin> 
+			<plugin>
+				<!-- Build an executable JAR -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>cmsc495.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.8.11.2</version>
+		</dependency>
+		<!-- http://opencsv.sourceforge.net -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>3.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+	</dependencies>
+
 </project>
