@@ -16,7 +16,7 @@ public class Entry extends JPanel {
     private JButton plus;
     private JButton minus;
     private EntryList parent;
-//create one field
+//create a field
     public Entry( String textFieldText, EntryList list) {
        
         this.parent = list;
