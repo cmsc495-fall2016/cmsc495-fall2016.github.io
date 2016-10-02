@@ -4,17 +4,31 @@ import cmsc495.database.Recipe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 
 /**
@@ -31,79 +45,76 @@ import javax.swing.SwingConstants;
 public class PageCreateEdit extends Page implements ActionListener {
   
   private static final long serialVersionUID = -7189486032976973625L;
+  private String[] recipeFields = {
+      "name","author","description","source","cookTime","prepTime","serves",
+      "difficulty"
+      };
   private Recipe recipe;
   private String sw;
-  //Label
-  private JLabel author;
-  private JLabel prepTime;
-  private JLabel cookTime;
-  private JLabel recipeName;
-  private JLabel procedures;
-  private JLabel description;
-  private JLabel difficulty;
-  //Textfield
-  private JTextField autho;
-  private JTextField prepTim;
-  private JTextField cookTim;
-  private JTextField recipeNam;
-  private JTextField descriptio;
-  private JTextArea procedure;
-
+  private Map<String,JLabel> labels = new HashMap<String,JLabel>();
+  private Map<String,JTextField> textFields = new HashMap<String,JTextField>();
+  private JTextArea procedures;
+  
   /**
    * Constructor method to create the creating a new recipe.
    * @param title String to be displayed as the title
    */
   public PageCreateEdit( String title ) {
     super(title);
-
-    //Initialized panel    
-    this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    this.sw = "Create";
-    //add panel Layout
-    this.add(createNorthPanel("Save"), BorderLayout.NORTH);
-    this.add(new EntryList(),BorderLayout.CENTER);
+    buildCommon();
 
   } //end constructor for creating
 
   /**
    * Constructor method to edit an existing recipe.
-   * @param recip Recipe to edit
+   * @param recipe Recipe to edit
    */
-  public PageCreateEdit( Recipe recip ) {
+  public PageCreateEdit( Recipe recipe ) {
     super("Edit");
-    this.recipe = recip;
-    this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    this.sw = "Edit";
-    this.add(createNorthPanel("Confirm"), BorderLayout.NORTH);
-    this.add(new EntryList(), BorderLayout.CENTER);
+    this.recipe = recipe;
+    buildCommon();
     setall();
   } // end constructor for editing
   
   /**
-   * Initialized all recipe field.
+  * Method to consolidate common actions between two constructors.
+  */
+  public void buildCommon() {
+    //Initialized panel    
+    this.setLayout((LayoutManager) new BorderLayout());
+    this.sw = "Create";
+    //add panel Layout
+    this.add(createNorthPanel(), BorderLayout.NORTH);
+    this.add(createCenterPanel(),BorderLayout.CENTER);
+  }
+  
+  /**
+   * Objective for the panel is to create two (2) things.
+   * 1) JTextArea for the procedures resizes nicely 
+   * 2) An area for the ingredients 
+   * @return panel
    */
-  private void setall() {
-    this.autho.setText(String.format("%s", this.recipe.getAuthor()));
-    this.prepTim.setText(String.format("%s", this.recipe.getPrep_time()));
-    this.cookTim.setText(String.format("%s", this.recipe.getCook_time()));
-    this.recipeNam.setText(this.recipe.getName());
-    this.descriptio.setText(this.recipe.getDescription());
-    this.procedure.setText(this.recipe.getProcedures());
+  private Container createCenterPanel() {
+    // Create the procedure text area in a scrolled area
+    procedures = new JTextArea(10,10);
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.add(new JScrollPane(procedures),BorderLayout.CENTER);
+    
+    // add the ingredient listed items
+    JPanel panel2 = new JPanel(new BorderLayout());
+    panel2.add(new JScrollPane(new EntryList()),BorderLayout.CENTER);
+    
+    JTabbedPane tabbedpane = new JTabbedPane();
+    tabbedpane.addTab("Procedure", panel);
+    tabbedpane.addTab("Ingredients", panel2);
+    return tabbedpane;
   }
 
   /**
    * Create panel with fields.
-   * @param but TODO OO: what is this used for
    * @return JPanel
    */
-  private JPanel createNorthPanel(String but) {
-    // Create the north panel
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.setOpaque(true);
-
-    // build & add label
-
-    panel.setLayout(null);
+  private JPanel createNorthPanel() {
     // build & add button
     JButton button = new JButton();
     button.setText("<HTML><FONT color=\"#000099\"><U>Save</U></FONT></HTML>");
@@ -114,83 +125,127 @@ public class PageCreateEdit extends Page implements ActionListener {
     button.addActionListener(this);
     button.setActionCommand("Save");
     button.setBounds(600, 0, 60, 20);
-    panel.add(button, BorderLayout.LINE_END);
-
-    //Initialized all Label&fields
-    this.recipeNam = new JTextField();
-    this.recipeName = new JLabel("Recipe Name:");
-    this.recipeName.setBounds(10, 0, 80, 20);
-    this.recipeNam.setBounds(90, 0, 150, 20);
-
-    this.autho = new JTextField();
-    this.author = new JLabel("Author:");
-    this.author.setBounds(10, 20, 80, 20);
-    this.autho.setBounds(90, 20, 150, 20);
-
-    this.cookTim = new JTextField();
-    this.cookTime = new JLabel("Cook Time:");
-    this.cookTime.setBounds(10, 40, 80, 20);
-    this.cookTim.setBounds(90, 40, 150, 20);
-
-    this.prepTim = new JTextField();
-    this.prepTime = new JLabel("Prep Time:");
-    this.prepTime.setBounds(10, 60, 80, 20);
-    this.prepTim.setBounds(90, 60, 150, 20);
-
-    this.descriptio = new JTextField();
-    this.description = new JLabel("Description:");
-    this.description.setBounds(10, 80, 80, 20);
-    this.descriptio.setBounds(90, 80, 300, 20);
-
-    this.procedure = new JTextArea();
-    this.procedures = new JLabel("Procedures:");
-    this.setBounds(10, 100, 80, 20);
-
-    JScrollPane sp = new JScrollPane(this.procedure);
-    sp.setBounds(10, 130, 600, 70);
-
-    //add labels&fields
-    panel.add(this.author);
-    panel.add(this.prepTime);
-    panel.add(this.cookTime);
-    panel.add(this.recipeName);
-    panel.add(this.procedures);
-    panel.add(this.description);
-
-
-    panel.add(this.autho);
-    panel.add(this.prepTim);
-    panel.add(this.cookTim);
-    panel.add(this.descriptio);
-    panel.add(this.recipeNam);
-    panel.add(sp);
-
+    
+    //Make JLabels & Text fields
+    for (String string : recipeFields) {
+      //make the display objects for the recipe elements
+      // Capitalize the first char in each word
+      String labelString = string.substring(0, 1).toUpperCase() + string.substring(1) + " ";;
+      if (string == "cookTime" || string == "prepTime") {
+        labelString = String.format("%s%s %s%s",
+            string.substring(0, 1).toUpperCase(), string.substring(1,4),
+            string.substring(4, 5).toUpperCase(), string.substring(5,8)
+            );
+      } //end unique label for cookTime & prepTime
+      textFields.put(string, new JTextField("",30));
+      labels.put(string,new JLabel(labelString + ":"));
+    }
+    
+    // Make a sub panel to add to the main...the main will anchor it the left
+    JPanel subPanel = new JPanel( new GridBagLayout() );
+    subPanel.add(button,makeGbc(1,1));
+    int row = 2;
+    for (String string : recipeFields) {
+      // Add the components
+      subPanel.add(labels.get(string),makeGbc(1,row));
+      subPanel.add(textFields.get(string),makeGbc(2,row++));
+    }
+    // Create the north panel
+    JPanel panel = new JPanel((LayoutManager) new FlowLayout(FlowLayout.LEFT));
+    panel.setOpaque(true);
+    panel.add(subPanel,BorderLayout.PAGE_START);
+    panel.add(button,BorderLayout.PAGE_END);
+  
     return panel;
   } // end createNorthPanel
 
+  /**
+   * Initialized all recipe field.
+   */
+  private void setall() {
+    textFields.get("name").setText(String.format("%s", recipe.getName()));
+    textFields.get("author").setText(String.format("%s", recipe.getAuthor()));
+    textFields.get("description").setText(recipe.getDescription());
+    textFields.get("source").setText(String.format("%s", recipe.getSource()));
+    textFields.get("cookTime").setText(String.format("%s", recipe.getCook_time()));
+    textFields.get("prepTime").setText(String.format("%s", recipe.getPrep_time()));
+    textFields.get("serves").setText(String.format("%s", recipe.getServes()));
+    textFields.get("difficulty").setText(String.format("%s", recipe.getDifficulty()));
+    this.procedures.setText(this.recipe.getProcedures());
+    
+  }
+
+  /**
+   * method to help structure the GridBagLayout.
+   * @param xgrid specifies the x coordinates
+   * @param yGrid specifies the x coordinates
+   * @return GridBagConstraints
+   */
+  private GridBagConstraints makeGbc(int xgrid, int ygrid) {
+    GridBagConstraints gbc = new GridBagConstraints();
+    // assign location
+    gbc.gridx = xgrid;
+    gbc.gridy = ygrid;
+    // assign padding
+    gbc.ipadx = 5;
+    gbc.ipady = 0;
+    // set the spacing of the cells
+    gbc.insets = new Insets(0, 0, 0, 0);
+    // set where the grid anchors to
+    gbc.anchor = GridBagConstraints.NORTHEAST;
+    // allow the grid to expand
+    gbc.fill = GridBagConstraints.BOTH;
+    return gbc;
+  } // end makeGbc
+  
   /**
    * Method to define the actions to be performed by objects in this class. 
    */
   @Override
   public void actionPerformed(ActionEvent event) {
     if (event.getSource() instanceof JButton) {
-      switch (this.sw) {
-        case "Create":
-          //TODO
-          PopUp.warning(this, "Place Holder", " This is a place holder for Creating a recipe");
-          break;
-        case "Edit":
-          //TODO
-          PopUp.warning(this, "Place Holder", " This is a place holder for editing a recipe");
-          break;
-        default:
-          PopUp.warning(this, "Button action undefined",
-              "There is no action defined for " + event.getActionCommand());
-      } // end switch
+      // the inputs for editing & creating are the same see test inputs
+      if (testInputs()) {
+        switch (this.sw) {
+          case "Create":
+            //TODO
+            PopUp.warning(this, "Place Holder", " This is a place holder for Creating a recipe");
+            break;
+          case "Edit":
+            //TODO
+            PopUp.warning(this, "Place Holder", " This is a place holder for editing a recipe");
+            break;
+          default:
+            PopUp.warning(this, "Button action undefined",
+                "There is no action defined for " + event.getActionCommand());
+        } // end switch
+      }
     } else {
       PopUp.warning(this, "Action listener undefined",
           "There is no action defined for " + event.getSource());
     }
+  }
+
+  /**
+   * method designed to determine if the input parameters are correct & defined
+   * @return Boolean is all correct.
+   */
+  private boolean testInputs() {
+    /*
+     * Required inputs as per ERD
+     * name
+     * serves
+     * author
+     * preptime
+     * cooktime
+     * difficulty
+     * procedures
+     * ingredients
+     * 
+     * Optional:
+     *  Description
+     */
+    return false;
   }
 
 }

@@ -47,8 +47,6 @@ public class PageBrowseRecipe extends Page implements ActionListener {
     // fetch recipe browse default
     List<Recipe> listRecipes = new Recipe().getAll();
     
-    // build the panel & set its' layout manager
-
     /*
      *  build the button & add to:
      *    recipe map (helps with action listener)

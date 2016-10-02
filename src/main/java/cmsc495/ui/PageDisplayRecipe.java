@@ -81,7 +81,6 @@ public class PageDisplayRecipe extends Page implements ActionListener {
       JButton button = (JButton) event.getSource();
 
       // set the panel to the main page 
-      // TODO Update with appropriate pages
       SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
       switch (button.getActionCommand()) {
         case "Edit": 
@@ -246,6 +245,8 @@ public class PageDisplayRecipe extends Page implements ActionListener {
       insertString(doc,recipe.getAuthor() + nl + nl,"small");
       //insertString(doc,"Description:\t" ,"italicbold");
       insertString(doc,recipe.getDescription() + nl + nl,"regular");
+      insertString(doc,"Source: " ,"italicsmallbold");
+      insertString(doc,recipe.getSource() + nl,"small");
       insertString(doc,"Cook Time:\t" ,"italicbold");
       insertString(doc,recipe.getCook_time() + nl, "regular");
       insertString(doc,"Prep Time:\t" ,"italicbold");

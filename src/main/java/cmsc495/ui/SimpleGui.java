@@ -94,7 +94,7 @@ public class SimpleGui extends JFrame implements ActionListener {
         Page page = enumPage.getPanel();
         
         // set the panel to the main page
-        if (page != null){
+        if (page != null) {
           setCurrentPage( page );
         }
       } else {

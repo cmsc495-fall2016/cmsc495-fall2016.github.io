@@ -455,7 +455,7 @@ public class Recipe {
       exception.printStackTrace();
     }
     //fetch the recipes by id
-    for (int integer : recipeIds){
+    for (int integer : recipeIds) {
       try {
         Recipe recipe = new Recipe();
         recipe.getRecipeByNumber(integer);
