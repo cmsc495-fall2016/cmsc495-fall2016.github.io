@@ -46,7 +46,7 @@ public class Ingredient {
   public void createIngredient(String name) throws SQLException {
     connection = myDatabase.getDatabaseConn();
     PreparedStatement statement = 
-        connection.prepareStatement("INSERT INTO ingredient (name) VALUES(?)");
+        connection.prepareStatement("INSERT OR IGNORE INTO ingredient (name) VALUES(?)");
     statement.setString(1, name);
     this.name = name;
     statement.executeUpdate();
@@ -66,7 +66,7 @@ public class Ingredient {
     this.description = description;
     connection = myDatabase.getDatabaseConn();
     PreparedStatement statement = 
-        connection.prepareStatement("INSERT INTO ingredient (name,description) VALUES (?,?)");
+        connection.prepareStatement("INSERT OR IGNORE INTO ingredient (name,description) VALUES (?,?)");
     statement.setString(1, name);
     this.name = name;
     statement.setString(2, description);
@@ -231,6 +231,14 @@ public class Ingredient {
   public static void main(String[] args) throws SQLException {
     System.out.println("[!] Begin Ingredient Test.");
     Ingredient test = new Ingredient();
+    test.createIngredient("Paprika");
+    test.getIngredientByName("Paprika");
+    System.out.println("[#] Number is: " + test.id);
+    System.out.println("[*] Name is: " + test.name);
+    test.createIngredient("Paprika", "Spice");
+    test.getIngredientByName("Paprika");
+    System.out.println("[#] Number is: " + test.id);
+    System.out.println("[*] Name is: " + test.name);
     test.createIngredient("Paprika");
     test.getIngredientByName("Paprika");
     System.out.println("[#] Number is: " + test.id);
