@@ -52,3 +52,9 @@ documents/week1/~$todo.docx
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/
+.settings/org.eclipse.m2e.core.prefs
+.classpath
+.project
+*.prefs
+*.db-journal
+recipe.db

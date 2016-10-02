@@ -22,6 +22,14 @@
         </archive>
       </configuration>
     </plugin>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+      </configuration>
+    </plugin>
   </plugins>
 </build>
     <dependencies>
@@ -30,6 +38,17 @@
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.8.11.2</version>
+        </dependency>
+        <!-- http://opencsv.sourceforge.net -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>3.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
         </dependency>
     </dependencies>
     

@@ -7,49 +7,67 @@
  *   2) add the implementation of the abstract method
  *      utilized to create the panel (page)
  */
+
 package cmsc495.ui;
 
+import cmsc495.testclasses.ui.PageUIAllTest;
+
 /**
+ * The Pages classes.
+ * 
  * @author Adam
  *
  */
-public enum Pages {
+public enum Navigations {
   MAIN {
-    public Page getPanel(){
-      return new Page_Main();
+    public Page getPanel(SimpleGui simpleGui) {
+      return new PageMain();
     }
   },
   SEARCH {
-    public Page getPanel(){
+    public Page getPanel(SimpleGui simpleGui) {
       return new Page(this.toString());
     }
   },
   BROWSE {
-    public Page getPanel(){
-      return new Page_BrowseRecipe(this.toString());
+    public Page getPanel(SimpleGui simpleGui) {
+      return new PageBrowseRecipe(this.toString());
     }
   },
   CREATE {
-    public Page getPanel(){
-      return new Page(this.toString());
+    public Page getPanel(SimpleGui simpleGui) {
+      return new PageCreateEdit(this.toString());
     }
   },
-  ;
+  IMPORT {
+    public Page getPanel(SimpleGui simpleGui) {
+      new ImportExport(simpleGui);
+      return null;
+    }
+  },
+/*  TESTING {
+    public Page getPanel() {
+      return new PageUIAllTest();
+    }
+  },
+*/  ;
   
   /**
    * Abstract method that each enum must implement for their own type of 
-   *    pages 
+   *    pages.
+   *    
    * @return Page
    */
-  public abstract Page getPanel();
+  public abstract Page getPanel(SimpleGui simpleGui);
  
   /**
    * override the default toString to provide
-   *   Capitalized first letter of the enum
+   *   Capitalized first letter of the enum.
+   *   
    * @return String
    */
   @Override
-  public String toString(){
+  public String toString() {
     return 
         String.format(
             "%s%s",
