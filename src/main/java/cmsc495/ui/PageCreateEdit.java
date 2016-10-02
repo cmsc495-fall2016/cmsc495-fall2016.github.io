@@ -7,9 +7,10 @@ import java.awt.Color;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import javax.swing.JCheckBox;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,7 +33,8 @@ public class PageCreateEdit extends Page implements ActionListener {
 
   private static final long serialVersionUID = 1L;
   private Recipe recipe;
-
+  private String sw;
+  //Label
   private JLabel author;
   private JLabel prepTime;
   private JLabel cookTime;
@@ -40,7 +42,7 @@ public class PageCreateEdit extends Page implements ActionListener {
   private JLabel procedures;
   private JLabel description;
   private JLabel difficulty;
-
+  //Textfield
   private JTextField autho;
   private JTextField prepTim;
   private JTextField cookTim;
@@ -52,14 +54,18 @@ public class PageCreateEdit extends Page implements ActionListener {
    * Constructor method to create the creating the recipe.
    * @param title String to be displayed as the title
    */
+  //Create new recipe
   public PageCreateEdit( String title ) {
     super(title);
 
-
-
+    //Initialized panel
+    EntryList panel = new EntryList();
     this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    JPanel panel = createNorthPanel();
-    this.add(panel, BorderLayout.NORTH);
+    JPanel Panel = createNorthPanel("Save");
+    this.sw="Save";
+    //add panel Layout
+    this.add(Panel, BorderLayout.NORTH);
+    this.add(panel,BorderLayout.CENTER);
 
   }
 
@@ -67,16 +73,21 @@ public class PageCreateEdit extends Page implements ActionListener {
    * Constructor method to edit an existing recipe.
    * @param recip Recipe to edit
    */
+  
+   //Edit recipe
   public PageCreateEdit( Recipe recip ) {
     super("Ediit");
     this.recipe = recip;
-
+    EntryList panel = new EntryList();
     this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
-    JPanel panel = createNorthPanel();
-    this.add(panel, BorderLayout.NORTH);
+    JPanel Panel = createNorthPanel("Confirm");
+    this.sw="Confirm";
+    this.add(Panel, BorderLayout.NORTH);
+    this.add(panel,BorderLayout.CENTER);
     setall();
   }
-
+  
+//Initialized all recipe field
   private void setall() {
     this.autho.setText(String.format("%s", this.recipe.getAuthor()));
     this.prepTim.setText(String.format("%s", this.recipe.getPrep_time()));
@@ -85,8 +96,8 @@ public class PageCreateEdit extends Page implements ActionListener {
     this.descriptio.setText(this.recipe.getDescription());
     this.procedure.setText(this.recipe.getProcedures());
   }
-
-  private JPanel createNorthPanel() {
+  //Create panel with fields
+  private JPanel createNorthPanel(String but) {
     // Create the north panel
     JPanel panel = new JPanel(new BorderLayout());
     panel.setOpaque(true);
@@ -106,6 +117,7 @@ public class PageCreateEdit extends Page implements ActionListener {
     button.setBounds(600, 0, 60, 20);
     panel.add(button, BorderLayout.LINE_END);
 
+    //Initialized all Label&fields
     this.recipeNam = new JTextField();
     this.recipeName = new JLabel("Recipe Name:");
     this.recipeName.setBounds(10, 0, 80, 20);
@@ -138,8 +150,9 @@ public class PageCreateEdit extends Page implements ActionListener {
     this.setBounds(10, 100, 80, 20);
 
     JScrollPane sp = new JScrollPane(this.procedure);
-    sp.setBounds(10, 130, 600, 300);
+    sp.setBounds(10, 130, 600, 70);
 
+    //add labels&fields
     panel.add(this.author);
     panel.add(this.prepTime);
     panel.add(this.cookTime);
@@ -160,22 +173,27 @@ public class PageCreateEdit extends Page implements ActionListener {
 
 
   @Override
-  public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent e) {
     // TODO Auto-generated method stub
-    if (event.getSource() instanceof JButton) {
-      switch (event.getActionCommand()) {
+    if (e.getSource() instanceof JButton) {
+      switch (this.sw) {
         case "Save":
-          // TODO save actions go here; may need two types 1) update if editing 2) creating if not
-          // editing
+          // 1) creating 
+         
           break;
+        case "Confirm":
+            // 2) update 
+            
+            break;
         default:
-          PopUp.warning(this, "Button action undefined",
-              "There is no action defined for " + event.getActionCommand());
-      } // end switch
-    } else {
-      PopUp.warning(this, "Action listener undefined",
-          "There is no action defined for " + event.getSource());
-    } //end if/else test for event source is a JButton
+          PopUp.Warning(this, "Button action undefined",
+              "There is no action defined for " + e.getActionCommand());
+      }// end switch
+    } // end test of JButton
+    else {
+      PopUp.Warning(this, "Action listener undefined",
+          "There is no action defined for " + e.getSource());
+    }
   }
 
 }
