@@ -1,4 +1,4 @@
-package cmsc495.ui;
+package sharkbread.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
