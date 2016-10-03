@@ -45,12 +45,13 @@ public enum Navigations {
       return null;
     }
   },
-/*  TESTING {
-    public Page getPanel() {
+  TESTING {
+    public Page getPanel(SimpleGui simpleGui) {
+
       return new PageUIAllTest();
     }
   },
-*/  ;
+  ;
   
   /**
    * Abstract method that each enum must implement for their own type of 
