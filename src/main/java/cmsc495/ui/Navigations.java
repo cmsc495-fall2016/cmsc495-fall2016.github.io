@@ -47,6 +47,7 @@ public enum Navigations {
   },
   TESTING {
     public Page getPanel(SimpleGui simpleGui) {
+
       return new PageUIAllTest();
     }
   },
