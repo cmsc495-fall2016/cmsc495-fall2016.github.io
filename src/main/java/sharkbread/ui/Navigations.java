@@ -13,7 +13,10 @@ package sharkbread.ui;
 import sharkbread.test.classes.ui.PageUiAllTest;
 
 /**
- * The Pages classes.
+ * The Navigations enum.
+ * This is where the navigation section of the SimpleGUI is updated.
+ * To add, just add a new enum and add a constructor the specific
+ * getPanel method of the enum.
  * 
  * @author Adam
  *
@@ -26,7 +29,7 @@ public enum Navigations {
   },
   SEARCH {
     public Page getPanel(SimpleGui simpleGui) {
-      return new Page(this.toString());
+      return new PageFind(this.toString());
     }
   },
   BROWSE {
