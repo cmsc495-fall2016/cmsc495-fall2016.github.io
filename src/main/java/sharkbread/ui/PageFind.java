@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import cmsc495.database.Recipe;
+import sharkbread.database.Recipe;
 /**
  *Class find recipe
 * @author Obinna Ojialor
