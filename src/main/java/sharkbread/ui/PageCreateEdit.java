@@ -29,15 +29,11 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 /**
- * TODO: Add a Class descriptor on this line.
- * TODO OO: populate method headers & comment throughout
- * TODO AH: make the display resize nicely
- * TODO : implement ingredients
- * TODO : implement ingredient new field creator from the page ie start with one field and add more
- *  at the discretion of the user
+ * Class to allow 1) Creation of New Recipes 2) Editing of existing Recipes.
  *  
  * @author Obinna Ojialor
- *
+ * @author Adam Howell
+ * 
  */
 public class PageCreateEdit extends Page implements ActionListener {
   
@@ -84,8 +80,43 @@ public class PageCreateEdit extends Page implements ActionListener {
     //add panel Layout
     this.add(createNorthPanel(), BorderLayout.NORTH);
     this.add(createCenterPanel(),BorderLayout.CENTER);
-  }
+  } // end BuildCommon
   
+  /**
+   * Method to define the actions to be performed by objects in this class. 
+   */
+  @Override
+  public void actionPerformed(ActionEvent event) {
+    // test the source of the ActionEvent; currently there are only JButtons
+    if (event.getSource() instanceof JButton) {
+      JButton button = (JButton)event.getSource();
+      // the inputs for editing & creating are the same see testInputs
+      if (testInputs()) {
+        switch (this.sw) {
+          case "CREATE":
+            createRecipe();
+            break;
+          case "EDIT":
+            updateRecipe();
+            break;
+          default:
+            PopUp.warning(this, "Button action undefined",
+                "There is no action defined for " + event.getActionCommand());
+        } // end switch
+        // if the recipe fails to create or edit then the recipe is null 
+        if (recipe instanceof Recipe) {
+          // set the panel to the main page
+          SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
+          gui.setCurrentPage(new PageDisplayRecipe(recipe));
+          
+        } // end instanceof test of recipe
+      } // end of testing inputs
+    } else {
+      PopUp.warning(this, "Action listener undefined",
+          "There is no action defined for " + event.getSource());
+    } // end if/else JButton test
+  } // end actionPerformed
+
   /**
    * Objective for the panel is to create two (2) things.
    * 1) JTextArea for the procedures resizes nicely 
@@ -95,6 +126,12 @@ public class PageCreateEdit extends Page implements ActionListener {
   private Container createCenterPanel() {
     // Create the procedure text area in a scrolled area
     procedures = new JTextArea(10,10);
+    // Some recipes have long strings with out line breaks in them
+    //    So let's set the line wrap on
+    procedures.setWrapStyleWord(true);
+    procedures.setLineWrap(true);
+    
+    // panel to hold the recipe's procedure
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(new JScrollPane(procedures),BorderLayout.CENTER);
     
@@ -102,15 +139,17 @@ public class PageCreateEdit extends Page implements ActionListener {
     JPanel panel2 = new JPanel(new BorderLayout());
     panel2.add(new JScrollPane(entryList),BorderLayout.CENTER);
     
+    // stuff the procedures and the ingredients into a tabbed pane
     JTabbedPane tabbedpane = new JTabbedPane();
     tabbedpane.addTab("Procedure", panel);
     tabbedpane.addTab("Ingredients", panel2);
     return tabbedpane;
-  }
+  } //end createCenterPanel
 
   /**
-   * Create panel with fields.
-   * @return JPanel
+   * Create panel with fields for the recipe input.
+   *     Does not include the procedure or ingredients
+   * @return JPanel Contains all fields but procedures & ingredients
    */
   private JPanel createNorthPanel() {
     // build & add 'Save' button
@@ -158,31 +197,37 @@ public class PageCreateEdit extends Page implements ActionListener {
   } // end createNorthPanel
 
   /**
-   * Initialized all recipe field.
+   * Method to create a new recipe from the users' inputs.
    */
-  private void setall() {
-    // populate the easy fields
-    textFields.get("name").setText(String.format("%s", recipe.getName()));
-    textFields.get("author").setText(String.format("%s", recipe.getAuthor()));
-    textFields.get("description").setText(recipe.getDescription());
-    textFields.get("source").setText(String.format("%s", recipe.getSource()));
-    textFields.get("cookTime").setText(String.format("%s", recipe.getCook_time()));
-    textFields.get("prepTime").setText(String.format("%s", recipe.getPrep_time()));
-    textFields.get("serves").setText(String.format("%s", recipe.getServes()));
-    textFields.get("difficulty").setText(String.format("%s", recipe.getDifficulty()));
-    this.procedures.setText(this.recipe.getProcedures());
-    
-    // populate the ingredients ... the first one is done for us
-    ArrayList<Ingredient> ingredientList = recipe.getIngredients();
-    // the first entry list item is made for us
-    entryList.getList().get(0).setField(ingredientList.get(0).getName());
-    int count = 1;
-    while(ingredientList.size() != entryList.getList().size()) {
-      //make the entry & load the entry into the list
-      Entry entry = new Entry(ingredientList.get(count++).getName(), entryList);
-      entryList.addItem(entry);
-    }
-  }
+  private void createRecipe() {
+    recipe = new Recipe();
+    // try to create a new recipe or pop-up the printed stack
+    try {
+      recipe.createRecipe(
+          textFields.get("name").getText(),
+          Integer.parseInt(
+              textFields.get("serves").getText()
+          ),
+          textFields.get("author").getText() , 
+          Integer.parseInt(
+              textFields.get("prepTime").getText()
+          ), 
+          Integer.parseInt(
+              textFields.get("cookTime").getText()
+          ) , 
+          Integer.parseInt(
+              textFields.get("difficulty").getText()
+          ) ,
+          procedures.getText() , 
+  
+          textFields.get("description").getText() , 
+          textFields.get("source").getText(),
+          pullIngredients()
+      );
+    } catch (Exception execption) {
+      PopUp.error(this, "Database Error", execption.getStackTrace().toString());
+    } // end try/catch
+  } // end createRecipe
 
   /**
    * method to help structure the GridBagLayout.
@@ -208,116 +253,50 @@ public class PageCreateEdit extends Page implements ActionListener {
   } // end makeGbc
   
   /**
-   * Method to define the actions to be performed by objects in this class. 
+   * Method to get the Entry.TextField's string value
+   * @return ArrayList of Ingredient objects containing the user's input
    */
-  @Override
-  public void actionPerformed(ActionEvent event) {
-    if (event.getSource() instanceof JButton) {
-      JButton button = (JButton)event.getSource();
-      // the inputs for editing & creating are the same see test inputs
-      if (testInputs()) {
-        switch (this.sw) {
-          case "CREATE":
-            createRecipe();
-            break;
-          case "EDIT":
-            updateRecipe();
-            break;
-          default:
-            PopUp.warning(this, "Button action undefined",
-                "There is no action defined for " + event.getActionCommand());
-        } // end switch
-        if (recipe instanceof Recipe) {
-          // set the panel to the main page
-          SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(button);
-          gui.setCurrentPage(new PageDisplayRecipe(recipe));
-          
-        } // end instancec test of recipe
-      } // end of testing inuts
-    } else {
-      PopUp.warning(this, "Action listener undefined",
-          "There is no action defined for " + event.getSource());
-    }
-  }
-
-  private void createRecipe() {
-    recipe = new Recipe();
-    try {
-      recipe.createRecipe(
-          textFields.get("name").getText(),
-          Integer.parseInt(
-              textFields.get("serves").getText()
-          ),
-          textFields.get("author").getText() , 
-          Integer.parseInt(
-              textFields.get("prepTime").getText()
-          ), 
-          Integer.parseInt(
-              textFields.get("cookTime").getText()
-          ) , 
-          Integer.parseInt(
-              textFields.get("difficulty").getText()
-          ) ,
-          procedures.getText() , 
-
-          textFields.get("description").getText() , 
-          textFields.get("source").getText(),
-          pullIngredients()
-          );
-    } catch (Exception execption) {
-      PopUp.error(this, "Database Error", execption.getStackTrace().toString());
-    }
-     
-  }
-
   private ArrayList<Ingredient> pullIngredients() {
     ArrayList<Ingredient> list = new ArrayList<Ingredient>();
     //cycle through the EntryList and pull the text strings
-    for (Entry entry : entryList.getList()){
+    for (Entry entry : entryList.getList()) {
       Ingredient ingredient = new Ingredient();
       try {
         ingredient.createIngredient(entry.getField());
         list.add(ingredient);
       } catch (SQLException execption) {
         PopUp.error(this, "Database Error", execption.getStackTrace().toString());
-      }
-    }
+      } //  end try/catch
+    } // end for
     return list;
-  }
+  } // end pullIngredients
 
   /**
-   * Method to update a recipes values based upon the corresponding JTextField
-   * @return 
+   * Initialized all recipe field.
    */
-  private void updateRecipe() {
-    try {
-      recipe.updateRecipe(
-          recipe.getId(),
-          textFields.get("name").getText(),
-          Integer.parseInt(
-              textFields.get("serves").getText()
-          ),
-          textFields.get("author").getText() , 
-          Integer.parseInt(
-              textFields.get("prepTime").getText()
-          ), 
-          Integer.parseInt(
-              textFields.get("cookTime").getText()
-          ) , 
-          Integer.parseInt(
-              textFields.get("difficulty").getText()
-          ) ,
-          procedures.getText() , 
-
-          textFields.get("description").getText() , 
-          textFields.get("source").getText() 
-          );
-      
-    } catch (NumberFormatException | SQLException exception) {
-      // TODO Auto-generated catch block
-      exception.printStackTrace();
-    }
-  }
+  private void setall() {
+    // populate the easy fields
+    textFields.get("name").setText(String.format("%s", recipe.getName()));
+    textFields.get("author").setText(String.format("%s", recipe.getAuthor()));
+    textFields.get("description").setText(recipe.getDescription());
+    textFields.get("source").setText(String.format("%s", recipe.getSource()));
+    textFields.get("cookTime").setText(String.format("%s", recipe.getCook_time()));
+    textFields.get("prepTime").setText(String.format("%s", recipe.getPrep_time()));
+    textFields.get("serves").setText(String.format("%s", recipe.getServes()));
+    textFields.get("difficulty").setText(String.format("%s", recipe.getDifficulty()));
+    this.procedures.setText(this.recipe.getProcedures());
+    
+    // populate the ingredients ... the first one is done for us
+    ArrayList<Ingredient> ingredientList = recipe.getIngredients();
+    // the first entry list item is made for us
+    entryList.getList().get(0).setField(ingredientList.get(0).getName());
+    int count = 1;
+    while (ingredientList.size() != entryList.getList().size()) {
+      //make the entry & load the entry into the list
+      Entry entry = new Entry(ingredientList.get(count++).getName(), entryList);
+      entryList.addItem(entry);
+    } // end while
+  } // end setall
 
   /**
    * method designed to determine if the input parameters are correct & defined
@@ -338,25 +317,23 @@ public class PageCreateEdit extends Page implements ActionListener {
      * Optional:
      *  Description
      */
-    if(
-        testTextFieldLength("name") &&
-        testTextFieldLength("author") &&
-        testTextFieldLength("source") &&
-        testTextFieldLength("cookTime") &&
-        testTextFieldIntParse("cookTime") &&
-        testTextFieldLength("prepTime") &&
-        testTextFieldIntParse("prepTime") &&
-        testTextFieldLength("serves") &&
-        testTextFieldIntParse("serves") &&
-        testTextFieldLength("difficulty") &&
-        testTextFieldIntParse("difficulty") &&
-        testStringLength(procedures.getText()) && 
-        true
-    ){
+    if (testTextFieldLength("name") 
+        && testTextFieldLength("author")
+        && testTextFieldLength("source")
+        && testTextFieldLength("cookTime")
+        && testTextFieldIntParse("cookTime")
+        && testTextFieldLength("prepTime")
+        && testTextFieldIntParse("prepTime")
+        && testTextFieldLength("serves")
+        && testTextFieldIntParse("serves")
+        && testTextFieldLength("difficulty")
+        && testTextFieldIntParse("difficulty")
+        && testStringLength(procedures.getText()) 
+        && true) {
       return true;
     }
     return false;
-  }
+  } // end testInputs
 
   /**
    * Common method to test the length of a string
@@ -368,8 +345,8 @@ public class PageCreateEdit extends Page implements ActionListener {
   }
 
   /**
-   * Method to test the value.getText() lentgh from the textFields map 
-   * @param string
+   * Method to test the value.getText() length from the textFields map 
+   * @param string used to fetch the text field from the map
    * @return true if text is > 0
    */
   private boolean testTextFieldIntParse(String string) {
@@ -377,15 +354,15 @@ public class PageCreateEdit extends Page implements ActionListener {
       Integer.parseInt(textFields.get(string).getText() ) ;
       // nothing to occur here just testing
     } catch (Exception execption) {
-      PopUp.error(this, "Invalid Input", "The "+ string + " must be an integer");
+      PopUp.error(this, "Invalid Input", "The " + string + " must be an integer");
       return false;
     }
     return true;
 
-  }
+  } // end testTextFieldIntParse
 
   /**
-   * Method to ensure the string input length is correct
+   * Method to ensure the string input length is correct.
    * @param string Field in the textFields to test
    * @return true if the field contains a parsable integer
    */
@@ -397,5 +374,37 @@ public class PageCreateEdit extends Page implements ActionListener {
         "Invalid Input",
         "The " + field + " must be Populated");
     return false;
-  }
-}
+  } // end testTextFieldLength
+
+  /**
+   * Method to update a recipes values based upon the corresponding JTextField.
+   */
+  private void updateRecipe() {
+    try {
+      recipe.updateRecipe(
+          recipe.getId(),
+          textFields.get("name").getText(),
+          Integer.parseInt(
+              textFields.get("serves").getText()
+          ),
+          textFields.get("author").getText() , 
+          Integer.parseInt(
+              textFields.get("prepTime").getText()
+          ), 
+          Integer.parseInt(
+              textFields.get("cookTime").getText()
+          ) , 
+          Integer.parseInt(
+              textFields.get("difficulty").getText()
+          ) ,
+          procedures.getText() , 
+  
+          textFields.get("description").getText() , 
+          textFields.get("source").getText() 
+      );
+      
+    } catch (NumberFormatException | SQLException exception) {
+      exception.printStackTrace();
+    } //end try/catch for reciep updating
+  } // end updateRecipe
+} // end class PageCreateEdit
