@@ -2,7 +2,6 @@ package sharkbread.ui;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -14,13 +13,14 @@ import javax.swing.JPanel;
 
 // List with fields
 public class EntryList extends JPanel {
-  private List<Entry> entries;
+  private static final long serialVersionUID = 8712758062786643007L;
+  private ArrayList<Entry> entries;
   // Replace with database stuff
 
   // Initialized new field
   public EntryList() {
     this.entries = new ArrayList<Entry>();
-    setLayout(new GridLayout(0, 3));
+    setLayout(new GridLayout(0, 1));
     Entry initial = new Entry("", this);
     addItem(initial);
   }
@@ -34,7 +34,7 @@ public class EntryList extends JPanel {
   }
 
   // add object
-  private void addItem(Entry entry) {
+  public void addItem(Entry entry) {
     entries.add(entry);
 
     add(entry);
@@ -59,6 +59,15 @@ public class EntryList extends JPanel {
         e.enableMinus(true);
       }
     }
+  }
+
+  /**
+   * Method to fecth the entrylist
+   * @return 
+   * @return EntryList
+   */
+  public ArrayList<Entry> getList() {
+    return entries;
   }
 
 }

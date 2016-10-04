@@ -1,5 +1,8 @@
 package sharkbread.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -13,27 +16,39 @@ import javax.swing.JTextField;
  * @author Obinna Ojialor
  */
 public class Entry extends JPanel {
+  private static final long serialVersionUID = -7543351226139978896L;
   private JTextField textField;
   private JButton plus;
   private JButton minus;
   private EntryList parent;
 
-  // create one field
+  /**
+   * Constructor method to create two (2) buttons ('-','+') and a JTextField
+   * @param textFieldText Sting value 
+   * @param list EntryList to associate as the parent of this Entry
+   */
   public Entry(String textFieldText, EntryList list) {
 
+    setLayout(new BorderLayout());
     this.parent = list;
     this.plus = new JButton(new AddEntryAction());
+    plus.setSize(new Dimension(0, 1));
     this.minus = new JButton(new RemoveEntryAction());
-    this.textField = new JTextField(10);
-    this.textField.setText(textFieldText);
-    add(this.plus);
-    add(this.minus);
+    this.textField = new JTextField(40);
+    this.setField(textFieldText);
+    
+    JPanel panel = new JPanel(new FlowLayout());
+    panel.add(plus);
+    panel.add(minus);
+    add(panel,BorderLayout.LINE_START);
     add(this.textField);
   }
 
 
   // wait for click "+" then add new field
   public class AddEntryAction extends AbstractAction {
+
+    private static final long serialVersionUID = 9007319513607797216L;
 
     public AddEntryAction() {
       super("+");
@@ -48,6 +63,8 @@ public class Entry extends JPanel {
 
   public class RemoveEntryAction extends AbstractAction {
 
+    private static final long serialVersionUID = 6804252255410189204L;
+
     public RemoveEntryAction() {
       super("-");
     }
@@ -58,15 +75,29 @@ public class Entry extends JPanel {
     }
   }
 
-  // get access for delete
+  // get access for add
   public void enableAdd(boolean enabled) {
     this.plus.setEnabled(enabled);
-
   }
 
   // get access for delete
   public void enableMinus(boolean enabled) {
     this.minus.setEnabled(enabled);
-
+  }
+  
+  /**
+   * Method to fecth the string contents of the field.
+   * @return String
+   */
+  public String getField(){
+    return this.textField.getText();
+  }
+  
+  /**
+   * Method to set the string of the field.
+   * @param string string 
+   */
+  public void setField(String string) {
+    this.textField.setText(string);
   }
 }
