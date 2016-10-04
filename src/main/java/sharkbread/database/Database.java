@@ -40,10 +40,12 @@ public class Database {
      * Try to connect to the database, or create it if it doesn't exist
      */
     try {
-      // The database path should be cmsc495-fall2016.github.io/database/
+      // The database path should be ../database/
       File currentDirectory = new File(new File(".").getCanonicalPath());
-      this.path = "jdbc:sqlite:" + currentDirectory + File.separator + "database" 
-          + File.separator + "recipe.db";
+      String directoryPath = currentDirectory+File.separator + "database"+File.separator;
+      //Create directory if it doesn't exist
+      new File(directoryPath).mkdir();     
+      this.path = "jdbc:sqlite:"+directoryPath + "recipe.db";
       this.databaseConn = DriverManager.getConnection(path);
       createTables(); // Create if not exists
       if (verbose) {
@@ -167,7 +169,7 @@ public class Database {
    */
   public static void main(String[] args) {
     Database test = new Database();
-    test.createTables();
+    //test.createTables();
   }
 }
 
