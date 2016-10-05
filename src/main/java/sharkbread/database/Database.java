@@ -42,10 +42,10 @@ public class Database {
     try {
       // The database path should be ../database/
       File currentDirectory = new File(new File(".").getCanonicalPath());
-      String directoryPath = currentDirectory+File.separator + "database"+File.separator;
+      String directoryPath = currentDirectory + File.separator + "database" + File.separator;
       //Create directory if it doesn't exist
       new File(directoryPath).mkdir();     
-      this.path = "jdbc:sqlite:"+directoryPath + "recipe.db";
+      this.path = "jdbc:sqlite:" + directoryPath + "recipe.db";
       this.databaseConn = DriverManager.getConnection(path);
       createTables(); // Create if not exists
       if (verbose) {

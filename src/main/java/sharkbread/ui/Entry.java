@@ -23,7 +23,8 @@ public class Entry extends JPanel {
   private EntryList parent;
 
   /**
-   * Constructor method to create two (2) buttons ('-','+') and a JTextField
+   * Constructor method to create two (2) buttons ('-','+') and a JTextField.
+   * 
    * @param textFieldText Sting value 
    * @param list EntryList to associate as the parent of this Entry
    */
@@ -89,7 +90,7 @@ public class Entry extends JPanel {
    * Method to fecth the string contents of the field.
    * @return String
    */
-  public String getField(){
+  public String getField() {
     return this.textField.getText();
   }
   

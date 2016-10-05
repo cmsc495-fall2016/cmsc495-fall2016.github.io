@@ -10,14 +10,14 @@ import javax.swing.JPanel;
  *
  * @author Obinna Ojialor
  */
-
-// List with fields
 public class EntryList extends JPanel {
   private static final long serialVersionUID = 8712758062786643007L;
   private ArrayList<Entry> entries;
   // Replace with database stuff
 
-  // Initialized new field
+  /**
+   * The default constructor.
+   */
   public EntryList() {
     this.entries = new ArrayList<Entry>();
     setLayout(new GridLayout(0, 1));
@@ -25,7 +25,12 @@ public class EntryList extends JPanel {
     addItem(initial);
   }
 
-  // clone object
+
+  /**
+   * Method to clone an item.
+   * 
+   * @param entry - Entry to clone.
+   */
   public void cloneEntry(Entry entry) {
 
     Entry theClone = new Entry("", this);
@@ -33,7 +38,12 @@ public class EntryList extends JPanel {
     addItem(theClone);
   }
 
-  // add object
+
+  /**
+   * Method to add an item.
+   * 
+   * @param entry - Entry to add
+   */
   public void addItem(Entry entry) {
     entries.add(entry);
 
@@ -41,7 +51,12 @@ public class EntryList extends JPanel {
     refresh();
   }
 
-  // remove object
+
+  /**
+   * Method to remove an item.
+   * 
+   * @param entry - Entry to remove
+   */
   public void removeItem(Entry entry) {
     entries.remove(entry);
     remove(entry);
@@ -62,8 +77,8 @@ public class EntryList extends JPanel {
   }
 
   /**
-   * Method to fecth the entrylist
-   * @return 
+   * Method to fetch the entry list.
+   * 
    * @return EntryList
    */
   public ArrayList<Entry> getList() {
