@@ -1,6 +1,11 @@
+/**
+ * Class to find the displaying recipes
+ * 
+ * Design: Two (2) panels to add to the main panel
+ *  1) Panel: Jlable : buttons (Find)
+ *  2) Scrollable panel:JTable added into the center
+ * */
 package sharkbread.ui;
-
-import sharkbread.database.Recipe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,6 +14,10 @@ import java.awt.FlowLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,141 +30,172 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
-
-
-/**
- * Class find recipe.
- * 
- * @author Obinna Ojialor
+import sharkbread.database.Recipe;
+/*
+* @author Obinna Ojialor
  */
-public class PageFind extends Page implements ActionListener {
-
-  private List<Recipe> listRecipes;
-  private JTextField fieldfind;
-  private JButton buttonfind;
-  private Map<JButton, Recipe> buttonMap = new HashMap<JButton, Recipe>();
-
-  /**
-   * A construtor for PageFind that takes a string.
-   * 
-   * @param title - The title of PageFind
+public class PageFind  extends Page {
+	
+	private  List<Recipe> listRecipes;
+        private  ArrayList <Integer>  listnubers;
+	private  JTextField Fieldfind;
+	private  JButton Buttonfind;
+	private JTable table;
+	private  DefaultTableModel dtm;
+    /**
+   * Constructor method to find recipe.
+   * @param  Recipe to display
    */
-  public PageFind(String title) {
-    super(title);
-    this.setLayout(new BorderLayout());
-    // fetch recipe browse default
-    listRecipes = new Recipe().getAll();
-
-    fieldfind = new JTextField("", 15);
-    buttonfind = new JButton("Search");
-    buttonfind.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent event) {
-        fieldfind.setVisible(false);
-        findall(fieldfind.getText());
-      }
-    });
+	public PageFind(String title) {
+		    super(title);
+                      // set layout manager
+		    this.setLayout(new BorderLayout());
+		      // create default TableModel
+		    dtm = new DefaultTableModel(0, 0);
+                    // create list nubers
+		    listnubers=new ArrayList<Integer>();
+                    // create list Recipes
+                    listRecipes = new Recipe().getAll();
+              
+		    //create panel top
+		    JPanel paneltop = new JPanel(new FlowLayout());
+		    //top button and lable
+		    Fieldfind=new JTextField("", 15);
+		    Buttonfind=new JButton("Search");
+                    //Action listener for display recipe 
+		    Buttonfind.addActionListener(new ActionListener()
+			  {
+			    public void actionPerformed(ActionEvent e)
+			    {
+			    	//clean table
+			    	while (dtm.getRowCount()>0) {
+                                dtm.removeRow(0);
+                                }
+                                
+			    	findall(Fieldfind.getText());
+			    }
+			  });
+		    paneltop.add(Fieldfind);
+		    paneltop.add(Buttonfind);
+		    
+		    //adding panel
+		    this.add(paneltop,BorderLayout.NORTH);
+		
+                    
+		      String columnheaders[] = { "Recipe Name", "Author", "Time","Difficulty","Ingredients"  };
+		  
+		   
+		    
+		    //create Jtable
+		    table = new JTable(){
+		         public boolean editCellAt(int row, int column, java.util.EventObject e) {
+		             return false;
+		          }
+		       };
+                    
+                    //setings  Default Table Model 
+		     dtm = new DefaultTableModel(0, 0);
+		    dtm.setColumnIdentifiers(columnheaders);
+		    table.setModel(dtm);
+                    
+                    //Create table
+		    JScrollPane scrollPane = new JScrollPane(table);
+			add(scrollPane,BorderLayout.CENTER);
+                        //new mouse Listener when click on table disply recipe
+                        MouseListener mouseListener = new MouseAdapter(){
+                         public void mouseClicked(MouseEvent mouseEvent) {
+                             
+                             if (mouseEvent.getClickCount() == 1) {
+                                 int selRow = table.getSelectedRow();
+                               //check
+                                if (selRow >= 0) {
+                                  
+                          
+                                    Recipe recipe = (Recipe) listRecipes.get(listnubers.get(table.getSelectedRow()));
+        
+        
+                                    SimpleGui gui = (SimpleGui)SwingUtilities.getRoot(table);
+                                    gui.setCurrentPage(new PageDisplayRecipe(recipe));
+                             }
+                         }
+                         }
+                        };
+			table.addMouseListener(mouseListener);
     
-    JPanel panelTop = new JPanel(new FlowLayout());
-    
-    panelTop.add(fieldfind);
-    panelTop.add(buttonfind);
-
-
-    this.add(panelTop, BorderLayout.NORTH);
-
-
-
-  }
-
-  // find and draw alleleent
-  private void findall(String sr) {
-    int size = 0;
-    JPanel panelcenter = new JPanel();
-    for (Recipe recipe : listRecipes) {
-
-      if (sr == recipe.getName()) {
-        JButton button = buildButton(recipe);
-        buttonMap.put(button, recipe);
-        button.addActionListener(this);
-        button.setActionCommand("Recipe_" + recipe.getId());
-        panelcenter.add(button);
-        size++;
-        continue;
-      }
-      if (sr == recipe.getAuthor()) {
-        JButton button = buildButton(recipe);
-        buttonMap.put(button, recipe);
-        button.addActionListener(this);
-        button.setActionCommand("Recipe_" + recipe.getId());
-        panelcenter.add(button);
-        size++;
-        continue;
-      }
-      for (int i = 0; i < recipe.getIngredients().size(); i++) {
-        if (sr == recipe.getIngredients().get(i).getName()) {
-          JButton button = buildButton(recipe);
-          buttonMap.put(button, recipe);
-          button.addActionListener(this);
-          button.setActionCommand("Recipe_" + recipe.getId());
-          panelcenter.add(button);
-          size++;
-          continue;
-        }
-      }
-
-    }
-    if (size == 0) {
-
-      JPanel ane = new JPanel();
-      ane.add(new JLabel("No content in table"));
-    } else {
-      JScrollPane scrollPane = new JScrollPane(panelcenter);
-      add(scrollPane, BorderLayout.CENTER);
-    }
-
-  }
-
-  private JButton buildButton(Recipe recipe) {
-    // Creates a button that resembles a webpage's link
-    JButton button = new JButton();
-    button.setText(String.format(
-        "<HTML><HR>" + "Recipe: <FONT color=\"#000099\"><U>%s</U></FONT><BR>" 
-        + "Description: <BR>%s" + "</HTML>", recipe.getName(), recipe.getDescription()));
-    button.setHorizontalAlignment(SwingConstants.LEFT);
-    button.setBorderPainted(false);
-    button.setOpaque(false);
-    button.setBackground(Color.WHITE);
-
-    return button;
-  }
-
-
-
-  @Override
-  /**
-   * Add in the ActionListener methods required from implementation.
-   */
-  public void actionPerformed(ActionEvent event) {
-    // Determine what the ActionEvent is
-    if (event.getSource() instanceof JButton) {
-      JButton button = (JButton) event.getSource();
-
-      // Determine if the button is in the buttonMap
-      if (buttonMap.containsKey(button)) {
-        Recipe recipe = (Recipe) buttonMap.get(button);
-
-        // set the panel to the main page
-        SimpleGui gui = (SimpleGui) SwingUtilities.getRoot(button);
-        gui.setCurrentPage(new PageDisplayRecipe(recipe));
-      } else {
-        // show a PopUp.error() if there is no action associated
-        PopUp.error(this, "Unknown Action",
-            "A JButton has been found, but there is no action associated\n" 
-            + " Please open a ticket against this");
-      }
-    }
-  }
-
-
 }
+   
+      
+		    
+		    
+		    
+		     
+		    
+	 //Add new raw
+	private void Addraw(Recipe recipe,int n){
+		dtm.addRow(new Object[]{recipe.getName(), recipe.getAuthor(), recipe.getCook_time(),recipe.getDifficulty(),recipe.getIngredients().get(5).getName()});
+		listnubers.add(new Integer(n));
+	}
+	
+        //find with keywords
+	private void findall(String sr){
+		int size=0;
+		JPanel panelcenter = new JPanel();
+		for (Recipe recipe : listRecipes) {
+			
+			if(recipe.getName().toLowerCase().contains(sr.toLowerCase())){
+		      Addraw(recipe,size);
+		      size++;
+		      continue;
+		    }
+                        if (recipe.getAuthor().toLowerCase().contains(sr.toLowerCase())){
+				Addraw(recipe,size);
+			      size++;
+			      continue;
+			}
+                     
+                   
+			
+			for(int i=0;i<recipe.getIngredients().size();i++){
+				if(recipe.getIngredients().get(i).getName().toLowerCase().contains(sr.toLowerCase())){
+					Addraw(recipe,size);
+				      size++;
+				      continue;
+				}
+			}
+                         try {
+                         Integer.valueOf(sr);
+                    } 
+                    catch (NumberFormatException e) {
+                        continue;
+                    }
+                    if(recipe.getCook_time()== Integer.valueOf(sr)){
+		      Addraw(recipe,size);
+		      size++;
+		      continue;
+		    }
+                     if(recipe.getDifficulty()== Integer.valueOf(sr)){
+		      Addraw(recipe,size);
+		      size++;
+		      continue;
+		    }
+			
+	}
+		if(size==0){
+                dtm.addRow(new Object[]{"Not found", "Not found", "Not found","Not found","Not found"});
+
+			
+		}
+		
+	    
+	}
+}	 
+	  
+ 
+	 
+	
+	 
+	
+	
+
