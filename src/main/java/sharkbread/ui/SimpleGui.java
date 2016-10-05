@@ -173,8 +173,8 @@ public class SimpleGui extends JFrame implements ActionListener {
    */
   private Component getFooter() {
     JPanel panel = new JPanel();
-    // check style alerts to the usage of escaped unicodes ... cna you do it in ascii  
-    JLabel label = new JLabel("\u00a9 2016 UMUC CMSC 495");
+    // CheckStyle plug-in was complaining about unicode escapes ... html to the rescue
+    JLabel label = new JLabel("<HTML>&copy 2016 UMUC CMSC 495</HTML>");
     panel.add(label);
     setBorder(panel);
     

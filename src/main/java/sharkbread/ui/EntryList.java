@@ -27,9 +27,9 @@ public class EntryList extends JPanel {
 
 
   /**
-   * Method to clone an item.
-   * 
-   * @param entry - Entry to clone.
+   *  clone object.
+   *  
+   * @param entry to clone
    */
   public void cloneEntry(Entry entry) {
 
@@ -40,9 +40,8 @@ public class EntryList extends JPanel {
 
 
   /**
-   * Method to add an item.
-   * 
-   * @param entry - Entry to add
+   * add object.
+   * @param entry Entry Object to add to this EntryList
    */
   public void addItem(Entry entry) {
     entries.add(entry);
@@ -51,11 +50,9 @@ public class EntryList extends JPanel {
     refresh();
   }
 
-
   /**
-   * Method to remove an item.
-   * 
-   * @param entry - Entry to remove
+   * remove object.
+   * @param entry Entry Object to remove from this EntryList
    */
   public void removeItem(Entry entry) {
     entries.remove(entry);
@@ -63,7 +60,10 @@ public class EntryList extends JPanel {
     refresh();
   }
 
-  // refresh object
+
+  /**
+   * Method to refresh the EntryList.
+   */
   private void refresh() {
     revalidate();
 
@@ -77,9 +77,9 @@ public class EntryList extends JPanel {
   }
 
   /**
-   * Method to fetch the entry list.
+   * Method to fetch the entries controlled by this EntryList.
    * 
-   * @return EntryList
+   * @return ArrayList of Entry's
    */
   public ArrayList<Entry> getList() {
     return entries;
