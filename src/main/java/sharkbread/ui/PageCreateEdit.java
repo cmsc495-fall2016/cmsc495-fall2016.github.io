@@ -489,7 +489,7 @@ public class PageCreateEdit extends Page implements ActionListener {
         );
         
       } catch (NumberFormatException | SQLException exception) {
-        exception.printStackTrace();
+        PopUp.exception(this, exception);
       } //end try/catch for recipe updating
     } // end if/else deltasEsist
   } // end updateRecipe

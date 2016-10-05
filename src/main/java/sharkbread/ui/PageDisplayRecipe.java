@@ -99,7 +99,7 @@ public class PageDisplayRecipe extends Page implements ActionListener {
                 recipe.deleteRecipe(recipe.getId());
                 gui.setCurrentPage(new PageDisplayRecipe(null));
               } catch (SQLException exception) {
-                exception.printStackTrace();
+                PopUp.exception(this, exception);
               } //end try/catch
             } // end confirmation of delete
           } //end test for recipe to not be null
@@ -299,10 +299,8 @@ public class PageDisplayRecipe extends Page implements ActionListener {
           doc.getLength(),
           display,
           doc.getStyle(format));
-    } catch (BadLocationException execption) {
-      PopUp.error(this, 
-          "Error in doc.insertString",
-          "Couldn't insert initial text into text pane.");
+    } catch (BadLocationException exception) {
+      PopUp.exception(this, exception);
     }
   }
 }

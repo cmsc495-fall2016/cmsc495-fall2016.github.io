@@ -60,8 +60,7 @@ public class ImportExport {
             gui.setCurrentPage(new PageDisplayRecipe(imported));
           } // end component test
         } catch (Exception execption) {
-          PopUp.error(null, "Invalid Recipe File", 
-              "The selected file is in the incorrect format,please try again");
+          PopUp.exception(null, execption);
         } // end try/catch
       } else {
         new Export(file, recipe);

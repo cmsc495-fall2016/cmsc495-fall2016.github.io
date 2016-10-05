@@ -40,14 +40,14 @@ public class PopUp {
    * An error pop up to show the stack trace.
    * 
    * @param frame Container (or child class) to tie the pop up to could be null
-   * @param execption Exception Object to pull the stack trace form
+   * @param exception Exception Object to pull the stack trace form
    */
-  public static void exception( Container frame, Exception execption ) {
+  public static void exception( Container frame, Exception exception ) {
     error(
         frame,
         "ERROR - StackTrace",
         String.format("Error occurred, contact support\nStackTrace:\n%s",
-            execption.getStackTrace().toString()
+            exception.getStackTrace().toString()
         )
     );
   }
