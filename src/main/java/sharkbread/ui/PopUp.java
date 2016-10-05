@@ -36,6 +36,16 @@ public class PopUp {
     JOptionPane.showMessageDialog(frame, message, title, JOptionPane.ERROR_MESSAGE);
   } // end Error
 
+  public static void exception( Container frame, Exception execption ) {
+    error(
+        frame,
+        "ERROR - StackTrace",
+        String.format("Error occurred, contact support\nStackTrace:\n%s",
+            execption.getStackTrace().toString()
+        )
+    );
+  }
+  
   /**
    * An warning pop up... has an warning picture
    * 

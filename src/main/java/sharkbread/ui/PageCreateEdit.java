@@ -30,7 +30,10 @@ import javax.swing.SwingUtilities;
 
 /**
  * Class to allow 1) Creation of New Recipes 2) Editing of existing Recipes.
- *  
+ * TODO: Update to show & address ingredient description
+ *   (TODO) showing
+ *   (TODO) editing
+ *   
  * @author Obinna Ojialor
  * @author Adam Howell
  * 
@@ -74,7 +77,7 @@ public class PageCreateEdit extends Page implements ActionListener {
   /**
   * Method to consolidate common actions between two constructors.
   */
-  public void buildCommon() {
+  private void buildCommon() {
     //Initialized panel    
     this.setLayout((LayoutManager) new BorderLayout());
     //add panel Layout
@@ -225,7 +228,7 @@ public class PageCreateEdit extends Page implements ActionListener {
           pullIngredients()
       );
     } catch (Exception execption) {
-      PopUp.error(this, "Database Error", execption.getStackTrace().toString());
+      PopUp.exception(this,execption);
     } // end try/catch
   } // end createRecipe
 
@@ -265,8 +268,21 @@ public class PageCreateEdit extends Page implements ActionListener {
         ingredient.createIngredient(entry.getField());
         list.add(ingredient);
       } catch (SQLException execption) {
-        PopUp.error(this, "Database Error", execption.getStackTrace().toString());
+        PopUp.exception(this, execption);
       } //  end try/catch
+    } // end for
+    return list;
+  } // end pullIngredients
+
+  /**
+   * Method to get the Entry.TextField's string value
+   * @return ArrayList of Ingredient objects containing the user's input
+   */
+  private ArrayList<String> pullIngredientsNoCreate() {
+    ArrayList<String> list = new ArrayList<String>();
+    //cycle through the EntryList and pull the text strings
+    for (Entry entry : entryList.getList()) {
+      list.add(entry.getField());
     } // end for
     return list;
   } // end pullIngredients
@@ -380,31 +396,101 @@ public class PageCreateEdit extends Page implements ActionListener {
    * Method to update a recipes values based upon the corresponding JTextField.
    */
   private void updateRecipe() {
-    try {
-      recipe.updateRecipe(
-          recipe.getId(),
-          textFields.get("name").getText(),
-          Integer.parseInt(
-              textFields.get("serves").getText()
-          ),
-          textFields.get("author").getText() , 
-          Integer.parseInt(
-              textFields.get("prepTime").getText()
-          ), 
-          Integer.parseInt(
-              textFields.get("cookTime").getText()
-          ) , 
-          Integer.parseInt(
-              textFields.get("difficulty").getText()
-          ) ,
-          procedures.getText() , 
-  
-          textFields.get("description").getText() , 
-          textFields.get("source").getText() 
-      );
+    //TODO: update to check & update delta in description
+    /* 
+     * check for ingredient deltas 
+     * Three (3) cases exist
+     *   1) No deltas; no change to ingredients
+     *     ACTION: NONE
+     *   2) Deltas exist, only to ingredient description
+     *     ACTION: Update the ingredient description
+     *   3) Deltas exist to ingredient quantity or name(s)
+     *     ACTION: Delete recipe and create a new one
+     */
+    boolean deltasExist = false;
+    ArrayList<String> newIngredients = pullIngredientsNoCreate();
+    ArrayList<Ingredient> oldIngredients = pullIngredients();
+    
+    // check for ingredient quantity differences
+    if (newIngredients.size() != oldIngredients.size()) {
+      deltasExist = true;
+    }
+    
+    // check for ingredient description or Id deltas
+    outerLoop:
+    for (String newIngredient : newIngredients) {
+      // case to exit outerLoop
+      if (deltasExist) {
+        break outerLoop;
+      }
       
-    } catch (NumberFormatException | SQLException exception) {
-      exception.printStackTrace();
-    } //end try/catch for reciep updating
+      boolean found = false;
+      innerLoop:
+      for (Ingredient oldIngredient : recipe.getIngredients()) {
+        // check the name, as ingredient names are unique in the data base
+        if (newIngredient == oldIngredient.getName()) {
+          found = true;
+          
+          // if the new ingredient name != old ingredient name
+          /* 
+           * TODO: update to address ingredient description change
+           *   If description change, update the ingredient 
+           */
+          /*if (description change) {
+            oldIngredient.updateIngredient(
+                oldIngredient.getId(),
+                oldIngredient.getName(),
+                newDescription
+            );
+          }*/
+          break innerLoop;
+        }
+      } // end for ingredients inner
+      
+      if (!found) {
+        deltasExist = true;
+      }
+    } // end for ingredients outer
+    
+    if (deltasExist) {
+      /* Try to delete & create the recipe*/
+      try {
+        recipe.deleteRecipe(recipe.getId());
+      } catch (SQLException execption) {
+        PopUp.exception(this, execption);
+        return; // cannot do anything else here
+      } // end try/catch
+      
+      createRecipe();
+      PopUp.confirm(this, "There was a DELETE & CREATE");
+    } else {
+      /* Address the recipe if there was no update to the ingredients  */
+      try {
+        recipe.updateRecipe(
+            recipe.getId(),
+            textFields.get("name").getText(),
+            Integer.parseInt(
+                textFields.get("serves").getText()
+            ),
+            textFields.get("author").getText() , 
+            Integer.parseInt(
+                textFields.get("prepTime").getText()
+            ), 
+            Integer.parseInt(
+                textFields.get("cookTime").getText()
+            ) , 
+            Integer.parseInt(
+                textFields.get("difficulty").getText()
+            ) ,
+            procedures.getText() , 
+    
+            textFields.get("description").getText() , 
+            textFields.get("source").getText() 
+        );
+        
+      } catch (NumberFormatException | SQLException exception) {
+        exception.printStackTrace();
+      } //end try/catch for recipe updating
+    } // end if/else deltasEsist
   } // end updateRecipe
 } // end class PageCreateEdit
