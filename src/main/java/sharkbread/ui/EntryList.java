@@ -17,7 +17,9 @@ public class EntryList extends JPanel {
   private ArrayList<Entry> entries;
   // Replace with database stuff
 
-  // Initialized new field
+  /**
+   *  Initialized new field.
+   */
   public EntryList() {
     this.entries = new ArrayList<Entry>();
     setLayout(new GridLayout(0, 1));
@@ -25,7 +27,10 @@ public class EntryList extends JPanel {
     addItem(initial);
   }
 
-  // clone object
+  /**
+   *  clone object.
+   * @param entry to clone
+   */
   public void cloneEntry(Entry entry) {
 
     Entry theClone = new Entry("", this);
@@ -33,7 +38,10 @@ public class EntryList extends JPanel {
     addItem(theClone);
   }
 
-  // add object
+  /**
+   * add object.
+   * @param entry Entry Object to add to this EntryList
+   */
   public void addItem(Entry entry) {
     entries.add(entry);
 
@@ -41,7 +49,10 @@ public class EntryList extends JPanel {
     refresh();
   }
 
-  // remove object
+  /**
+   * remove object.
+   * @param entry Entry Object to remove from this EntryList
+   */
   public void removeItem(Entry entry) {
     entries.remove(entry);
     remove(entry);
@@ -62,9 +73,8 @@ public class EntryList extends JPanel {
   }
 
   /**
-   * Method to fecth the entrylist
-   * @return 
-   * @return EntryList
+   * Method to fetch the entries controlled by this EntryList.
+   * @return ArrayList of Entry's
    */
   public ArrayList<Entry> getList() {
     return entries;
