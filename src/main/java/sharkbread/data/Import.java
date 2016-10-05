@@ -68,6 +68,8 @@ public class Import {
     JSONArray ingredArray = (JSONArray) recipeObj.get("Ingredients");
     ArrayList<Ingredient> ingredList = new ArrayList<Ingredient>();
     // Process ingredient array
+    
+    @SuppressWarnings("unchecked")
     Iterator<JSONObject> itr = ingredArray.iterator();
     while (itr.hasNext()) {
       JSONObject ingredObj = itr.next();

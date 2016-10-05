@@ -46,12 +46,20 @@ public class Export {
 
   /**
    * Method to create the JSON Object needed for output.
+   * NOTE: The JSON library we use does setup the Hashmap it relies on properly.
+   * The SuppressWarnings unchecked annotation was adding.
+   * Reference: http://stackoverflow.com/questions/35453110/json-simple-causes-compiler-warning-type-safety-the-method-putobject-object
+   * 
    * @param recipe Recipe to feed into the JSON Object
    * @return JSONObject 
    */
+  @SuppressWarnings("unchecked")
   public JSONObject createJsonFromRecipe(Recipe recipe) {
     // Create the json object
     JSONObject recipeObj = new JSONObject();
+    
+    // 
+    
     recipeObj.put("Name", recipe.getName());
     recipeObj.put("Description", recipe.getDescription());
     recipeObj.put("Serves", recipe.getServes());
