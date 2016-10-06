@@ -462,7 +462,6 @@ public class PageCreateEdit extends Page implements ActionListener {
       } // end try/catch
       
       createRecipe();
-      PopUp.confirm(this, "There was a DELETE & CREATE");
     } else {
       /* Address the recipe if there was no update to the ingredients  */
       try {
