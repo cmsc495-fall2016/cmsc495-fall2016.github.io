@@ -81,8 +81,10 @@ public class PageFind  extends Page {
 
     String[] columnheaders = {"Recipe Name", "Author", "Time", "Difficulty", "Ingredients"};
 
-    // create Jtable
+    // create JTable
     table = new JTable() {
+      private static final long serialVersionUID = 6492017648013147860L;
+
       public boolean editCellAt(int row, int column, java.util.EventObject event) {
         return false;
       }
@@ -120,7 +122,7 @@ public class PageFind  extends Page {
   }
         
   // Add new raw
-  private void Addraw(Recipe recipe, int number) {
+  private void addDraw(Recipe recipe, int number) {
     dtm.addRow(new Object[] {recipe.getName(), recipe.getAuthor(), recipe.getCook_time(),
         recipe.getDifficulty(), recipe.getIngredients().get(5).getName()});
     listnubers.add(new Integer(number));
@@ -129,23 +131,22 @@ public class PageFind  extends Page {
   // find with keywords
   private void findall(String sr) {
     int size = 0;
-    JPanel panelcenter = new JPanel();
     for (Recipe recipe : listRecipes) {
 
       if (recipe.getName().toLowerCase().contains(sr.toLowerCase())) {
-        Addraw(recipe, size);
+        addDraw(recipe, size);
         size++;
         continue;
       }
       if (recipe.getAuthor().toLowerCase().contains(sr.toLowerCase())) {
-        Addraw(recipe, size);
+        addDraw(recipe, size);
         size++;
         continue;
       }
 
       for (int i = 0; i < recipe.getIngredients().size(); i++) {
         if (recipe.getIngredients().get(i).getName().toLowerCase().contains(sr.toLowerCase())) {
-          Addraw(recipe, size);
+          addDraw(recipe, size);
           size++;
           continue;
         }
@@ -156,12 +157,12 @@ public class PageFind  extends Page {
         continue;
       }
       if (recipe.getCook_time() == Integer.valueOf(sr)) {
-        Addraw(recipe, size);
+        addDraw(recipe, size);
         size++;
         continue;
       }
       if (recipe.getDifficulty() == Integer.valueOf(sr)) {
-        Addraw(recipe, size);
+        addDraw(recipe, size);
         size++;
         continue;
       }
