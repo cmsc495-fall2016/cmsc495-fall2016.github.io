@@ -30,7 +30,7 @@ public class PageMain extends Page {
    * Generated serial ID.
    */
   private static final long serialVersionUID = 4670577079792236241L;
-  public File logoFilePath = new File("src/main/resources/sharkbread-logo.jpg-");
+  public File logoFilePath = new File("src/main/resources/sharkbread-logo.jpg");
     
   /**
    * Child constructor for Page class.
@@ -61,7 +61,7 @@ public class PageMain extends Page {
       );
       logo = new JLabel(imageIcon);
     } catch (IOException exception) {
-      logo = new JLabel("SHARK BREAK RECIPE REPOSITORY"); 
+      logo = new JLabel("SHARK BREAK RECIPE REPOSITORY");
     }
     
     // Create a label to contain string about the project
