@@ -1,4 +1,4 @@
-package sharkbread.ui;
+package sharkbread.ui.support;
 
 import java.awt.Container;
 

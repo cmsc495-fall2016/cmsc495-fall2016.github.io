@@ -2,8 +2,8 @@ package sharkbread.test.classes.ui;
 
 import sharkbread.test.classes.AllTest;
 import sharkbread.ui.Page;
-import sharkbread.ui.PopUp;
 import sharkbread.ui.SimpleGui;
+import sharkbread.ui.support.PopUp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

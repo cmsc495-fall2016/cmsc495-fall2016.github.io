@@ -4,8 +4,10 @@
 
 package sharkbread.ui;
 
-import java.awt.BorderLayout;
+import sharkbread.ui.support.Navigations;
+import sharkbread.ui.support.PopUp;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;

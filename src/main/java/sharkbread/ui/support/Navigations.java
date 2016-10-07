@@ -8,9 +8,15 @@
  *      utilized to create the panel (page)
  */
 
-package sharkbread.ui;
+package sharkbread.ui.support;
 
 import sharkbread.test.classes.ui.PageUiAllTest;
+import sharkbread.ui.Page;
+import sharkbread.ui.PageBrowseRecipe;
+import sharkbread.ui.PageCreateEdit;
+import sharkbread.ui.PageFind;
+import sharkbread.ui.PageMain;
+import sharkbread.ui.SimpleGui;
 
 /**
  * The Navigations enum.

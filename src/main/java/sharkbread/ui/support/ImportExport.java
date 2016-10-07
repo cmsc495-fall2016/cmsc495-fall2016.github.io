@@ -1,8 +1,10 @@
-package sharkbread.ui;
+package sharkbread.ui.support;
 
 import sharkbread.data.Export;
 import sharkbread.data.Import;
 import sharkbread.database.Recipe;
+import sharkbread.ui.PageDisplayRecipe;
+import sharkbread.ui.SimpleGui;
 
 import java.awt.Component;
 import java.io.File;

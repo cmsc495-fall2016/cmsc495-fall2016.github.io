@@ -1,4 +1,4 @@
-package sharkbread.ui;
+package sharkbread.ui.support;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

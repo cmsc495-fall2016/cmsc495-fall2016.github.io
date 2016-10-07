@@ -10,6 +10,7 @@
 package sharkbread.ui;
 
 import sharkbread.database.Recipe;
+import sharkbread.ui.support.JTableSb;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

@@ -2,6 +2,9 @@ package sharkbread.ui;
 
 import sharkbread.database.Ingredient;
 import sharkbread.database.Recipe;
+import sharkbread.ui.support.Entry;
+import sharkbread.ui.support.EntryList;
+import sharkbread.ui.support.PopUp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

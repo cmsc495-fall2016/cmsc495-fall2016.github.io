@@ -1,6 +1,8 @@
-package sharkbread.ui;
+package sharkbread.ui.support;
 
 import sharkbread.database.Recipe;
+import sharkbread.ui.PageDisplayRecipe;
+import sharkbread.ui.SimpleGui;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
