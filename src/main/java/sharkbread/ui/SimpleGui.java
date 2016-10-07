@@ -48,7 +48,8 @@ public class SimpleGui extends JFrame implements ActionListener {
    */
   private JPanel mainPanel;
   private JPanel currentPage;
-  
+  public static int initWidth = 800;
+  public static int initHeight = 600;
   private Map<JButton,Navigations> buttonMap = new HashMap<JButton, Navigations>();
   
   /**
@@ -74,7 +75,7 @@ public class SimpleGui extends JFrame implements ActionListener {
    
     // set configurations
     setCommonActions_JFrame(this);
-    setSize(800, 600);
+    setSize(initWidth, initHeight);
     
     // add the page container
     this.add(mainPanel);
