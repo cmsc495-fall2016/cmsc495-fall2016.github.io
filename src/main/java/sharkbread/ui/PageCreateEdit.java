@@ -2,9 +2,9 @@ package sharkbread.ui;
 
 import sharkbread.database.Ingredient;
 import sharkbread.database.Recipe;
-import sharkbread.ui.support.PopUp;
 import sharkbread.ui.support.ButtonEditor;
 import sharkbread.ui.support.ButtonRenderer;
+import sharkbread.ui.support.PopUp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -38,6 +38,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
+ * Class to create the needed page to create and edit recipes.
  * @author Obinna Ojialor
  * @author Adam Howell
  */
@@ -210,7 +211,7 @@ public class PageCreateEdit extends Page implements ActionListener {
     if (command == "-") {
 
       //Check if user wants to remove the top most row
-      if (table.getSelectedRow() == 0){
+      if (table.getSelectedRow() == 0) {
         PopUp.warning(this, "User Error", "Cannot remove the top most row");
       } else {
         // remove the requested row
@@ -334,7 +335,7 @@ public class PageCreateEdit extends Page implements ActionListener {
    */
   private ArrayList<Ingredient> pullIngredients() {
     ArrayList<Ingredient> list = new ArrayList<Ingredient>();
-    for(String[] strings : pullIngredientsNoCreate()) {
+    for (String[] strings : pullIngredientsNoCreate()) {
       Ingredient ingredient = new Ingredient();
       try {
         ingredient.createIngredient(strings[0],strings[1]);
@@ -387,7 +388,7 @@ public class PageCreateEdit extends Page implements ActionListener {
     
     // populate the ingredients ... the first one is done for us
     ArrayList<Ingredient> ingredientList = recipe.getIngredients();
-    for (Ingredient ingredient : ingredientList){
+    for (Ingredient ingredient : ingredientList) {
       addTableRow(ingredient);
     }
 
@@ -395,7 +396,7 @@ public class PageCreateEdit extends Page implements ActionListener {
   
   /**
    * method to add an ingredient to the JTable.
-   * @param ingredient 
+   * @param ingredient ingredient to add to the table
    */
   private void addTableRow(Ingredient ingredient) {
     addTableRow(ingredient.getName(),ingredient.getDescription());

@@ -2,6 +2,7 @@ package sharkbread.ui.support;
 
 import java.awt.Component;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -20,6 +21,10 @@ public class ButtonRenderer  extends JButton implements TableCellRenderer {
     setOpaque(true);
   }
 
+  /**
+   * Override'n method in {@link DefaultCellEditor}.
+   * Sets the button background & foreground
+   */
   public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
       boolean hasFocus, int row, int column) {
     if (isSelected) {

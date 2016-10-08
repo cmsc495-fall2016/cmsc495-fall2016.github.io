@@ -1,5 +1,6 @@
 package sharkbread.ui.support;
 
+import java.awt.Checkbox;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +18,7 @@ import javax.swing.JTable;
  * @version 1.0 11/09/98
  */
 
-public class ButtonEditor extends DefaultCellEditor implements ActionListener{
+public class ButtonEditor extends DefaultCellEditor implements ActionListener {
   private static final long serialVersionUID = -4999912757120204926L;
 
   /* Maps to store any commands associated to the buttons */
@@ -31,6 +32,10 @@ public class ButtonEditor extends DefaultCellEditor implements ActionListener{
 
   private boolean isPushed;
 
+  /**
+   * Constructor class.
+   * @param checkBox The button need to be a {@link Checkbox} for some reason
+   */
   public ButtonEditor(JCheckBox checkBox) {
     super(checkBox);
     button = new JButton();
@@ -39,7 +44,7 @@ public class ButtonEditor extends DefaultCellEditor implements ActionListener{
   }
 
   /**
-   * Implemented methods for implementing {@link ActionListener}
+   * Implemented methods for implementing {@link ActionListener}.
    */
   @Override
   public void actionPerformed(ActionEvent arg0) {
@@ -110,7 +115,7 @@ public class ButtonEditor extends DefaultCellEditor implements ActionListener{
    * Stops the execution of the button
    */
   protected void fireEditingStopped() {
-    try{
+    try {
       super.fireEditingStopped();
     } catch (ArrayIndexOutOfBoundsException exception) {
       // this is a catch for any removed elements
@@ -119,11 +124,11 @@ public class ButtonEditor extends DefaultCellEditor implements ActionListener{
 
   /**
    * Custom method to allow referenced method calls from another object.
-   * 
    * this was a pain to figure out.
    * @param object - Instance to call a method from
    * @param method - Method in a instance to call 
-   * @param label - label to distinguish the command...implemented like {@link ActionListener}.setActionCommand
+   * @param label - label to distinguish the command...implemented like
+   *                {@link ActionListener}.setActionCommand
    */
   public void setActionCommand(Object object, Method method, String label)  {
     Object[] parameters = new Object[1];
