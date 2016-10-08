@@ -1,6 +1,8 @@
 package sharkbread.ui.support;
 
 import java.awt.Container;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.swing.JOptionPane;
 
@@ -43,15 +45,18 @@ public class PopUp {
    * @param exception Exception Object to pull the stack trace form
    */
   public static void exception( Container frame, Exception exception ) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    exception.printStackTrace(pw);
+    
     error(
         frame,
         "ERROR - StackTrace",
         String.format("Error occurred, contact support\nStackTrace:\n%s",
-            exception.getStackTrace().toString()
+            sw.toString()
         )
     );
   }
-  
   /**
    * An warning pop up... has an warning picture
    * 
