@@ -1,7 +1,9 @@
 package sharkbread.test.classes.ui;
 
 import sharkbread.test.classes.AllTest;
+import sharkbread.test.classes.RecipeTest;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -10,10 +12,10 @@ import java.sql.SQLException;
  * 
  * @author Adam
  */
-public class CreateaAllDataRunner implements Runnable {
+public class CreateAllDataRunner implements Runnable {
   AllTest test;
 
-  public CreateaAllDataRunner(AllTest test) {
+  public CreateAllDataRunner(AllTest test) {
     this.test = test;
   }
 
@@ -24,6 +26,15 @@ public class CreateaAllDataRunner implements Runnable {
   public void run() {
     try {
       test.createaAllData(null);
+      RecipeTest rt = new RecipeTest();
+      
+//      System.out.println("[!] Begin ingestion of Recipe test_classes data.");
+//      rt.populateTestData(
+//          new File("recipe_data_optionals_removed.csv")
+//      );
+//      System.out.println("[!] Test data read in; attempting to write to table");
+//      rt.updateRecipeTable();
+      
     } catch (SQLException | IOException exception) {
       exception.printStackTrace();
     }

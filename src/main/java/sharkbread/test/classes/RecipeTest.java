@@ -76,7 +76,7 @@ public class RecipeTest {
    * @param file File containing our Recipe test data
    * @throws IOException Standard IOException
    */
-  private void populateTestData(File file) throws IOException {
+  public void populateTestData(File file) throws IOException {
 
     CSVReader reader;
     try {
@@ -117,7 +117,7 @@ public class RecipeTest {
    * 
    * @throws SQLException Standard SQL Exception
    */
-  private void updateRecipeTable() throws SQLException {
+  public void updateRecipeTable() throws SQLException {
     System.out.println("[!] Deleting all prior recipe entries (we are in test mode!)");
     Recipe recipeDelete = new Recipe();
     recipeDelete.clearRecipeTable();

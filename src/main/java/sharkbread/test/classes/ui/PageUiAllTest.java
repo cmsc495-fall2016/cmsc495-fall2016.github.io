@@ -70,7 +70,7 @@ public class PageUiAllTest extends Page implements ActionListener {
           /*
            * Since this method is a long one, thread it out
            */
-          CreateaAllDataRunner cad = new CreateaAllDataRunner(test);
+          CreateAllDataRunner cad = new CreateAllDataRunner(test);
           Thread thread = new Thread(cad);
           thread.start();
           break;
