@@ -2,12 +2,13 @@ package sharkbread.ui;
 
 import sharkbread.database.Ingredient;
 import sharkbread.database.Recipe;
-import sharkbread.ui.support.Entry;
-import sharkbread.ui.support.EntryList;
 import sharkbread.ui.support.PopUp;
+import sharkbread.ui.support.ButtonEditor;
+import sharkbread.ui.support.ButtonRenderer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -16,30 +17,29 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
- * Class to allow 1) Creation of New Recipes 2) Editing of existing Recipes.
- * TODO: Update to show & address ingredient description
- *   (TODO) showing
- *   (TODO) editing
- *   
  * @author Obinna Ojialor
  * @author Adam Howell
- * 
  */
 public class PageCreateEdit extends Page implements ActionListener {
   
@@ -53,7 +53,8 @@ public class PageCreateEdit extends Page implements ActionListener {
   private Map<String,JLabel> labels = new HashMap<String,JLabel>();
   private Map<String,JTextField> textFields = new HashMap<String,JTextField>();
   private JTextArea procedures;
-  private EntryList entryList = new EntryList();
+  private JTable table;
+  private DefaultTableModel tableModel;
   
   /**
    * Constructor method to create the creating a new recipe.
@@ -141,16 +142,85 @@ public class PageCreateEdit extends Page implements ActionListener {
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(new JScrollPane(procedures),BorderLayout.CENTER);
     
-    // add the ingredient listed items
-    JPanel panel2 = new JPanel(new BorderLayout());
-    panel2.add(new JScrollPane(entryList),BorderLayout.CENTER);
-    
     // stuff the procedures and the ingredients into a tabbed pane
     JTabbedPane tabbedpane = new JTabbedPane();
     tabbedpane.addTab("Procedure", panel);
-    tabbedpane.addTab("Ingredients", panel2);
+    tabbedpane.addTab("Ingredients", createIngredientPanel());
+    
     return tabbedpane;
   } //end createCenterPanel
+
+  /**
+   * Method to create the ingredient scroll panel.
+   * @return {@link JScrollPane} with a {@link JTable} containing {@link JButton}s
+   */
+  private Component createIngredientPanel() {
+    table = new JTable();
+    tableModel = new DefaultTableModel();
+    table.setModel(tableModel);
+    
+    //set the column headers
+    tableModel.setColumnIdentifiers(new String[]{"Add Row","Remove Row","Name","Description"});
+    
+    // set the first row
+    addTableRow("","");
+
+    ArrayList<ButtonEditor> buttonEditorList = new ArrayList<ButtonEditor>();
+    // update the button row to be a button
+    for (String rowName : new String[]{"Add Row","Remove Row"}) {
+      table.getColumn(rowName).setCellRenderer(new ButtonRenderer());
+      ButtonEditor buttonEditor = new ButtonEditor(new JCheckBox());
+      buttonEditorList.add(buttonEditor);
+      table.getColumn(rowName).setCellEditor(buttonEditor);
+    }
+    
+    // update the commands for the ButtonEditor
+    for (ButtonEditor buttonEditor : buttonEditorList) {
+      Class[] parameterTypes = new Class[1];
+      parameterTypes[0] = String.class;
+      Method methodAdd = null;
+      try {
+        methodAdd = PageCreateEdit.class.getMethod("addRemoveRow", parameterTypes);
+        buttonEditor.setActionCommand(this,methodAdd,"-");
+        buttonEditor.setActionCommand(this,methodAdd,"+");
+      } catch (Exception exception) {
+        // Just incase, haven't found that this one catches but it's bound to happen
+        exception.printStackTrace();
+      }
+    }
+    
+    // update the buttons columns to be a maximum width
+    for (int integer : new int[]{0,1}) {
+      table.getColumnModel().getColumn(integer).setMaxWidth(100);
+    }    
+    
+    //table.getColumn("Button").setCellRenderer(new ButtonRenderer());
+    //table.getColumn("Button").setCellEditor(new ButtonEditor(new JCheckBox()));
+    JScrollPane scrollPane = new JScrollPane(table);
+    return scrollPane;
+  }
+  
+  /**
+   * Method built to allow the {@link ButtonEditor} class call back action.
+   * @param command simple command ie '-' '+'
+   */
+  public void addRemoveRow(String command) {
+
+    // determine requested command 
+    if (command == "-") {
+
+      //Check if user wants to remove the top most row
+      if (table.getSelectedRow() == 0){
+        PopUp.warning(this, "User Error", "Cannot remove the top most row");
+      } else {
+        // remove the requested row
+        tableModel.removeRow(table.getSelectedRow());
+      }
+      
+    } else if (command == "+") {
+      addTableRow("", "");
+    }
+  }
 
   /**
    * Create panel with fields for the recipe input.
@@ -264,11 +334,10 @@ public class PageCreateEdit extends Page implements ActionListener {
    */
   private ArrayList<Ingredient> pullIngredients() {
     ArrayList<Ingredient> list = new ArrayList<Ingredient>();
-    //cycle through the EntryList and pull the text strings
-    for (Entry entry : entryList.getList()) {
+    for(String[] strings : pullIngredientsNoCreate()) {
       Ingredient ingredient = new Ingredient();
       try {
-        ingredient.createIngredient(entry.getField());
+        ingredient.createIngredient(strings[0],strings[1]);
         list.add(ingredient);
       } catch (SQLException execption) {
         PopUp.exception(this, execption);
@@ -281,12 +350,19 @@ public class PageCreateEdit extends Page implements ActionListener {
    * Method to get the Entry.TextField's string value
    * @return ArrayList of Ingredient objects containing the user's input
    */
-  private ArrayList<String> pullIngredientsNoCreate() {
-    ArrayList<String> list = new ArrayList<String>();
+  private ArrayList<String[]> pullIngredientsNoCreate() {
+    ArrayList<String[]> list = new ArrayList<String[]>();
     //cycle through the EntryList and pull the text strings
-    for (Entry entry : entryList.getList()) {
-      list.add(entry.getField());
+    for (int i = 0; i < table.getRowCount(); i++) {
+      String name  = String.valueOf(table.getModel().getValueAt(i, 2));
+      String description = String.valueOf(table.getModel().getValueAt(i, 3));
+      
+      /* only add if the name is longer than 0 characters */
+      if (name.length() > 0 ) {
+        list.add(new String[]{name,description});
+      }
     } // end for
+    
     return list;
   } // end pullIngredients
 
@@ -294,6 +370,10 @@ public class PageCreateEdit extends Page implements ActionListener {
    * Initialized all recipe field.
    */
   private void setall() {
+    // Clean the table ... should only be one ... buy hey why not a while loop
+    while (table.getRowCount() > 0) {
+      tableModel.removeRow(0);
+    }
     // populate the easy fields
     textFields.get("name").setText(String.format("%s", recipe.getName()));
     textFields.get("author").setText(String.format("%s", recipe.getAuthor()));
@@ -307,15 +387,30 @@ public class PageCreateEdit extends Page implements ActionListener {
     
     // populate the ingredients ... the first one is done for us
     ArrayList<Ingredient> ingredientList = recipe.getIngredients();
-    // the first entry list item is made for us
-    entryList.getList().get(0).setField(ingredientList.get(0).getName());
-    int count = 1;
-    while (ingredientList.size() != entryList.getList().size()) {
-      //make the entry & load the entry into the list
-      Entry entry = new Entry(ingredientList.get(count++).getName(), entryList);
-      entryList.addItem(entry);
-    } // end while
-  } // end setall
+    for (Ingredient ingredient : ingredientList){
+      addTableRow(ingredient);
+    }
+
+  } // end setAll
+  
+  /**
+   * method to add an ingredient to the JTable.
+   * @param ingredient 
+   */
+  private void addTableRow(Ingredient ingredient) {
+    addTableRow(ingredient.getName(),ingredient.getDescription());
+  }
+
+  /**
+   * Method to insert a new row in the JTable.
+   * @param string Name
+   * @param string2 Description
+   */
+  private void addTableRow(String string, String string2) {
+    tableModel.addRow(
+        new String[]{"+", "-", string, string2}
+    );
+  }
 
   /**
    * method designed to determine if the input parameters are correct & defined
@@ -383,7 +478,7 @@ public class PageCreateEdit extends Page implements ActionListener {
   /**
    * Method to ensure the string input length is correct.
    * @param string Field in the textFields to test
-   * @return true if the field contains a parsable integer
+   * @return true if the field contains a parse-able integer
    */
   private boolean testTextFieldLength(String field) {
     if ( testStringLength(textFields.get(field).getText() ) ) {
@@ -399,7 +494,6 @@ public class PageCreateEdit extends Page implements ActionListener {
    * Method to update a recipes values based upon the corresponding JTextField.
    */
   private void updateRecipe() {
-    //TODO: update to check & update delta in description
     /* 
      * check for ingredient deltas 
      * Three (3) cases exist
@@ -411,17 +505,16 @@ public class PageCreateEdit extends Page implements ActionListener {
      *     ACTION: Delete recipe and create a new one
      */
     boolean deltasExist = false;
-    ArrayList<String> newIngredients = pullIngredientsNoCreate();
-    ArrayList<Ingredient> oldIngredients = pullIngredients();
+    ArrayList<String[]> newIngredients = pullIngredientsNoCreate();
     
     // check for ingredient quantity differences
-    if (newIngredients.size() != oldIngredients.size()) {
+    if (newIngredients.size() != recipe.getIngredients().size()) {
       deltasExist = true;
     }
     
     // check for ingredient description or Id deltas
     outerLoop:
-    for (String newIngredient : newIngredients) {
+    for (String[] newIngredient : newIngredients) {
       // case to exit outerLoop
       if (deltasExist) {
         break outerLoop;
@@ -431,21 +524,23 @@ public class PageCreateEdit extends Page implements ActionListener {
       innerLoop:
       for (Ingredient oldIngredient : recipe.getIngredients()) {
         // check the name, as ingredient names are unique in the data base
-        if (newIngredient == oldIngredient.getName()) {
+        if (newIngredient[0] == oldIngredient.getName()) {
           found = true;
           
-          // if the new ingredient name != old ingredient name
           /* 
-           * TODO: update to address ingredient description change
            *   If description change, update the ingredient 
            */
-          /*if (description change) {
-            oldIngredient.updateIngredient(
-                oldIngredient.getId(),
-                oldIngredient.getName(),
-                newDescription
-            );
-          }*/
+          if (newIngredient[1] != oldIngredient.getDescription()) {
+            try {
+              oldIngredient.updateIngredient(
+                  oldIngredient.getId(),
+                  oldIngredient.getName(),
+                  newIngredient[1]
+              );
+            } catch (SQLException exception) {
+              PopUp.exception(this, exception);
+            }
+          }
           break innerLoop;
         }
       } // end for ingredients inner
