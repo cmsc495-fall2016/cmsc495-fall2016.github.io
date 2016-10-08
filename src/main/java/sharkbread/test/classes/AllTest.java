@@ -45,10 +45,10 @@ public class AllTest {
    */
   public void deleteAllData() throws SQLException {
     System.out.println("Deleting all data from Recipe, Ingredient, User, Uses tables");
-    database.clearUsesTable();
+    //database.clearUsesTable();
     recipe.clearRecipeTable();
-    ingredient.clearIngredientTable();
-    user.clearUserTable();
+    //ingredient.clearIngredientTable();
+    //user.clearUserTable();
   }
 
   /**

@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -30,7 +31,7 @@ public class PageMain extends Page {
    * Generated serial ID.
    */
   private static final long serialVersionUID = 4670577079792236241L;
-  public File logoFilePath = new File("src/main/resources/sharkbread-logo.jpg");
+  public File logoFilePath = new File("/sharkbread-logo.jpg");
     
   /**
    * Child constructor for Page class.
@@ -50,7 +51,9 @@ public class PageMain extends Page {
     // attempt to load the image file ... otherwise load a text string
     JLabel logo;
     try {
-      BufferedImage logoImage = ImageIO.read(logoFilePath);
+      //BufferedImage logoImage = ImageIO.read(logoFilePath);
+      BufferedImage logoImage = ImageIO.read(getClass().getResourceAsStream("/sharkbread-logo.jpg"));
+      
       // Build the scaled image to half of the SimpleGui overall size
       ImageIcon imageIcon = new ImageIcon(
           new ImageIcon(logoImage).getImage().getScaledInstance(

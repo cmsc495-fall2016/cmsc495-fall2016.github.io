@@ -7,6 +7,8 @@ import sharkbread.database.Recipe;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -110,6 +112,42 @@ public class RecipeTest {
       exception.printStackTrace();
     }
   }
+  
+  public void populateTestData(InputStream inputStream) {
+    
+    CSVReader reader;
+    try {
+      reader = new CSVReader(new InputStreamReader(inputStream));
+      String[] recipe;
+      reader.readNext(); // Get rid of the header line
+      while ((recipe = reader.readNext()) != null) {
+        RecipeCsvEntry entry = new RecipeCsvEntry();
+        entry.id = Integer.parseInt(recipe[0]);
+        entry.name = recipe[1];
+        
+        // in case our Serves field has non-nummeric data.
+        entry.serves = Integer.parseInt(recipe[2].split(" ")[0]);
+        entry.author = recipe[3];
+        entry.prepTimeAsString = recipe[4];
+        entry.prepTime = ensureTimeInMinutes(entry.prepTimeAsString);
+        entry.cookTimeAsString = recipe[5];
+        entry.cookTime = ensureTimeInMinutes(entry.cookTimeAsString);
+        if (recipe[6].contentEquals("")) {
+          entry.difficulty = 0;
+        } else {
+          entry.difficulty = Integer.parseInt(recipe[6]);
+        }
+        entry.procedures = recipe[7];
+        entry.description = recipe[8];
+        entry.source = recipe[9];
+
+        testData.add(entry);
+      }
+    } catch (IOException exception) {
+      exception.printStackTrace();
+    }
+  }
+  
 
 
   /**
@@ -140,7 +178,7 @@ public class RecipeTest {
     RecipeTest rt = new RecipeTest();
     System.out.println("[!] Begin ingestion of Recipe test_classes data.");
     rt.populateTestData(
-        new File("src/main/java/sharkbread/test/data/recipe_data_optionals_removed.csv")
+        rt.getClass().getResourceAsStream("/recipe_data_optionals_removed.csv")
     );
     System.out.println("[!] Test data read in; attempting to write to table");
     rt.updateRecipeTable();

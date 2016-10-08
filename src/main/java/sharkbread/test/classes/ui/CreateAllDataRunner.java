@@ -26,11 +26,11 @@ public class CreateAllDataRunner implements Runnable {
   public void run() {
     try {
       test.createaAllData(null);
-      RecipeTest rt = new RecipeTest();
-      
+//      RecipeTest rt = new RecipeTest();
+//      
 //      System.out.println("[!] Begin ingestion of Recipe test_classes data.");
 //      rt.populateTestData(
-//          new File("recipe_data_optionals_removed.csv")
+//          new File("assets/recipe_data_optionals_removed.csv")
 //      );
 //      System.out.println("[!] Test data read in; attempting to write to table");
 //      rt.updateRecipeTable();
