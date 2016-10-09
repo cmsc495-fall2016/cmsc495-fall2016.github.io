@@ -386,8 +386,11 @@ public class PageCreateEdit extends Page implements ActionListener {
     textFields.get("difficulty").setText(String.format("%s", recipe.getDifficulty()));
     this.procedures.setText(this.recipe.getProcedures());
     
-    // populate the ingredients ... the first one is done for us
+    // populate the ingredients ... unless there is none
     ArrayList<Ingredient> ingredientList = recipe.getIngredients();
+    if (ingredientList.size() == 0) {
+      addTableRow("", "");
+    }
     for (Ingredient ingredient : ingredientList) {
       addTableRow(ingredient);
     }
