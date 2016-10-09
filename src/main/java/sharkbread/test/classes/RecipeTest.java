@@ -113,6 +113,10 @@ public class RecipeTest {
     }
   }
   
+  /**
+   * Method to populate test data from an {@link InputStream}.
+   * @param inputStream - where to stream data from
+   */
   public void populateTestData(InputStream inputStream) {
     
     CSVReader reader;
@@ -142,7 +146,8 @@ public class RecipeTest {
         entry.source = recipe[9];
 
         testData.add(entry);
-      }
+      } //end while
+      reader.close();
     } catch (IOException exception) {
       exception.printStackTrace();
     }

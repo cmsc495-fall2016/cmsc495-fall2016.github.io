@@ -21,7 +21,7 @@ public class User {
   Database myDatabase = new Database();
 
   private Connection connection = null;
-  private Statement statement = null;
+  //private Statement statement = null;
   private int id = -1;
   private String userName = null;
   private String firstName = null;

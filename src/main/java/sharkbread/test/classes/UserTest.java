@@ -74,6 +74,7 @@ public class UserTest {
         entry.username = user[4];
         testData.add(entry);
       }
+      reader.close();
     } catch (IOException exception) {
       exception.printStackTrace();
     }

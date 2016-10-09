@@ -13,8 +13,6 @@ import java.awt.image.BufferedImage;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -51,8 +49,8 @@ public class PageMain extends Page {
     // attempt to load the image file ... otherwise load a text string
     JLabel logo;
     try {
-      //BufferedImage logoImage = ImageIO.read(logoFilePath);
-      BufferedImage logoImage = ImageIO.read(getClass().getResourceAsStream("/sharkbread-logo.jpg"));
+      BufferedImage logoImage = ImageIO.read(
+          getClass().getResourceAsStream("/sharkbread-logo.jpg"));
       
       // Build the scaled image to half of the SimpleGui overall size
       ImageIcon imageIcon = new ImageIcon(

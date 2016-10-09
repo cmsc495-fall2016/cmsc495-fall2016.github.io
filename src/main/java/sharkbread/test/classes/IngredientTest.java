@@ -57,6 +57,11 @@ public class IngredientTest {
     }
   }
 
+  /**
+   * Method to populate test data from an {@link InputStream}.
+   * @param inputStream - stream to pull data from
+   * @throws IOException - Error incase the stream is invalid
+   */
   private void populateTestData(InputStream inputStream) throws IOException {
     CSVReader reader;
     try {
@@ -71,6 +76,7 @@ public class IngredientTest {
         entry.description = ingredient[2];
         testData.add(entry);
       }
+      reader.close();
     } catch (IOException exception) {
       exception.printStackTrace();
     }
@@ -103,7 +109,7 @@ public class IngredientTest {
     IngredientTest it = new IngredientTest();
     System.out.println("[!] Begin ingestion of Ingredient test_classes data.");
     //it.populateTestData(new File("src/main/java/sharkbread/test/data/ingredient_data.csv"));
-    it.getClass().getResourceAsStream("/ingredient_data.csv");
+    it.populateTestData(it.getClass().getResourceAsStream("/ingredient_data.csv"));
     System.out.println("[!] Test data read in; attempting to write to table");
     it.updateIngredientTable();
     System.out.println("[!] If no stacktrace, assume db ingredient table is populated.");

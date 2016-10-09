@@ -67,6 +67,7 @@ public class UsesTest {
         entry.recipe = Integer.parseInt(uses[2]);
         testData.add(entry);
       }
+      reader.close();
     } catch (IOException exception) {
       exception.printStackTrace();
     }
@@ -97,8 +98,7 @@ public class UsesTest {
   public static void main(String[] args) throws IOException, SQLException {
     UsesTest ut = new UsesTest();
     System.out.println("[!] Begin ingestion of Uses test_classes data.");
-    //ut.populateTestData(new File("src/main/java/sharkbread/test/data/uses_data.csv"));
-    ut.getClass().getResourceAsStream("/uses_data.csv");
+    ut.populateTestData(ut.getClass().getResourceAsStream("/uses_data.csv"));
     System.out.println("[!] Test data read in; attempting to write to table");
     ut.updateIngredientTable();
     System.out.println("[!] If no stacktrace, assume db ingredient table is populated.");

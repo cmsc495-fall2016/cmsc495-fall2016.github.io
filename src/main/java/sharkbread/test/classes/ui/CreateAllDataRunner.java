@@ -1,9 +1,7 @@
 package sharkbread.test.classes.ui;
 
 import sharkbread.test.classes.AllTest;
-import sharkbread.test.classes.RecipeTest;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -25,16 +23,7 @@ public class CreateAllDataRunner implements Runnable {
   @Override
   public void run() {
     try {
-      test.createaAllData(null);
-//      RecipeTest rt = new RecipeTest();
-//      
-//      System.out.println("[!] Begin ingestion of Recipe test_classes data.");
-//      rt.populateTestData(
-//          new File("assets/recipe_data_optionals_removed.csv")
-//      );
-//      System.out.println("[!] Test data read in; attempting to write to table");
-//      rt.updateRecipeTable();
-      
+      test.createaAllData(null);      
     } catch (SQLException | IOException exception) {
       exception.printStackTrace();
     }
