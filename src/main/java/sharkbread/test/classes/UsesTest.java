@@ -7,6 +7,8 @@ import sharkbread.database.Database;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -51,6 +53,24 @@ public class UsesTest {
       exception.printStackTrace();
     }
   }
+  
+  private void populateTestData(InputStream inputStream) throws IOException {
+    CSVReader reader;
+    try {
+      reader = new CSVReader(new InputStreamReader(inputStream));
+      String[] uses;
+      reader.readNext(); // discard column header line
+      while ((uses = reader.readNext()) != null) {
+        UsesCsvEntry entry = new UsesCsvEntry();
+        entry.id = Integer.parseInt(uses[0]);
+        entry.ingredient = Integer.parseInt(uses[1]);
+        entry.recipe = Integer.parseInt(uses[2]);
+        testData.add(entry);
+      }
+    } catch (IOException exception) {
+      exception.printStackTrace();
+    }
+  }
 
   /**
    * Commit our test data to the Uses table, deleting all prior Uses first, as we are in testing
@@ -77,7 +97,8 @@ public class UsesTest {
   public static void main(String[] args) throws IOException, SQLException {
     UsesTest ut = new UsesTest();
     System.out.println("[!] Begin ingestion of Uses test_classes data.");
-    ut.populateTestData(new File("src/main/java/sharkbread/test/data/uses_data.csv"));
+    //ut.populateTestData(new File("src/main/java/sharkbread/test/data/uses_data.csv"));
+    ut.getClass().getResourceAsStream("/uses_data.csv");
     System.out.println("[!] Test data read in; attempting to write to table");
     ut.updateIngredientTable();
     System.out.println("[!] If no stacktrace, assume db ingredient table is populated.");

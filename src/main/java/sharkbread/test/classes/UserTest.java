@@ -7,6 +7,8 @@ import sharkbread.database.User;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -57,6 +59,26 @@ public class UserTest {
     }
   }
 
+  private void populateTestData(InputStream inputStream) throws IOException {
+    CSVReader reader;
+    try {
+      reader = new CSVReader(new InputStreamReader(inputStream));
+      String[] user;
+      reader.readNext(); // discard header line
+      while ((user = reader.readNext()) != null) {
+        UserCsvEntry entry = new UserCsvEntry();
+        entry.id = Integer.parseInt(user[0]);
+        entry.firstName = user[1];
+        entry.lastName = user[2];
+        entry.email = user[3];
+        entry.username = user[4];
+        testData.add(entry);
+      }
+    } catch (IOException exception) {
+      exception.printStackTrace();
+    }
+  }
+  
   /**
    * Commit our test data to the Ingredients table, deleting all prior Ingredients first, as we are
    * in testing mode and want only this data in the table.
@@ -82,7 +104,8 @@ public class UserTest {
   public static void main(String[] args) throws IOException, SQLException {
     UserTest ut = new UserTest();
     System.out.println("[!] Begin ingestion of User test_classes data.");
-    ut.populateTestData(new File("src/main/java/sharkbread/test/data/user_data.csv"));
+    //ut.populateTestData(new File("src/main/java/sharkbread/test/data/user_data.csv"));
+    ut.populateTestData(ut.getClass().getResourceAsStream("/user_data.csv"));
     System.out.println("[!] Test data read in; attempting to write to table");
     ut.updateIngredientTable();
     System.out.println("[!] If no stacktrace, assume db user table is populated.");
