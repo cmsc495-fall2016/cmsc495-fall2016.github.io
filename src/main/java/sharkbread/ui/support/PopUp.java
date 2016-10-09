@@ -57,6 +57,20 @@ public class PopUp {
         )
     );
   }
+  
+  /**
+   * Method to call a confirmation pop up.
+   * @param container Container (or child class) to tie the pop up to could be null
+   * @param message The string to display in the middle of the window
+   */
+  public static void info( Container container, String message) {
+    JOptionPane.showMessageDialog(
+        container,
+        message,
+        "Information",
+        JOptionPane.INFORMATION_MESSAGE);
+  } //end confirm
+
   /**
    * An warning pop up... has an warning picture
    * 
