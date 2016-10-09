@@ -254,6 +254,8 @@ public class PageDisplayRecipe extends Page implements ActionListener {
       insertString(doc,recipe.getPrep_time() + nl, "regular");
       insertString(doc,"Difficulty:\t" ,"italicbold");
       insertString(doc,recipe.getDifficulty() + nl, "regular");
+      insertString(doc, "Serves:\t", "italicbold");
+      insertString(doc, recipe.getServes()+nl, "regular");
       insertString(doc,"Ingredients:" + nl,"italicbold");
       for (Ingredient ingredient : recipe.getIngredients()) {
         insertString(doc,"\t" + ingredient.getName() + nl, "regular");
